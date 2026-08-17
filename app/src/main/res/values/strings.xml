@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MediTick</string>
+    <string name="widget_description">Today’s medication progress and next dose</string>
+</resources>
