@@ -155,7 +155,7 @@ fun SlotIcon(time: Long, size: Dp = 36.dp) {
 }
 
 fun formIcon(form: MedicationForm): ImageVector = when (form) {
-    MedicationForm.tablet, MedicationForm.capsule -> Icons.Default.Medication
+    MedicationForm.pill, MedicationForm.tablet, MedicationForm.capsule, MedicationForm.gummy -> Icons.Default.Medication
     MedicationForm.liquid, MedicationForm.drops -> Icons.Default.WaterDrop
     MedicationForm.injection -> Icons.Default.Vaccines
     MedicationForm.inhaler, MedicationForm.spray -> Icons.Default.Air

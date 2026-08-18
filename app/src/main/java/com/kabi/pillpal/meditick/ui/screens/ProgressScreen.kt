@@ -84,6 +84,7 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                     }
                 }
                 item { InsightCard(data, stats) }
+                item { PatternCard(data, if (allTime) DoseEngine.addDays(today, -364) else DoseEngine.addDays(today, -6), today) }
                 item { SectionLabel(if (allTime) "All days calendar" else SimpleDateFormat("MMM d", Locale.getDefault()).format(Date(DoseEngine.addDays(today, -6))) + " – " + SimpleDateFormat("MMM d", Locale.getDefault()).format(Date(today))) }
                 if (allTime) item { MonthCard(repository, displayedMonth, selectedDay, { displayedMonth = it }, { selectedDay = it }) }
                 else item { WeekCard(repository, selectedDay) { selectedDay = it } }
@@ -152,6 +153,28 @@ private fun InsightCard(data: AppData, stats: DoseEngine.Stats) {
         Row(Modifier.padding(17.dp), verticalAlignment = Alignment.Top) {
             IconTile(Icons.Default.AutoAwesome, DS.colors.violet, 42.dp); Spacer(Modifier.width(12.dp))
             Column { SectionLabel("Smart insight"); Spacer(Modifier.height(4.dp)); Text(message, color = DS.colors.ink2, fontSize = 13.sp, lineHeight = 19.sp) }
+        }
+    }
+}
+
+/** "Morning is the hardest time" — where the misses actually cluster. */
+@Composable
+internal fun PatternCard(data: AppData, from: Long, to: Long) {
+    val pattern = remember(data.logs.size, data.medications.size, from, to) {
+        DoseEngine.hardestSlot(from, to, data.medications, data.mealTimes, data.logs)
+    } ?: return
+    val slotName = listOf("Morning", "Midday", "Evening", "Bedtime")[pattern.slot]
+    GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(16.dp)) {
+        Row(verticalAlignment = Alignment.Top) {
+            IconTile(Icons.Default.Insights, DS.colors.amber, 42.dp); Spacer(Modifier.width(12.dp))
+            Column {
+                SectionLabel("Patterns"); Spacer(Modifier.height(4.dp))
+                Text("$slotName is the hardest time", color = DS.colors.ink, fontWeight = FontWeight.Bold)
+                Text(
+                    "${pattern.missed} of ${pattern.total} missed doses happened in the $slotName.",
+                    color = DS.colors.ink3, fontSize = 12.sp, lineHeight = 18.sp,
+                )
+            }
         }
     }
 }

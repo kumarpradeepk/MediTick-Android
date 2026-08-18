@@ -49,12 +49,7 @@ object NotificationScheduler {
         val audio = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT).build()
         val dose = NotificationChannel(doseChannel(settings), "Dose reminders", importance).apply {
             description = "Alerts at scheduled medication times"
-            val sound = when (settings.alertSound) {
-                AlertSound.STANDARD, AlertSound.CHIME -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-                AlertSound.BELL -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-                AlertSound.URGENT -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-                AlertSound.SILENT -> null
-            }
+            val sound = soundUri(settings.alertSound)
             setSound(sound, if (sound == null) null else audio)
             enableVibration(settings.alertSound != AlertSound.SILENT)
         }
@@ -168,6 +163,20 @@ object NotificationScheduler {
         add(Calendar.DAY_OF_YEAR, 1)
         set(Calendar.HOUR_OF_DAY, 2); set(Calendar.MINUTE, 15); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
         timeInMillis
+    }
+
+    /** The system tone each reminder sound maps to; null means silent. */
+    fun soundUri(sound: AlertSound): android.net.Uri? = when (sound) {
+        AlertSound.STANDARD, AlertSound.CHIME -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        AlertSound.BELL -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        AlertSound.URGENT -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        AlertSound.SILENT -> null
+    }
+
+    /** Plays a reminder sound once so the picker can preview it. */
+    fun previewSound(context: Context, sound: AlertSound) {
+        val uri = soundUri(sound) ?: return
+        runCatching { RingtoneManager.getRingtone(context.applicationContext, uri)?.play() }
     }
 
     fun doseChannel(settings: SettingsStore): String =
