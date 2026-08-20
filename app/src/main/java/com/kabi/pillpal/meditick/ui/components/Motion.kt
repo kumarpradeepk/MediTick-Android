@@ -6,6 +6,7 @@ import android.os.Build
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -191,43 +192,43 @@ fun DangerButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifie
 
 // MARK: - Celebration
 
-private class ConfettiPiece(seed: Int) {
-    private val rnd = kotlin.random.Random(seed * 7919 + 13)
-    val angle = (rnd.nextFloat() * 2f - 1f) * 1.15f - 1.5708f // mostly upward
-    val speed = 0.55f + rnd.nextFloat() * 0.75f
-    val size = 4f + rnd.nextFloat() * 5f
-    val spin = (rnd.nextFloat() * 2f - 1f) * 540f
-    val colorIndex = rnd.nextInt(5)
-    val drift = (rnd.nextFloat() * 2f - 1f) * 0.35f
+private class ConfettiPiece(index: Int) {
+    // Deterministic layout, identical to the iOS ConfettiBurst.
+    val xFraction = (6 + (index * 37) % 89) / 100f
+    val delay = ((index * 13) % 10) / 20f          // 0…0.45s stagger
+    val rotation = ((index * 47) % 360).toFloat()
+    val colorIndex = index % 5
 }
 
 /**
- * A single celebratory burst from the top half of the screen — the Android
- * twin of the iOS `ConfettiBurst` on the medication-saved screen.
+ * Party-popper confetti falling from the top of the screen — a 1:1 port of
+ * the iOS `ConfettiBurst` on the medication-saved screen: 18 pieces drop
+ * from above the screen to below it over 1.5s, tumbling two full turns.
  */
 @Composable
 fun ConfettiBurst(modifier: Modifier = Modifier) {
     val c = DS.colors
-    val pieces = remember { List(30, ::ConfettiPiece) }
-    val progress = remember { Animatable(0f) }
-    LaunchedEffect(Unit) { progress.animateTo(1f, tween(1600, easing = LinearOutSlowInEasing)) }
-    val colors = listOf(c.mint, c.cyan, c.violet, c.amber, c.coral)
+    val pieces = remember { List(18, ::ConfettiPiece) }
+    // One master clock; each piece reads its own delayed window from it.
+    val clock = remember { Animatable(0f) }
+    val total = 1.5f + 0.45f
+    LaunchedEffect(Unit) { clock.animateTo(1f, tween((total * 1000).toInt(), easing = LinearEasing)) }
+    val colors = listOf(c.gradStart, c.gradEnd, c.violet, c.amber, c.coral)
     androidx.compose.foundation.Canvas(modifier.fillMaxSize()) {
-        val t = progress.value
-        if (t <= 0f || t >= 1f) return@Canvas
-        val origin = Offset(size.width / 2f, size.height * 0.32f)
-        val reach = size.minDimension * 0.85f
+        val elapsed = clock.value * total
+        val w = 8.dp.toPx(); val h = 14.dp.toPx()
         pieces.forEach { piece ->
-            // Decelerating flight with a little gravity and sideways drift.
-            val distance = reach * piece.speed * t
-            val x = origin.x + cos(piece.angle) * distance + piece.drift * reach * t * t
-            val y = origin.y + sin(piece.angle) * distance + size.height * 0.35f * t * t
-            rotate(degrees = piece.spin * t, pivot = Offset(x, y)) {
+            val t = ((elapsed - piece.delay) / 1.5f).coerceIn(0f, 1f)
+            if (t >= 1f) return@forEach
+            val eased = t * t // easeIn, like the iOS fall
+            val x = size.width * piece.xFraction
+            val y = -30.dp.toPx() + eased * (size.height + 70.dp.toPx())
+            rotate(degrees = piece.rotation + 720f * eased, pivot = Offset(x, y)) {
                 drawRoundRect(
-                    color = colors[piece.colorIndex].copy(alpha = (1f - t).coerceIn(0f, 1f)),
-                    topLeft = Offset(x - piece.size, y - piece.size * 0.6f),
-                    size = androidx.compose.ui.geometry.Size(piece.size * 2f, piece.size * 1.2f),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(piece.size * 0.5f),
+                    color = colors[piece.colorIndex].copy(alpha = 1f - 0.3f * eased),
+                    topLeft = Offset(x - w / 2, y - h / 2),
+                    size = androidx.compose.ui.geometry.Size(w, h),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(3.dp.toPx()),
                 )
             }
         }

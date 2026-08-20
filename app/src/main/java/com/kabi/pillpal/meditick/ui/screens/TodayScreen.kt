@@ -349,7 +349,7 @@ private fun DoseActionSheet(repository: AppRepository, dose: ScheduledDose, onDi
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
                     }, Modifier.weight(1f), leading = Icons.Default.Schedule)
                 }
-                Spacer(Modifier.height(8.dp)); OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth().appearFluidly(3))
+                Spacer(Modifier.height(8.dp)); MediTickTextField(note, { note = it }, placeholder = stringResource(R.string.dose_note_optional), modifier = Modifier.fillMaxWidth().appearFluidly(3))
                 Spacer(Modifier.height(12.dp))
                 PrimaryButton(stringResource(R.string.dose_mark_as_taken), { haptics.success(); repository.logDose(resolved, DoseStatus.taken, actedAt, note); onDismiss() }, Modifier.fillMaxWidth().appearFluidly(4), leading = Icons.Default.Check)
                 Spacer(Modifier.height(10.dp))
@@ -379,9 +379,9 @@ fun AsNeededSheet(repository: AppRepository, medication: Medication, onDismiss: 
             SectionLabel(stringResource(R.string.dose_as_needed_title), Modifier.appearFluidly(0))
             Text(medication.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink, modifier = Modifier.appearFluidly(1))
             Spacer(Modifier.height(18.dp))
-            OutlinedTextField(amount, { amount = it.filter { ch -> ch.isDigit() || ch == '.' } }, label = { Text(stringResource(R.string.dose_amount_label, medication.form.unitName(context, 2.0))) }, modifier = Modifier.fillMaxWidth().appearFluidly(2))
+            MediTickTextField(amount, { amount = it.filter { ch -> ch.isDigit() || ch == '.' } }, placeholder = stringResource(R.string.dose_amount_label, medication.form.unitName(context, 2.0)), modifier = Modifier.fillMaxWidth().appearFluidly(2))
             Spacer(Modifier.height(10.dp))
-            OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth().appearFluidly(3))
+            MediTickTextField(note, { note = it }, placeholder = stringResource(R.string.dose_note_optional), modifier = Modifier.fillMaxWidth().appearFluidly(3))
             Spacer(Modifier.height(18.dp))
             PrimaryButton(stringResource(R.string.action_log_dose), { haptics.success(); repository.logAsNeeded(medication, amount.toDoubleOrNull() ?: 1.0, note); onDismiss() }, Modifier.fillMaxWidth().appearFluidly(4), leading = Icons.Default.Check)
         }

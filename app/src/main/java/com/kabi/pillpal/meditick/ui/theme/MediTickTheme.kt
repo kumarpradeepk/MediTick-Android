@@ -109,8 +109,9 @@ private fun palette(accent: AccentId, dark: Boolean): MediTickColors {
         coral = c(if (dark) 0xFFFF8577 else 0xFFE0574B),
         dockBg = c(if (dark) 0xED0E1713 else 0xF2FFFFFF), ringTrack = if (dark) Color.White.copy(alpha = .08f) else c(0x17102017),
         // Invisible in Midnight, a soft green-gray lift in Daylight — same
-        // rule as the iOS card shadow.
-        cardShadow = if (dark) Color.Transparent else c(0x59102017),
+        // rule as the iOS card shadow. Kept faint: the glass fills are
+        // translucent, so a strong shadow bleeds through as a smudge.
+        cardShadow = if (dark) Color.Transparent else c(0x2E102017),
         isDark = dark,
     )
 }

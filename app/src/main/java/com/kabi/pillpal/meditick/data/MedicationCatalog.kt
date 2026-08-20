@@ -21,6 +21,9 @@ class MedicationCatalog private constructor(context: Context) {
         }
     }.getOrDefault(emptyList())
 
+    /** Every entry — the Scan-to-Add matcher scores the whole catalog. */
+    fun all(): List<CatalogEntry> = entries
+
     fun search(query: String, limit: Int = 6): List<CatalogEntry> {
         val q = query.trim().lowercase()
         if (q.length < 2) return emptyList()

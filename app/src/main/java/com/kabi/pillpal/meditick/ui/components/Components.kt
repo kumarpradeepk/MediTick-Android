@@ -64,7 +64,7 @@ fun ScreenBackground(content: @Composable BoxScope.() -> Unit) {
 }
 
 /** Soft daylight lift under cards; invisible in Midnight (alpha-zero token). */
-private fun Modifier.cardShadow(shadow: Color, shape: androidx.compose.ui.graphics.Shape, elevation: Dp = 9.dp): Modifier =
+private fun Modifier.cardShadow(shadow: Color, shape: androidx.compose.ui.graphics.Shape, elevation: Dp = 6.dp): Modifier =
     if (shadow == Color.Transparent) this else shadow(elevation, shape, ambientColor = shadow, spotColor = shadow)
 
 @Composable
@@ -99,10 +99,11 @@ fun GradientCard(
     val shape = RoundedCornerShape(radius)
     val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     val haptics = rememberHaptics()
+    // No shadow here — the fill is a faint wash and a shadow reads as a
+    // smudge through it. The iOS rx card is shadowless for the same reason.
     Box(
         modifier
             .then(if (onClick != null) Modifier.pressScale(interaction, 0.975f) else Modifier)
-            .cardShadow(c.cardShadow, shape)
             .clip(shape)
             .background(
                 Brush.linearGradient(listOf(c.gradStart.copy(.17f), c.gradEnd.copy(.11f), c.violet.copy(.14f))),
@@ -143,6 +144,33 @@ fun PrimaryButton(
         leading?.let { Icon(it, null, Modifier.size(18.dp), tint = content); Spacer(Modifier.width(8.dp)) }
         Text(text, color = content, style = MaterialTheme.typography.labelLarge.copy(fontSize = 16.sp, fontWeight = FontWeight.ExtraBold))
     }
+}
+
+/**
+ * The app's text field — the iOS `fieldStyle`: a rounded glass fill with a
+ * hairline border and the hint inside, instead of Material's notched
+ * outline and floating label.
+ */
+@Composable
+fun MediTickTextField(
+    value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier,
+    placeholder: String? = null, singleLine: Boolean = false, minLines: Int = 1,
+    textStyle: androidx.compose.ui.text.TextStyle? = null,
+) {
+    val c = DS.colors
+    OutlinedTextField(
+        value, onValueChange, modifier,
+        placeholder = placeholder?.let { { Text(it, color = c.ink3) } },
+        singleLine = singleLine, minLines = minLines,
+        textStyle = (textStyle ?: LocalTextStyle.current).copy(color = c.ink, fontWeight = FontWeight.Medium),
+        shape = RoundedCornerShape(18.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = c.glass, unfocusedContainerColor = c.glass,
+            focusedBorderColor = c.mint.copy(.55f), unfocusedBorderColor = c.line2,
+            cursorColor = c.mint,
+            focusedTextColor = c.ink, unfocusedTextColor = c.ink,
+        ),
+    )
 }
 
 @Composable
