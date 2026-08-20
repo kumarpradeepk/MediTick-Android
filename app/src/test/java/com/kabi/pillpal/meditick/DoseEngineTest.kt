@@ -164,7 +164,10 @@ class DoseEngineTest {
         assertFalse(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 1)))
         assertFalse(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 2)))
         assertTrue(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 3)))
-        assertEquals("Every 3 days", schedule.frequencySummary())
+        // The wording of the summary is now a localized resource, so it needs a
+        // Context and belongs to an instrumented test; the cadence itself — the
+        // engine behaviour — is what the assertions above pin down.
+        assertEquals(3, schedule.dayInterval)
     }
 
     @Test fun treatmentCompletionAndArchiveKeepSeparateChildProvenance() {

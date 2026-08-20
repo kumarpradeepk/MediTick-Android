@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
+import com.kabi.pillpal.meditick.R
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,24 +57,24 @@ private fun SplashStep(next: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(Icons.Default.Star, null, tint = c.amber, modifier = Modifier.size(11.dp))
-                    Text("  PRIVATE · NO ACCOUNT · FREE  ", color = c.amber, fontWeight = FontWeight.ExtraBold, fontSize = 11.sp, letterSpacing = .6.sp)
+                    Text(stringResource(R.string.onboarding_badge), color = c.amber, fontWeight = FontWeight.ExtraBold, fontSize = 11.sp, letterSpacing = .6.sp)
                     Icon(Icons.Default.Star, null, tint = c.amber, modifier = Modifier.size(11.dp))
                 }
             }
         }
         Spacer(Modifier.height(30.dp))
-        Text("Never miss\na dose again.", style = MaterialTheme.typography.displayLarge.copy(
+        Text(stringResource(R.string.onboarding_headline), style = MaterialTheme.typography.displayLarge.copy(
             brush = c.gradient, fontSize = 40.sp, lineHeight = 43.sp),
         )
         Spacer(Modifier.height(12.dp))
-        Text("Gentle reminders, smart schedules, and a daily ring that fills as you care for yourself.",
+        Text(stringResource(R.string.onboarding_subhead),
             color = c.ink2, fontSize = 15.5.sp, lineHeight = 22.sp, modifier = Modifier.widthIn(max = 330.dp))
         Spacer(Modifier.height(22.dp))
-        FeatureRow(Icons.Default.AutoAwesome, "Type a sentence, get a schedule")
-        FeatureRow(Icons.Default.NotificationsActive, "Reminders that adapt to your meals")
-        FeatureRow(Icons.Default.Lock, "Your health data never leaves your phone")
+        FeatureRow(Icons.Default.AutoAwesome, stringResource(R.string.onboarding_feature_sentence))
+        FeatureRow(Icons.Default.NotificationsActive, stringResource(R.string.onboarding_feature_meals))
+        FeatureRow(Icons.Default.Lock, stringResource(R.string.onboarding_feature_private))
         Spacer(Modifier.weight(1f))
-        PrimaryButton("Get started", next, Modifier.fillMaxWidth(), leading = Icons.Default.ArrowForward)
+        PrimaryButton(stringResource(R.string.action_get_started), next, Modifier.fillMaxWidth(), leading = Icons.Default.ArrowForward)
     }
 }
 
@@ -127,21 +129,21 @@ private fun AnimatedAppMark() {
 private fun PurposeStep(finish: () -> Unit) {
     val c = DS.colors
     val purposes = listOf(
-        Triple(Icons.Default.NotificationsActive, "Remember every dose", "Quiet, dependable reminders"),
-        Triple(Icons.Default.Restaurant, "Sync with meals", "Before, with or after food"),
-        Triple(Icons.Default.LocalFireDepartment, "Build a streak", "See progress without guilt"),
-        Triple(Icons.Default.Inventory2, "Track refills", "Know before you run out"),
+        Triple(Icons.Default.NotificationsActive, R.string.onboarding_purpose_doses, R.string.onboarding_purpose_doses_sub),
+        Triple(Icons.Default.Restaurant, R.string.onboarding_purpose_meals, R.string.onboarding_purpose_meals_sub),
+        Triple(Icons.Default.LocalFireDepartment, R.string.onboarding_purpose_streak, R.string.onboarding_purpose_streak_sub),
+        Triple(Icons.Default.Inventory2, R.string.onboarding_purpose_refills, R.string.onboarding_purpose_refills_sub),
     )
     var selected by remember { mutableStateOf(setOf(0)) }
     Column(
         Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
     ) {
         Spacer(Modifier.height(22.dp))
-        SectionLabel("A 30-second setup")
+        SectionLabel(stringResource(R.string.onboarding_setup_label))
         Spacer(Modifier.height(10.dp))
-        Text("What brings you to MediTick?", style = MaterialTheme.typography.headlineLarge, color = c.ink)
+        Text(stringResource(R.string.onboarding_question), style = MaterialTheme.typography.headlineLarge, color = c.ink)
         Spacer(Modifier.height(7.dp))
-        Text("Choose everything that fits. You can change it later.", color = c.ink2)
+        Text(stringResource(R.string.onboarding_choose_all), color = c.ink2)
         Spacer(Modifier.height(24.dp))
         purposes.forEachIndexed { index, value ->
             val active = index in selected
@@ -154,8 +156,8 @@ private fun PurposeStep(finish: () -> Unit) {
                     IconTile(value.first, if (active) c.mint else c.ink3, 44.dp)
                     Spacer(Modifier.width(14.dp))
                     Column(Modifier.weight(1f)) {
-                        Text(value.second, color = c.ink, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text(value.third, color = c.ink3, fontSize = 12.sp)
+                        Text(stringResource(value.second), color = c.ink, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(stringResource(value.third), color = c.ink3, fontSize = 12.sp)
                     }
                     Icon(if (active) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked, null,
                         tint = if (active) c.mint else c.ink3)
@@ -163,8 +165,8 @@ private fun PurposeStep(finish: () -> Unit) {
             }
         }
         Spacer(Modifier.weight(1f))
-        Text("No sign-up. No email. Your health data stays on this device.",
+        Text(stringResource(R.string.onboarding_no_signup),
             color = c.ink3, fontSize = 12.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(bottom = 14.dp))
-        PrimaryButton("Build my routine", finish, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
+        PrimaryButton(stringResource(R.string.onboarding_build_routine), finish, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
     }
 }

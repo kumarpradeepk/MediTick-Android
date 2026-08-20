@@ -255,7 +255,7 @@ class DoseAlarmReceiver : BroadcastReceiver() {
                 context.resources.getQuantityString(R.plurals.notif_body_refill_days, it, it)
             } ?: context.getString(R.string.notif_body_refill_generic)
             else -> if (settings.hideMedicationNames) context.getString(R.string.notif_body_hidden)
-                else listOfNotNull(med.doseLabel, med.instructions.takeIf { it.isNotBlank() }).joinToString(" · ")
+                else listOfNotNull(med.doseLabel(context), med.instructions.takeIf { it.isNotBlank() }).joinToString(" · ")
         }
         val open = PendingIntent.getActivity(context, 1, Intent(context, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val channel = when (kind) {

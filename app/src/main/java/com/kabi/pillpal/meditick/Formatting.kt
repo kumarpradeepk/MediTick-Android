@@ -3,7 +3,9 @@ package com.kabi.pillpal.meditick
 import android.content.Context
 import android.text.format.DateFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 /**
  * Locale-aware formatting helpers.
@@ -33,3 +35,35 @@ fun formatTime(context: Context, hour: Int, minute: Int): String {
     }
     return DateFormat.getTimeFormat(context).format(calendar.time)
 }
+
+/**
+ * Formats a date from a *skeleton* rather than a fixed pattern.
+ *
+ * A literal pattern like `"MMM d, yyyy"` bakes in English field order and
+ * punctuation: the same call renders "Jan 5, 2026" in English but must read
+ * "2026年1月5日" in Japanese and "5. Jan. 2026" in German. A skeleton names only
+ * the *fields* wanted, and the platform reorders them for the active locale.
+ */
+private fun formatSkeleton(millis: Long, skeleton: String): String {
+    val locale = Locale.getDefault()
+    val pattern = DateFormat.getBestDateTimePattern(locale, skeleton)
+    return SimpleDateFormat(pattern, locale).format(Date(millis))
+}
+
+/** "Jan 5" — day and abbreviated month. */
+fun formatShortDate(millis: Long): String = formatSkeleton(millis, "MMMd")
+
+/** "Jan 5, 2026" — the full calendar date. */
+fun formatMediumDate(millis: Long): String = formatSkeleton(millis, "MMMdy")
+
+/** "Mon, Jan 5" — abbreviated weekday with the date. */
+fun formatWeekdayDate(millis: Long): String = formatSkeleton(millis, "EEEMMMd")
+
+/** "Monday · Jan 5" — the Today header. */
+fun formatFullWeekdayDate(millis: Long): String = formatSkeleton(millis, "EEEEMMMd")
+
+/** "January 2026" — the calendar month heading. */
+fun formatMonthYear(millis: Long): String = formatSkeleton(millis, "MMMMy")
+
+/** The one-letter column heading for a weekday, e.g. "M" — locale's own initial. */
+fun weekdayInitial(millis: Long): String = formatSkeleton(millis, "EEEEE")

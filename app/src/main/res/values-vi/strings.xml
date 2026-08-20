@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    vi translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">Tiến trình hôm nay và liều kế tiếp</string>
+    <string name="channel_dose_name">Nhắc uống thuốc</string>
+    <string name="channel_dose_description">Thông báo vào giờ uống thuốc đã đặt</string>
+    <string name="channel_follow_up_name">Nhắc lại</string>
+    <string name="channel_follow_up_description">Một lời nhắc nhẹ khi liều thuốc chưa được ghi lại</string>
+    <string name="channel_refill_name">Nhắc mua thêm</string>
+    <string name="channel_refill_description">Thông báo khi lượng thuốc đang theo dõi sắp hết</string>
+    <string name="notif_hidden_medication">thuốc của bạn</string>
+    <string name="notif_title_still_waiting">Vẫn đang chờ: %1$s</string>
+    <string name="notif_title_running_low">Sắp hết: %1$s</string>
+    <string name="notif_title_time_for">Đến giờ uống %1$s</string>
+    <string name="notif_body_nudge">Liều này chưa được ghi lại. Chỉ cần một chạm là xong.</string>
+    <string name="notif_body_snooze">Liều bạn hoãn lại đã đến giờ.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="other">Còn khoảng %1$d ngày thuốc. Đã đến lúc mua thêm.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Lượng thuốc còn dưới mức cần mua thêm.</string>
+    <string name="notif_body_hidden">Mở MediTick để xem và ghi lại liều này.</string>
+    <string name="action_take">Uống</string>
+    <string name="action_skip">Bỏ qua</string>
+    <string name="action_snooze_minutes">Báo lại %1$d phút</string>
+    <string name="widget_doses_ticked">Đã xong %1$d trên %2$d liều</string>
+    <string name="widget_header">MEDITICK · HÔM NAY</string>
+    <string name="widget_no_doses_today">Hôm nay không có liều nào</string>
+    <string name="widget_all_done_today">Hôm nay xong hết rồi</string>
+    <string name="widget_all_caught_up">Bạn đã ghi đủ tất cả</string>
+    <string name="billing_products_missing">Hãy kết nối các sản phẩm “monthly”, “yearly” và “lifetime” trong Google Play Console.</string>
+    <string name="billing_plan_lifetime">Trọn đời</string>
+    <string name="billing_plan_yearly">Hằng năm</string>
+    <string name="billing_plan_monthly">Hằng tháng</string>
+    <string name="billing_tag_one_time">Trả một lần</string>
+    <string name="billing_tag_best_value">Đáng giá nhất</string>
+    <string name="billing_tag_flexible">Thanh toán linh hoạt</string>
+    <string name="billing_checking_purchases">Đang kiểm tra giao dịch của bạn…</string>
+    <string name="billing_restored">Đã khôi phục giao dịch — chào mừng trở lại.</string>
+    <string name="billing_none_found">Không tìm thấy giao dịch nào đang hoạt động.</string>
+    <string name="billing_pro_unlocked">Chào mừng đến với MediTick Pro — mọi thứ đã được mở khoá.</string>
+    <string name="meal_breakfast">Bữa sáng</string>
+    <string name="meal_lunch">Bữa trưa</string>
+    <string name="meal_dinner">Bữa tối</string>
+    <string name="meal_bedtime">Giờ ngủ</string>
+    <string name="meal_breakfast_inline">bữa sáng</string>
+    <string name="meal_lunch_inline">bữa trưa</string>
+    <string name="meal_dinner_inline">bữa tối</string>
+    <string name="meal_bedtime_inline">giờ đi ngủ</string>
+    <string name="anchor_at_bedtime">Vào giờ ngủ</string>
+    <string name="anchor_with">Cùng %1$s</string>
+    <string name="anchor_before">Trước %1$s</string>
+    <string name="anchor_after">Sau %1$s</string>
+    <string name="anchor_before_offset">%1$d phút trước %2$s</string>
+    <string name="anchor_after_offset">%1$d phút sau %2$s</string>
+    <string name="anchor_fixed_time">Giờ cố định</string>
+    <string name="form_pill">Viên</string>
+    <string name="form_capsule">Viên nang</string>
+    <string name="form_tablet">Viên nén</string>
+    <string name="form_liquid">Dạng lỏng</string>
+    <string name="form_drops">Giọt</string>
+    <string name="form_injection">Thuốc tiêm</string>
+    <string name="form_patch">Miếng dán</string>
+    <string name="form_cream">Kem bôi</string>
+    <string name="form_inhaler">Ống hít</string>
+    <string name="form_powder">Bột</string>
+    <string name="form_gummy">Kẹo dẻo</string>
+    <string name="form_spray">Xịt</string>
+    <string name="form_other">Khác</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="other">viên</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="other">viên nang</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="other">viên</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="other">ml</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">giọt</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="other">mũi</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="other">miếng dán</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="other">lần bôi</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="other">nhát xịt</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">muỗng</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="other">viên kẹo</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="other">nhát xịt</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="other">liều</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="other">%1$d lần/ngày</item>
+    </plurals>
+    <string name="schedule_no_times_set">Chưa đặt giờ</string>
+    <string name="schedule_interval">Mỗi %1$d giờ, %2$s – %3$s</string>
+    <string name="schedule_as_needed">Khi cần</string>
+    <string name="schedule_when_needed">Khi cần</string>
+    <string name="schedule_every_day">Hằng ngày</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="other">%1$d ngày một lần</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d ngày uống, %2$d ngày nghỉ"</string>
+    <string name="inventory_not_tracked">Không theo dõi</string>
+    <string name="action_cancel">Huỷ</string>
+    <string name="action_done">Xong</string>
+    <string name="action_save">Lưu</string>
+    <string name="action_ok">OK</string>
+    <string name="action_add">Thêm</string>
+    <string name="action_delete">Xoá</string>
+    <string name="action_edit">Sửa</string>
+    <string name="action_close">Đóng</string>
+    <string name="action_back">Quay lại</string>
+    <string name="action_continue">Tiếp tục</string>
+    <string name="action_try_again">Thử lại</string>
+    <string name="action_get_started">Bắt đầu</string>
+    <string name="action_snooze">Hoãn</string>
+    <string name="action_log_dose">Ghi liều</string>
+    <string name="action_take_now">Uống ngay</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">Hôm nay</string>
+    <string name="tab_treatments">Điều trị</string>
+    <string name="tab_progress">Tiến trình</string>
+    <string name="tab_settings">Cài đặt</string>
+    <string name="onboarding_badge">"  RIÊNG TƯ · KHÔNG CẦN TÀI KHOẢN · MIỄN PHÍ  "</string>
+    <string name="onboarding_headline">Không còn quên\nliều thuốc nào.</string>
+    <string name="onboarding_subhead">Nhắc nhở nhẹ nhàng, lịch thông minh và vòng theo dõi đầy dần mỗi ngày khi bạn chăm sóc bản thân.</string>
+    <string name="onboarding_feature_sentence">Gõ một câu, có ngay lịch uống</string>
+    <string name="onboarding_feature_meals">Lời nhắc tự điều chỉnh theo bữa ăn</string>
+    <string name="onboarding_feature_private">Dữ liệu sức khoẻ không bao giờ rời khỏi điện thoại của bạn</string>
+    <string name="onboarding_setup_label">Thiết lập trong 30 giây</string>
+    <string name="onboarding_question">Điều gì đưa bạn đến MediTick?</string>
+    <string name="onboarding_choose_all">Chọn tất cả những gì phù hợp. Bạn có thể đổi sau.</string>
+    <string name="onboarding_purpose_doses">Nhớ từng liều</string>
+    <string name="onboarding_purpose_doses_sub">Lời nhắc nhẹ nhàng và đáng tin</string>
+    <string name="onboarding_purpose_meals">Khớp với bữa ăn</string>
+    <string name="onboarding_purpose_meals_sub">Trước, trong hoặc sau bữa ăn</string>
+    <string name="onboarding_purpose_streak">Giữ chuỗi ngày</string>
+    <string name="onboarding_purpose_streak_sub">Thấy tiến bộ mà không thấy áy náy</string>
+    <string name="onboarding_purpose_refills">Theo dõi lượng thuốc</string>
+    <string name="onboarding_purpose_refills_sub">Biết trước khi hết thuốc</string>
+    <string name="onboarding_no_signup">Không đăng ký. Không email. Dữ liệu sức khoẻ của bạn ở lại trên máy này.</string>
+    <string name="onboarding_build_routine">Tạo thói quen của tôi</string>
+    <string name="today_empty_title">Cùng tạo thói quen của bạn</string>
+    <string name="today_empty_body">Hãy mô tả loại thuốc như khi bạn nói ra miệng — MediTick sẽ biến nó thành lịch uống, lời nhắc và vòng tiến trình mỗi ngày.</string>
+    <string name="today_add_first">Thêm thuốc đầu tiên của bạn</string>
+    <string name="today_takes_30_seconds">Chỉ mất khoảng 30 giây.</string>
+    <string name="today_greeting_morning">Chào buổi sáng</string>
+    <string name="today_greeting_afternoon">Chào buổi chiều</string>
+    <string name="today_greeting_evening">Chào buổi tối</string>
+    <string name="today_add_new">Thêm</string>
+    <string name="today_take_all">Ghi tất cả</string>
+    <string name="today_when_you_need_it">Khi bạn cần</string>
+    <string name="today_no_doses_logged">Hôm nay chưa ghi liều nào</string>
+    <plurals name="today_taken_today">
+        <item quantity="other">Hôm nay đã uống %1$d lần</item>
+    </plurals>
+    <string name="today_ring_label">HÔM NAY</string>
+    <string name="today_daily_plan">Kế hoạch hôm nay</string>
+    <string name="today_left_next_up">Còn %1$d · Tiếp theo</string>
+    <string name="today_quiet_day">Một ngày nhẹ nhàng</string>
+    <plurals name="today_doses_missed">
+        <item quantity="other">Bỏ lỡ %1$d liều</item>
+    </plurals>
+    <string name="today_all_done">Xong hết rồi</string>
+    <string name="today_day_complete">Đã xong ngày hôm nay</string>
+    <string name="today_tap_missed">Chạm vào liều bỏ lỡ bên dưới để ghi lại</string>
+    <string name="today_doses_ticked">Đã xong %1$d trên %2$d liều</string>
+    <string name="today_meals_in_sync">Bữa ăn luôn được đồng bộ</string>
+    <string name="today_meal_summary">Bữa sáng %1$s · Bữa tối %2$s</string>
+    <string name="today_now">BÂY GIỜ · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">Sáng</string>
+    <string name="daypart_midday">Trưa</string>
+    <string name="daypart_evening">Tối</string>
+    <string name="daypart_bedtime">Giờ ngủ</string>
+    <string name="dose_note_optional">Ghi chú (không bắt buộc)</string>
+    <string name="dose_mark_as_taken">Đánh dấu đã uống</string>
+    <string name="dose_undo_taken">Hoàn tác đã uống</string>
+    <string name="dose_undo_skipped">Hoàn tác bỏ qua</string>
+    <string name="dose_as_needed_title">Liều khi cần</string>
+    <string name="dose_amount_label">Số lượng (%1$s)</string>
+    <string name="dose_log_title">Ghi liều</string>
+    <string name="dose_logged_time">Ghi lúc %1$s</string>
+    <string name="state_taken">Đã uống</string>
+    <string name="state_skipped">Đã bỏ qua</string>
+    <string name="state_missed">Bỏ lỡ</string>
+    <string name="state_upcoming">Sắp tới</string>
+    <string name="state_due">Đến giờ</string>
+    <string name="state_on_time">Đúng giờ</string>
+    <string name="state_early">Sớm</string>
+    <string name="state_late">Muộn</string>
+    <string name="progress_title">Tiến trình</string>
+    <string name="progress_empty_title">Câu chuyện của bạn sắp bắt đầu</string>
+    <string name="progress_empty_body">Thêm thuốc và ghi những liều đầu tiên — chuỗi ngày, tỷ lệ và xu hướng sẽ lớn dần tại đây.</string>
+    <string name="progress_range_week">7 ngày</string>
+    <string name="progress_range_all">Toàn thời gian</string>
+    <string name="progress_range_label_all">Toàn thời gian</string>
+    <string name="progress_range_label_week">7 ngày qua</string>
+    <string name="progress_ring_label">TUÂN THỦ</string>
+    <string name="progress_metric_on_time">Đúng giờ</string>
+    <string name="progress_metric_window">±%1$d phút</string>
+    <string name="progress_metric_streak">Ngày liên tiếp</string>
+    <string name="progress_metric_best">Kỷ lục %1$d</string>
+    <string name="progress_insight_label">Nhận xét</string>
+    <string name="progress_insight_refill">Sắp phải mua thêm. %1$s đã xuống dưới mức cảnh báo.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="other">Bạn đã bỏ lỡ %1$d liều trong kỳ này. Nhắc lại có thể giúp ích vào những ngày bận rộn.</item>
+    </plurals>
+    <string name="progress_insight_skipped">Bỏ qua một liều là chuyện bình thường, không phải thất bại. Cứ ghi tiếp để xu hướng còn hữu ích.</string>
+    <string name="progress_insight_calm">Một tuần đều đặn và nhẹ nhàng. Mỗi dấu tích nhỏ đều giữ thói quen của bạn đứng vững.</string>
+    <string name="progress_patterns_label">Quy luật</string>
+    <string name="progress_pattern_hardest">%1$s là lúc khó nhất với bạn</string>
+    <string name="progress_pattern_detail">%1$d trong %2$d liều bỏ lỡ rơi vào %3$s.</string>
+    <string name="progress_calendar_all_days">Lịch toàn bộ</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">Nhật ký · %1$s</string>
+    <string name="progress_previous_month">Tháng trước</string>
+    <string name="progress_next_month">Tháng sau</string>
+    <string name="progress_nothing_scheduled">Ngày này không có lịch uống nào.</string>
+    <string name="progress_as_needed_log">Khi cần · %1$s</string>
+    <string name="progress_generic_medication">Thuốc</string>
+    <string name="progress_delete_log">Xoá bản ghi</string>
+    <string name="progress_detail_timing_title">Chi tiết đúng giờ</string>
+    <string name="progress_detail_streak_title">Chi tiết chuỗi ngày</string>
+    <string name="progress_detail_adherence_title">Chi tiết tuân thủ</string>
+    <string name="progress_detail_no_taken">Kỳ này chưa có liều nào được uống.</string>
+    <string name="progress_detail_on_time_rate">%1$s số liều đã uống nằm trong khoảng ±%2$d phút.</string>
+    <string name="progress_detail_breakdown">%1$d sớm · %2$d đúng giờ · %3$d trễ · %4$d bỏ qua</string>
+    <string name="progress_detail_choose_window">Chọn khoảng sai lệch dùng cho chỉ số này:</string>
+    <string name="progress_detail_streak_line">%1$d ngày liên tiếp · kỷ lục %2$d ngày</string>
+    <string name="progress_detail_streak_body">Một ngày được tính vào chuỗi khi có ít nhất một liều theo lịch, mọi liều đến hạn đều đã uống, và không liều nào bị bỏ qua hay bỏ lỡ.</string>
+    <string name="progress_detail_adherence_rate">%1$s tuân thủ</string>
+    <string name="progress_detail_counts">%1$d theo lịch · %2$d đã uống · %3$d bỏ qua · %4$d bỏ lỡ · %5$d chờ</string>
+    <string name="progress_detail_adherence_body">Mức tuân thủ tính số liều đã uống trong những liều đã có kết quả. Các liều sắp tới chưa làm giảm tỉ lệ này.</string>
+    <string name="progress_detail_needs_attention">Cần chú ý</string>
+    <string name="progress_detail_no_attention">Kỳ này không có liều nào bị bỏ qua hay bỏ lỡ.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">Chăm sóc</string>
+    <string name="care_add">+ Thêm</string>
+    <string name="care_filter_all">Tất cả</string>
+    <string name="care_filter_medications">Thuốc</string>
+    <string name="care_filter_prescriptions">Đơn thuốc</string>
+    <string name="status_active">Đang dùng</string>
+    <string name="status_completed">Đã xong</string>
+    <string name="status_archived">Đã lưu trữ</string>
+    <string name="status_treatment">Điều trị %1$s</string>
+    <string name="care_empty_title">Tủ thuốc của bạn đang trống</string>
+    <string name="care_empty_body">Thêm đơn thuốc hoặc một thuốc lẻ, kế hoạch hằng ngày sẽ tự hình thành.</string>
+    <string name="care_section_prescriptions">Đơn thuốc của tôi</string>
+    <string name="care_section_medications">Thuốc</string>
+    <string name="care_section_standalone">Thuốc riêng lẻ</string>
+    <string name="care_archived_count">Đã lưu trữ (%1$d)</string>
+    <string name="care_what_adding">Bạn muốn thêm gì?</string>
+    <string name="care_mode_prescription">Đơn thuốc</string>
+    <string name="care_mode_prescription_sub">Một phác đồ gồm một hoặc nhiều loại thuốc</string>
+    <string name="care_mode_single">Thuốc lẻ</string>
+    <string name="care_mode_single_sub">Thêm thẳng vào kế hoạch hằng ngày</string>
+    <plurals name="care_medication_count">
+        <item quantity="other">%1$d loại thuốc</item>
+    </plurals>
+    <string name="care_stock_left">Còn %1$s</string>
+    <string name="detail_next_dose">Liều kế tiếp</string>
+    <string name="detail_as_needed">Khi cần</string>
+    <string name="detail_schedule">Lịch uống</string>
+    <string name="detail_amount_per_dose">Lượng mỗi liều</string>
+    <string name="detail_supply">Tồn thuốc</string>
+    <string name="detail_supply_remaining">Còn %1$s</string>
+    <string name="detail_supply_alert">Báo khi còn %1$s</string>
+    <string name="detail_supply_alert_days">Báo khi còn %1$s · Đủ khoảng %2$d ngày</string>
+    <string name="detail_supply_untracked">Không theo dõi lượng thuốc</string>
+    <string name="detail_supply_enable">Bật theo dõi khi bạn sửa loại thuốc này</string>
+    <string name="detail_refill">+ Nạp thêm</string>
+    <string name="detail_recent_history">Lịch sử gần đây</string>
+    <string name="detail_history_as_needed">Liều khi cần</string>
+    <string name="detail_view_medication_logs">Xem lịch sử của thuốc</string>
+    <string name="detail_view_medication_logs_sub">Toàn bộ lịch sử đã uống và bỏ qua</string>
+    <string name="detail_restore_medication">Khôi phục thuốc</string>
+    <string name="detail_archive_medication">Lưu trữ thuốc</string>
+    <string name="detail_delete_medication">Xoá thuốc</string>
+    <string name="confirm_delete_medication_title">Xoá %1$s?</string>
+    <string name="confirm_delete_medication_body">Lịch sử uống thuốc cũng sẽ bị xoá. Không thể hoàn tác.</string>
+    <string name="confirm_archive_medication_title">Lưu trữ %1$s?</string>
+    <string name="confirm_archive_medication_body">Các lời nhắc sắp tới sẽ dừng. Bạn có thể khôi phục thuốc này từ mục Lưu trữ.</string>
+    <string name="refill_title">Bổ sung thuốc</string>
+    <string name="refill_units_label">Số lượng thêm vào</string>
+    <string name="logs_title">Lịch sử của %1$s</string>
+    <string name="rx_prescribed_by">Do %1$s kê đơn</string>
+    <string name="rx_period_ongoing">%1$s · Đang tiếp tục</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">Thêm thuốc</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">Thuốc mới hoặc đã có</string>
+    <string name="rx_progress_and_logs">Tiến trình và lịch sử</string>
+    <string name="rx_no_decided">Chưa có liều nào có kết quả</string>
+    <string name="rx_adherence">%1$s tuân thủ</string>
+    <string name="rx_counts">%1$d đã uống · %2$d bỏ qua · %3$d bỏ lỡ</string>
+    <string name="rx_on_time">%1$s đúng giờ</string>
+    <string name="rx_no_taken">Chưa có liều nào được uống</string>
+    <string name="rx_within_window">Trong khoảng ±%1$d phút</string>
+    <string name="rx_view_logs">Xem lịch sử đơn thuốc</string>
+    <string name="rx_view_logs_sub">Đã uống, bỏ qua và uống khi cần</string>
+    <string name="rx_notes">Ghi chú</string>
+    <string name="rx_mark_complete">Đánh dấu đã xong</string>
+    <string name="rx_archive">Lưu trữ đơn thuốc</string>
+    <string name="rx_reactivate">Dùng lại đơn thuốc</string>
+    <string name="rx_restore">Khôi phục đơn thuốc</string>
+    <string name="rx_delete">Xoá đơn thuốc</string>
+    <string name="rx_confirm_complete_title">Đánh dấu đã xong?</string>
+    <string name="rx_confirm_complete_body">Các lời nhắc sắp tới của những thuốc liên kết sẽ dừng.</string>
+    <string name="rx_confirm_archive_title">Lưu trữ đơn thuốc?</string>
+    <string name="rx_confirm_archive_body">Đơn thuốc và các thuốc liên kết sẽ chuyển vào mục Lưu trữ. Bạn có thể khôi phục sau.</string>
+    <string name="rx_confirm_reactivate_title">Dùng lại đơn thuốc?</string>
+    <string name="rx_confirm_reactivate_body">Đợt điều trị tiếp tục và các lời nhắc quay lại. Những thuốc bạn đã hoàn tất riêng vẫn giữ trạng thái đã xong.</string>
+    <string name="rx_confirm_restore_title">Khôi phục đơn thuốc?</string>
+    <string name="rx_confirm_restore_body">Chỉ những thuốc bị đơn này thay đổi mới được khôi phục; thuốc bạn tự lưu trữ vẫn nằm trong mục Lưu trữ.</string>
+    <string name="rx_action_complete">Hoàn thành</string>
+    <string name="rx_action_archive">Lưu trữ</string>
+    <string name="rx_action_reactivate">Dùng lại</string>
+    <string name="rx_action_restore">Khôi phục</string>
+    <string name="rx_confirm_delete_title">Xoá đơn thuốc này?</string>
+    <string name="rx_confirm_delete_body">Các thuốc của đơn này vẫn nằm trong tủ thuốc dưới dạng thuốc riêng lẻ.</string>
+    <string name="rx_add_new_medication">Thuốc mới</string>
+    <string name="rx_add_new_medication_sub">Tạo và liên kết một lời nhắc mới</string>
+    <string name="rx_add_existing">Thuốc đã có</string>
+    <string name="rx_add_existing_sub">Liên kết một thuốc riêng lẻ</string>
+    <string name="rx_no_standalone">Không có thuốc riêng lẻ nào để liên kết.</string>
+    <string name="rx_editor_new">Đơn thuốc mới</string>
+    <string name="rx_editor_edit">Sửa đơn thuốc</string>
+    <string name="rx_field_plan_name">Tên phác đồ</string>
+    <string name="rx_field_condition">Chẩn đoán</string>
+    <string name="rx_field_prescriber">Bác sĩ kê đơn</string>
+    <string name="rx_field_facility">Cơ sở / phòng khám</string>
+    <string name="rx_field_contact">Liên hệ</string>
+    <string name="rx_field_notes">Ghi chú</string>
+    <string name="rx_start">Bắt đầu · %1$s</string>
+    <string name="rx_end">Kết thúc · %1$s</string>
+    <string name="rx_ongoing">Điều trị dài hạn</string>
+    <plurals name="rx_update_linked">
+        <item quantity="other">Cập nhật %1$d loại thuốc</item>
+    </plurals>
+    <string name="rx_apply_dates">Áp dụng khoảng thời gian này cho các lịch liên kết</string>
+    <string name="logs_empty">Chưa có liều nào được ghi lại.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">Thêm thuốc</string>
+    <string name="form_edit_title">Sửa thuốc</string>
+    <string name="form_step">Bước %1$d / 3</string>
+    <string name="form_add_to_routine">Thêm vào thói quen</string>
+    <string name="form_save_changes">Lưu thay đổi</string>
+    <string name="form_duplicate_title">Thuốc bị trùng</string>
+    <string name="form_duplicate_body">Đã có một loại thuốc tên “%1$s” với hàm lượng này.</string>
+    <string name="describe_label">Cứ nói tự nhiên</string>
+    <string name="describe_question">Bạn đang uống gì?</string>
+    <string name="describe_hint">Thử “Metformin 500mg every morning with food”.</string>
+    <string name="describe_placeholder">Tên thuốc, hàm lượng và lúc bạn uống…</string>
+    <string name="describe_examples">Ví dụ</string>
+    <string name="describe_understood">MediTick đã hiểu</string>
+    <string name="basics_label">Thông tin cơ bản</string>
+    <string name="basics_headline">Đặt tên dễ nhận ra</string>
+    <string name="basics_field_name">Tên thuốc</string>
+    <string name="basics_no_prescription">Không có (riêng lẻ)</string>
+    <string name="basics_field_strength">Hàm lượng</string>
+    <string name="basics_section_form">Dạng bào chế</string>
+    <string name="basics_field_instructions">Hướng dẫn (không bắt buộc)</string>
+    <string name="basics_track_supply">Theo dõi lượng thuốc</string>
+    <string name="basics_track_supply_sub">Mua thêm trước khi hết</string>
+    <string name="basics_field_stock">Đang có</string>
+    <string name="basics_field_alert">Báo khi còn</string>
+    <string name="rhythm_label">Nhịp của bạn</string>
+    <string name="rhythm_headline">Lúc nào thì hợp?</string>
+    <string name="rhythm_every_day">Hằng ngày</string>
+    <string name="rhythm_every_day_sub">Cùng giờ, mỗi ngày</string>
+    <string name="rhythm_specific">Ngày cụ thể</string>
+    <string name="rhythm_specific_sub">Chọn ngày trong tuần</string>
+    <string name="rhythm_every_other">Cách ngày</string>
+    <string name="rhythm_every_other_sub">Một ngày uống, một ngày nghỉ</string>
+    <string name="rhythm_interval">Cách quãng</string>
+    <string name="rhythm_interval_sub">Mỗi N ngày theo lịch</string>
+    <string name="rhythm_cyclic">Theo chu kỳ</string>
+    <string name="rhythm_cyclic_sub">Uống mấy ngày rồi nghỉ</string>
+    <string name="rhythm_as_needed">Khi cần</string>
+    <string name="rhythm_as_needed_sub">Không có lịch cố định</string>
+    <string name="rhythm_section_days">Ngày</string>
+    <string name="rhythm_days_on">Ngày uống</string>
+    <string name="rhythm_days_off">Ngày nghỉ</string>
+    <string name="rhythm_repeat_every">Lặp lại sau mỗi N ngày</string>
+    <string name="rhythm_section_doses">Liều</string>
+    <string name="rhythm_add_dose">Thêm liều</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">Lời nhắc gắn với bữa ăn</string>
+    <string name="rhythm_meal_auto">Đổi giờ ăn thì lời nhắc cũng tự đổi theo</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">Đồng bộ với giờ nhắc</string>
+    <string name="rhythm_amount_per_dose">Lượng mỗi liều</string>
+    <string name="rhythm_start_date">Ngày bắt đầu · %1$s</string>
+    <string name="rhythm_ongoing">Điều trị dài hạn</string>
+    <string name="rhythm_no_end_date">Không có ngày kết thúc</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="other">Đợt %1$d ngày</item>
+    </plurals>
+    <string name="dose_add_hint">Chọn giờ chính xác hoặc bắt đầu từ một khung giờ quen thuộc.</string>
+    <string name="dose_custom_time">Giờ tuỳ chọn</string>
+    <string name="dose_edit_title">Sửa liều</string>
+    <string name="dose_section_amount">Số lượng</string>
+    <string name="dose_decrease">Giảm liều</string>
+    <string name="dose_increase">Tăng liều</string>
+    <string name="dose_section_timing">Thời điểm</string>
+    <string name="dose_relation_fixed">Cố định</string>
+    <string name="dose_relation_before">Trước</string>
+    <string name="dose_relation_with">Cùng</string>
+    <string name="dose_relation_after">Sau</string>
+    <string name="dose_reminder_time">Nhắc lúc %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="other">%1$d phút trước bữa ăn</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="other">%1$d phút sau bữa ăn</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s lúc %2$s · đổi giờ ăn thì lời nhắc cũng tự đổi theo</string>
+    <string name="dose_remove">Bỏ liều này</string>
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_pro_active">Pro đang hoạt động</string>
+    <string name="settings_pro_thanks">Cảm ơn bạn đã ủng hộ</string>
+    <string name="settings_unlock_pro">Mở khoá MediTick Pro</string>
+    <string name="settings_unlock_pro_sub">Đồng bộ bữa ăn, nhắc lại, lịch sử đầy đủ và không giới hạn số thuốc</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">Tuỳ chọn</string>
+    <string name="settings_group_notifications">Thông báo</string>
+    <string name="settings_group_data">Dữ liệu của bạn</string>
+    <string name="settings_group_community">Cộng đồng</string>
+    <string name="settings_group_about">Giới thiệu</string>
+    <string name="settings_redeem">Dùng mã ưu đãi</string>
+    <string name="settings_redeem_sub">Mở khoá Pro bằng mã khuyến mãi của Play</string>
+    <string name="settings_join_community">Tham gia cộng đồng MediTick</string>
+    <string name="settings_join_community_sub">Chia sẻ thói quen, đặt câu hỏi và biết điều sắp tới</string>
+    <string name="settings_appearance">Giao diện</string>
+    <string name="settings_appearance_summary">%1$s · màu nhấn %2$s</string>
+    <string name="settings_appearance_mode">Chế độ</string>
+    <string name="settings_appearance_accent">Màu nhấn</string>
+    <string name="appearance_auto">Tự động</string>
+    <string name="appearance_daylight">Ban ngày</string>
+    <string name="appearance_midnight">Ban đêm</string>
+    <string name="accent_aurora">Cực quang</string>
+    <string name="accent_ocean">Đại dương</string>
+    <string name="accent_orchid">Hoa lan</string>
+    <string name="accent_ember">Than hồng</string>
+    <string name="settings_meal_times">Giờ ăn</string>
+    <string name="settings_meal_times_sub">Bữa sáng · Bữa trưa · Bữa tối · Giờ ngủ</string>
+    <string name="settings_widgets">Tiện ích</string>
+    <string name="settings_widgets_sub">Màn hình chính và các tuỳ chọn màn hình khoá được hỗ trợ</string>
+    <string name="settings_dose_presets">Giờ uống mặc định</string>
+    <string name="settings_dose_presets_sub">Sáng · Trưa · Tối · Trước khi ngủ</string>
+    <string name="settings_dose_presets_restore">Khôi phục giờ mặc định</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_language_system">Theo hệ thống</string>
+    <string name="settings_system_language">Cài đặt ngôn ngữ hệ thống</string>
+    <string name="settings_system_language_sub">Mở phần ngôn ngữ theo ứng dụng của Android</string>
+    <string name="settings_haptics">Rung phản hồi</string>
+    <string name="settings_haptics_sub">Rung nhẹ khi bạn thao tác</string>
+    <string name="settings_notif_permission">Quyền thông báo</string>
+    <string name="settings_notif_permission_sub">Chạm để cho phép nhắc nhở</string>
+    <string name="settings_notif_status">Trạng thái thông báo</string>
+    <string name="settings_notif_status_sub">Mở cài đặt thông báo của Android</string>
+    <string name="settings_dose_reminders">Nhắc uống thuốc</string>
+    <string name="settings_dose_reminders_sub">Thông báo cho mỗi liều</string>
+    <string name="settings_follow_up">Nhắc lại</string>
+    <string name="settings_follow_up_sub">Nhắc đến khi bạn ghi liều</string>
+    <string name="settings_follow_up_delay">Thời gian chờ trước khi nhắc lại</string>
+    <plurals name="settings_minutes">
+        <item quantity="other">%1$d phút</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d phút</string>
+    <string name="settings_hide_names">Ẩn tên thuốc trong thông báo</string>
+    <string name="settings_hide_names_sub">Tên thuốc không hiện trên màn hình khoá</string>
+    <string name="settings_alert_sound">Âm báo</string>
+    <string name="settings_urgent">Nhắc khẩn cấp</string>
+    <string name="settings_urgent_sub">Kênh ưu tiên cao; chế độ Không làm phiền vẫn có thể được áp dụng</string>
+    <string name="settings_exact_alarm">Quyền báo thức chính xác</string>
+    <string name="settings_exact_alarm_sub">Mở phần “Báo thức và lời nhắc” của Android</string>
+    <string name="settings_refill_reminders">Nhắc mua thêm</string>
+    <string name="settings_refill_reminders_sub">Báo khi lượng thuốc xuống dưới ngưỡng</string>
+    <string name="settings_sound_title">Âm thanh nhắc</string>
+    <string name="settings_sound_hint">Chạm vào một âm thanh để nghe thử. Lựa chọn chỉ áp dụng sau khi lưu. Một số âm thanh cần MediTick Pro.</string>
+    <string name="sound_standard">MediTick (chuẩn)</string>
+    <string name="sound_chime">Chuông gió (dài)</string>
+    <string name="sound_bell">Chuông</string>
+    <string name="sound_urgent">Khẩn cấp</string>
+    <string name="sound_silent">Im lặng</string>
+    <string name="settings_export">Xuất bản sao lưu</string>
+    <string name="settings_export_sub">Tất cả dưới dạng tệp JSON</string>
+    <string name="settings_import">Nhập bản sao lưu</string>
+    <string name="settings_import_sub">Khôi phục bản xuất MediTick từ iOS hoặc Android</string>
+    <string name="settings_erase">Xoá toàn bộ dữ liệu</string>
+    <string name="settings_erase_sub">Mọi thuốc, kế hoạch và nhật ký</string>
+    <string name="settings_erase_title">Xoá tất cả?</string>
+    <string name="settings_erase_body">Thao tác này xoá vĩnh viễn mọi thuốc, đơn thuốc và lịch sử khỏi thiết bị này.</string>
+    <string name="settings_msg_link_failed">Không mở được liên kết đó.</string>
+    <string name="settings_msg_exported">Đã xuất bản sao lưu.</string>
+    <string name="settings_msg_export_failed">Không xuất được bản sao lưu.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="other">Đã khôi phục bản sao lưu — nạp %1$d loại thuốc.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">Tệp này có vẻ không phải bản sao lưu của MediTick.</string>
+    <string name="settings_feedback">Gửi góp ý / báo lỗi</string>
+    <string name="settings_feedback_sub">Cho biết thiết bị và cách tái hiện lỗi</string>
+    <string name="settings_feature_request">Đề xuất tính năng</string>
+    <string name="settings_feature_request_sub">Hãy cho chúng tôi biết điều gì sẽ làm MediTick tốt hơn</string>
+    <string name="settings_review">Viết đánh giá</string>
+    <string name="settings_share">Chia sẻ MediTick</string>
+    <string name="settings_share_text">MediTick — không bao giờ quên liều thuốc nữa. Hẹn giờ uống thuốc, nhắc nhở và theo dõi.</string>
+    <string name="settings_community_title">Bạn không đơn độc đâu</string>
+    <string name="settings_community_body">Trao đổi thói quen với những người dùng MediTick khác, đặt câu hỏi, báo lỗi và biết tin về tính năng mới sớm nhất.</string>
+    <string name="settings_website">Trang web</string>
+    <string name="settings_whats_new">Có gì mới</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">Chính sách quyền riêng tư</string>
+    <string name="settings_privacy_sub">MediTick xử lý dữ liệu của bạn ra sao</string>
+    <string name="settings_terms">Điều khoản dịch vụ</string>
+    <string name="settings_terms_sub">Giới hạn của một công cụ nhắc nhở</string>
+    <string name="settings_about">Giới thiệu MediTick</string>
+    <string name="settings_version">Phiên bản %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · Dữ liệu sức khoẻ của bạn luôn ở trên thiết bị này.\nCông cụ nhắc nhở, không phải lời khuyên y tế.</string>
+    <string name="info_widgets_title">Tiện ích</string>
+    <string name="info_widgets_body">Thêm MediTick từ trình chọn tiện ích trên màn hình chính. Việc hỗ trợ tiện ích trên màn hình khoá phụ thuộc vào phiên bản Android và nhà sản xuất máy, và không thể bật tự động. Tiện ích hiện tại hiển thị tiến trình hôm nay và liều kế tiếp; việc ghi lại vẫn mở ứng dụng.</string>
+    <string name="info_privacy_title">Quyền riêng tư</string>
+    <string name="info_privacy_body">Dữ liệu thuốc, lịch uống và lịch sử được lưu trên máy này. Chỉ xuất ra khi bạn chủ động chọn. Google Play xử lý giao dịch; Android gửi thông báo.</string>
+    <string name="info_terms_title">Điều khoản sử dụng</string>
+    <string name="info_terms_body">MediTick là công cụ nhắc nhở và ghi chép cá nhân, không phải lời khuyên y tế. Hãy luôn làm theo chỉ dẫn của bác sĩ và hỏi ý kiến chuyên môn khi có thắc mắc về thuốc.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\nNhắc uống thuốc riêng tư, chạy offline trên Android.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">Đừng phải tự hỏi “mình uống chưa nhỉ?” nữa.</string>
+    <string name="paywall_feature_alerts">Thông báo giữ thói quen luôn trong tầm mắt</string>
+    <string name="paywall_feature_follow_ups">Nhắc lại cho đến khi mọi liều được ghi</string>
+    <string name="paywall_feature_unlimited">Không giới hạn thuốc và đơn thuốc</string>
+    <string name="paywall_feature_insights">Chuỗi ngày, nhận xét và tiện ích</string>
+    <string name="paywall_loading">Đang tải các gói của Google Play…</string>
+    <string name="paywall_unavailable">Hiện không có gói đăng ký nào.</string>
+    <string name="paywall_upgrade">Nâng cấp lên Pro</string>
+    <string name="paywall_lifetime_note">Trả một lần. Pro mãi mãi.</string>
+    <string name="paywall_renew_note">Tự động gia hạn. Có thể huỷ bất cứ lúc nào trong Google Play.</string>
+    <string name="paywall_restore">Khôi phục giao dịch</string>
+    <string name="add_sheet_title">Thêm mới</string>
+    <string name="add_sheet_prescription">Tạo đơn thuốc</string>
+    <string name="add_sheet_prescription_sub">Nhóm các thuốc dùng định kỳ</string>
+    <string name="add_sheet_medication">Thêm thuốc</string>
+    <string name="add_sheet_medication_sub">Tạo lời nhắc cho một loại thuốc</string>
+    <string name="release_latest">Phiên bản mới nhất</string>
+    <string name="release_lead">Bản cập nhật này đưa MediTick lên cùng một bộ tính năng trên iPhone và Android:</string>
+    <string name="release_bullet_filters">Điều trị nay lọc được theo loại và theo Đang dùng, Đã xong hoặc Lưu trữ.</string>
+    <string name="release_bullet_prescriptions">Đơn thuốc lưu bác sĩ kê đơn, phòng khám, liên hệ, chẩn đoán và thời gian điều trị, đồng thời có thể đánh dấu đã xong, lưu trữ hoặc khôi phục.</string>
+    <string name="release_bullet_per_dose">Mỗi liều có thể có số lượng riêng và quan hệ riêng với bữa ăn, nên một loại thuốc vừa cố định lúc 08:00 vừa uống trước bữa tối 30 phút.</string>
+    <string name="release_bullet_shapes">Thêm các kiểu lịch mới: mỗi N ngày và chu kỳ uống/nghỉ, bên cạnh ngày cụ thể và uống khi cần.</string>
+    <string name="release_bullet_take_all">“Ghi tất cả” xử lý trọn một nhóm giờ chỉ với một chạm.</string>
+    <string name="release_bullet_progress">Tiến trình có thêm lịch toàn bộ với chuyển tháng, cùng phần giải thích về tuân thủ, đúng giờ và chuỗi ngày.</string>
+    <string name="release_bullet_sounds">Âm thanh nhắc, thông báo riêng tư giữ tên thuốc khỏi màn hình khoá, và bộ chọn ngôn ngữ ngay trong ứng dụng.</string>
+    <string name="release_bullet_refills">Khi bổ sung, bạn xem trước lượng thuốc sau khi thêm, và giờ đã ghi có thể sửa lại sau.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">sáng,buổi sáng,bữa sáng</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">trưa,buổi trưa,bữa trưa</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">tối,buổi tối,bữa tối</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">trước khi ngủ,giờ đi ngủ</string>
+    <string name="parse_meal_before" tools:ignore="Typos">trước khi ăn,trước bữa ăn,trước bữa sáng,trước bữa trưa,trước bữa tối</string>
+    <string name="parse_meal_after" tools:ignore="Typos">sau khi ăn,sau bữa ăn,sau bữa sáng,sau bữa trưa,sau bữa tối</string>
+    <string name="parse_meal_with" tools:ignore="Typos">cùng bữa ăn,trong bữa ăn</string>
+    <string name="parse_twice" tools:ignore="Typos">hai lần,2 lần</string>
+    <string name="parse_unit_day" tools:ignore="Typos">ngày</string>
+    <string name="parse_unit_week" tools:ignore="Typos">tuần</string>
+    <string name="parse_unit_month" tools:ignore="Typos">tháng</string>
+    <string name="parse_marker_am" tools:ignore="Typos">sáng</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">chiều,tối</string>
+    <string name="parse_stopwords" tools:ignore="Typos">mỗi,hai lần,một lần,hằng ngày,hàng ngày,uống,cùng,trước,sau,sáng,đêm,tối,trưa,ngủ,bữa trưa,bữa tối,bữa sáng,bữa ăn,và</string>
+</resources>

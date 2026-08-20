@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    zh-Hans translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">今天的进度和下一次服药</string>
+    <string name="channel_dose_name">用药提醒</string>
+    <string name="channel_dose_description">在计划的服药时间提醒</string>
+    <string name="channel_follow_up_name">补充提醒</string>
+    <string name="channel_follow_up_description">当某次服药还没记录时的轻声提醒</string>
+    <string name="channel_refill_name">续药提醒</string>
+    <string name="channel_refill_description">当跟踪的库存不多时提醒</string>
+    <string name="notif_hidden_medication">你的药</string>
+    <string name="notif_title_still_waiting">仍在等待：%1$s</string>
+    <string name="notif_title_running_low">库存不足：%1$s</string>
+    <string name="notif_title_time_for">该服用 %1$s 了</string>
+    <string name="notif_body_nudge">这次服药还没记录，轻点一下就好。</string>
+    <string name="notif_body_snooze">延后的这次服药到时间了。</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="other">库存大约还够 %1$d 天，该续药了。</item>
+    </plurals>
+    <string name="notif_body_refill_generic">库存已低于续药提醒值。</string>
+    <string name="notif_body_hidden">打开 MediTick 查看并记录这次服药。</string>
+    <string name="action_take">服用</string>
+    <string name="action_skip">跳过</string>
+    <string name="action_snooze_minutes">%1$d 分钟后提醒</string>
+    <string name="widget_doses_ticked">%2$d 次中已完成 %1$d 次</string>
+    <string name="widget_header">MEDITICK · 今天</string>
+    <string name="widget_no_doses_today">今天没有服药安排</string>
+    <string name="widget_all_done_today">今天都完成了</string>
+    <string name="widget_all_caught_up">全部记录到位</string>
+    <string name="billing_products_missing">请在 Google Play Console 中配置 monthly、yearly 和 lifetime 商品。</string>
+    <string name="billing_plan_lifetime">买断</string>
+    <string name="billing_plan_yearly">包年</string>
+    <string name="billing_plan_monthly">包月</string>
+    <string name="billing_tag_one_time">一次性付费</string>
+    <string name="billing_tag_best_value">最划算</string>
+    <string name="billing_tag_flexible">灵活付费</string>
+    <string name="billing_checking_purchases">正在检查你的购买…</string>
+    <string name="billing_restored">购买已恢复，欢迎回来。</string>
+    <string name="billing_none_found">没有找到有效的购买。</string>
+    <string name="billing_pro_unlocked">欢迎使用 MediTick Pro，全部功能已解锁。</string>
+    <string name="meal_breakfast">早餐</string>
+    <string name="meal_lunch">午餐</string>
+    <string name="meal_dinner">晚餐</string>
+    <string name="meal_bedtime">睡前</string>
+    <string name="meal_breakfast_inline">早餐</string>
+    <string name="meal_lunch_inline">午餐</string>
+    <string name="meal_dinner_inline">晚餐</string>
+    <string name="meal_bedtime_inline">睡前</string>
+    <string name="anchor_at_bedtime">睡前</string>
+    <string name="anchor_with">随%1$s</string>
+    <string name="anchor_before">%1$s前</string>
+    <string name="anchor_after">%1$s后</string>
+    <string name="anchor_before_offset">%2$s前 %1$d 分钟</string>
+    <string name="anchor_after_offset">%2$s后 %1$d 分钟</string>
+    <string name="anchor_fixed_time">固定时间</string>
+    <string name="form_pill">药丸</string>
+    <string name="form_capsule">胶囊</string>
+    <string name="form_tablet">片剂</string>
+    <string name="form_liquid">液体</string>
+    <string name="form_drops">滴剂</string>
+    <string name="form_injection">针剂</string>
+    <string name="form_patch">贴剂</string>
+    <string name="form_cream">乳膏</string>
+    <string name="form_inhaler">吸入剂</string>
+    <string name="form_powder">粉剂</string>
+    <string name="form_gummy">软糖</string>
+    <string name="form_spray">喷雾</string>
+    <string name="form_other">其他</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="other">粒</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="other">粒</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="other">片</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="other">毫升</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">滴</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="other">针</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="other">贴</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="other">次</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="other">喷</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">勺</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="other">颗</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="other">喷</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="other">次</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="other">每天 %1$d 次</item>
+    </plurals>
+    <string name="schedule_no_times_set">未设置时间</string>
+    <string name="schedule_interval">每 %1$d 小时，%2$s – %3$s</string>
+    <string name="schedule_as_needed">按需服用</string>
+    <string name="schedule_when_needed">需要时</string>
+    <string name="schedule_every_day">每天</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="other">每 %1$d 天</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · 服 %1$d 天，停 %2$d 天"</string>
+    <string name="inventory_not_tracked">未跟踪</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_done">完成</string>
+    <string name="action_save">保存</string>
+    <string name="action_ok">好</string>
+    <string name="action_add">添加</string>
+    <string name="action_delete">删除</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_close">关闭</string>
+    <string name="action_back">返回</string>
+    <string name="action_continue">继续</string>
+    <string name="action_try_again">重试</string>
+    <string name="action_get_started">开始使用</string>
+    <string name="action_snooze">稍后提醒</string>
+    <string name="action_log_dose">记录用药</string>
+    <string name="action_take_now">现在服用</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">今天</string>
+    <string name="tab_treatments">治疗</string>
+    <string name="tab_progress">进度</string>
+    <string name="tab_settings">设置</string>
+    <string name="onboarding_badge">"  隐私 · 无需账号 · 免费  "</string>
+    <string name="onboarding_headline">从此不再\n漏服一次。</string>
+    <string name="onboarding_subhead">温和的提醒、智能的计划，还有一个随你照顾自己慢慢填满的每日圆环。</string>
+    <string name="onboarding_feature_sentence">输入一句话，得到用药计划</string>
+    <string name="onboarding_feature_meals">随用餐时间调整的提醒</string>
+    <string name="onboarding_feature_private">你的健康数据从不离开手机</string>
+    <string name="onboarding_setup_label">30 秒完成设置</string>
+    <string name="onboarding_question">你想用 MediTick 做什么？</string>
+    <string name="onboarding_choose_all">把符合的都选上，之后随时可以改。</string>
+    <string name="onboarding_purpose_doses">记住每一次服药</string>
+    <string name="onboarding_purpose_doses_sub">安静又可靠的提醒</string>
+    <string name="onboarding_purpose_meals">与三餐同步</string>
+    <string name="onboarding_purpose_meals_sub">餐前、随餐或餐后</string>
+    <string name="onboarding_purpose_streak">累积连续天数</string>
+    <string name="onboarding_purpose_streak_sub">轻松看到进步，不必自责</string>
+    <string name="onboarding_purpose_refills">留意库存</string>
+    <string name="onboarding_purpose_refills_sub">在用完之前就知道</string>
+    <string name="onboarding_no_signup">无需注册，无需邮箱。健康数据只留在这台设备上。</string>
+    <string name="onboarding_build_routine">开始建立习惯</string>
+    <string name="today_empty_title">一起建立你的用药习惯</string>
+    <string name="today_empty_body">像说话一样描述一种药，MediTick 会把它变成用药计划、提醒和每日进度环。</string>
+    <string name="today_add_first">添加第一个药品</string>
+    <string name="today_takes_30_seconds">大约 30 秒。</string>
+    <string name="today_greeting_morning">早上好</string>
+    <string name="today_greeting_afternoon">下午好</string>
+    <string name="today_greeting_evening">晚上好</string>
+    <string name="today_add_new">添加</string>
+    <string name="today_take_all">全部记录</string>
+    <string name="today_when_you_need_it">在你需要时</string>
+    <string name="today_no_doses_logged">今天还没有记录</string>
+    <plurals name="today_taken_today">
+        <item quantity="other">今天已服 %1$d 次</item>
+    </plurals>
+    <string name="today_ring_label">今天</string>
+    <string name="today_daily_plan">今日计划</string>
+    <string name="today_left_next_up">还剩 %1$d 次 · 接下来</string>
+    <string name="today_quiet_day">轻松的一天</string>
+    <plurals name="today_doses_missed">
+        <item quantity="other">漏服 %1$d 次</item>
+    </plurals>
+    <string name="today_all_done">全部完成</string>
+    <string name="today_day_complete">今天结束</string>
+    <string name="today_tap_missed">点按下方漏服的记录即可补上</string>
+    <string name="today_doses_ticked">%2$d 次中已完成 %1$d 次</string>
+    <string name="today_meals_in_sync">已与用餐时间同步</string>
+    <string name="today_meal_summary">早餐 %1$s · 晚餐 %2$s</string>
+    <string name="today_now">现在 · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">早上</string>
+    <string name="daypart_midday">中午</string>
+    <string name="daypart_evening">晚上</string>
+    <string name="daypart_bedtime">睡前</string>
+    <string name="dose_note_optional">备注（可选）</string>
+    <string name="dose_mark_as_taken">标记为已服用</string>
+    <string name="dose_undo_taken">撤销服用</string>
+    <string name="dose_undo_skipped">撤销跳过</string>
+    <string name="dose_as_needed_title">按需服用</string>
+    <string name="dose_amount_label">用量（%1$s）</string>
+    <string name="dose_log_title">记录用药</string>
+    <string name="dose_logged_time">记录时间 %1$s</string>
+    <string name="state_taken">已服用</string>
+    <string name="state_skipped">已跳过</string>
+    <string name="state_missed">漏服</string>
+    <string name="state_upcoming">待服</string>
+    <string name="state_due">到时间了</string>
+    <string name="state_on_time">准时</string>
+    <string name="state_early">偏早</string>
+    <string name="state_late">偏晚</string>
+    <string name="progress_title">进度</string>
+    <string name="progress_empty_title">你的故事即将开始</string>
+    <string name="progress_empty_body">添加药品并记录前几次用药 — 连续天数、准时率和趋势都会在这里成长。</string>
+    <string name="progress_range_week">7 天</string>
+    <string name="progress_range_all">全部时间</string>
+    <string name="progress_range_label_all">全部时间</string>
+    <string name="progress_range_label_week">最近 7 天</string>
+    <string name="progress_ring_label">服药依从性</string>
+    <string name="progress_metric_on_time">准时</string>
+    <string name="progress_metric_window">±%1$d 分钟</string>
+    <string name="progress_metric_streak">连续天数</string>
+    <string name="progress_metric_best">最佳 %1$d</string>
+    <string name="progress_insight_label">智能洞察</string>
+    <string name="progress_insight_refill">快要续药了，%1$s 已低于提醒值。</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="other">这段时间漏服了 %1$d 次。忙碌的日子里，补充提醒会有帮助。</item>
+    </plurals>
+    <string name="progress_insight_skipped">跳过一次也是过程的一部分，不是失败。继续记录，趋势才有参考价值。</string>
+    <string name="progress_insight_calm">这一周平稳而规律。每一个小小的勾选都在稳住你的习惯。</string>
+    <string name="progress_patterns_label">规律</string>
+    <string name="progress_pattern_hardest">%1$s是你最难坚持的时段</string>
+    <string name="progress_pattern_detail">%2$d 次漏服中有 %1$d 次发生在%3$s。</string>
+    <string name="progress_calendar_all_days">全部日期日历</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">记录 · %1$s</string>
+    <string name="progress_previous_month">上个月</string>
+    <string name="progress_next_month">下个月</string>
+    <string name="progress_nothing_scheduled">这一天没有安排。</string>
+    <string name="progress_as_needed_log">按需 · %1$s</string>
+    <string name="progress_generic_medication">药品</string>
+    <string name="progress_delete_log">删除记录</string>
+    <string name="progress_detail_timing_title">准时情况详情</string>
+    <string name="progress_detail_streak_title">连续天数详情</string>
+    <string name="progress_detail_adherence_title">依从性详情</string>
+    <string name="progress_detail_no_taken">这段时间还没有已服用的记录。</string>
+    <string name="progress_detail_on_time_rate">已服用的记录中有 %1$s 落在 ±%2$d 分钟内。</string>
+    <string name="progress_detail_breakdown">提前 %1$d · 准时 %2$d · 延后 %3$d · 跳过 %4$d</string>
+    <string name="progress_detail_choose_window">选择该指标使用的时间范围：</string>
+    <string name="progress_detail_streak_line">当前连续 %1$d 天 · 最佳 %2$d 天</string>
+    <string name="progress_detail_streak_body">计入连续天数的一天，需要至少有一次计划服药，所有到点的都已服用，且没有跳过或漏服。</string>
+    <string name="progress_detail_adherence_rate">依从性 %1$s</string>
+    <string name="progress_detail_counts">计划 %1$d · 已服 %2$d · 跳过 %3$d · 漏服 %4$d · 待定 %5$d</string>
+    <string name="progress_detail_adherence_body">依从性统计的是已有结果的服药中实际服用的比例。尚未到时间的不会拉低这个数字。</string>
+    <string name="progress_detail_needs_attention">需要留意</string>
+    <string name="progress_detail_no_attention">这段时间没有跳过或漏服。</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">支持与反馈</string>
+    <string name="care_add">+ 添加</string>
+    <string name="care_filter_all">全部</string>
+    <string name="care_filter_medications">药品</string>
+    <string name="care_filter_prescriptions">处方</string>
+    <string name="status_active">进行中</string>
+    <string name="status_completed">已完成</string>
+    <string name="status_archived">已归档</string>
+    <string name="status_treatment">%1$s的治疗</string>
+    <string name="care_empty_title">你的药柜是空的</string>
+    <string name="care_empty_body">添加处方或单个药品，每日计划会自动生成。</string>
+    <string name="care_section_prescriptions">我的处方</string>
+    <string name="care_section_medications">药品</string>
+    <string name="care_section_standalone">单独用药</string>
+    <string name="care_archived_count">已归档（%1$d）</string>
+    <string name="care_what_adding">要添加什么？</string>
+    <string name="care_mode_prescription">处方</string>
+    <string name="care_mode_prescription_sub">包含一种或多种药品的治疗方案</string>
+    <string name="care_mode_single">单个药品</string>
+    <string name="care_mode_single_sub">直接加入你的每日计划</string>
+    <plurals name="care_medication_count">
+        <item quantity="other">%1$d 种药品</item>
+    </plurals>
+    <string name="care_stock_left">还剩 %1$s</string>
+    <string name="detail_next_dose">下一次服药</string>
+    <string name="detail_as_needed">按需服用</string>
+    <string name="detail_schedule">用药计划</string>
+    <string name="detail_amount_per_dose">每次用量</string>
+    <string name="detail_supply">库存</string>
+    <string name="detail_supply_remaining">剩余 %1$s</string>
+    <string name="detail_supply_alert">%1$s 时提醒</string>
+    <string name="detail_supply_alert_days">%1$s 时提醒 · 大约还够 %2$d 天</string>
+    <string name="detail_supply_untracked">未跟踪库存</string>
+    <string name="detail_supply_enable">编辑这种药品即可开启库存跟踪</string>
+    <string name="detail_refill">+ 续药</string>
+    <string name="detail_recent_history">最近记录</string>
+    <string name="detail_history_as_needed">按需服用</string>
+    <string name="detail_view_medication_logs">查看该药记录</string>
+    <string name="detail_view_medication_logs_sub">已服用与跳过的完整记录</string>
+    <string name="detail_restore_medication">恢复药品</string>
+    <string name="detail_archive_medication">归档药品</string>
+    <string name="detail_delete_medication">删除药品</string>
+    <string name="confirm_delete_medication_title">删除%1$s？</string>
+    <string name="confirm_delete_medication_body">它的服药记录也会一并删除，且无法撤销。</string>
+    <string name="confirm_archive_medication_title">归档%1$s？</string>
+    <string name="confirm_archive_medication_body">后续提醒会停止。你之后可以从归档中恢复这种药品。</string>
+    <string name="refill_title">补充库存</string>
+    <string name="refill_units_label">要增加的数量</string>
+    <string name="logs_title">%1$s的记录</string>
+    <string name="rx_prescribed_by">开方医生：%1$s</string>
+    <string name="rx_period_ongoing">%1$s · 进行中</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">添加药品</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">新建或选择已有药品</string>
+    <string name="rx_progress_and_logs">进度与记录</string>
+    <string name="rx_no_decided">还没有已确定的服药</string>
+    <string name="rx_adherence">依从性 %1$s</string>
+    <string name="rx_counts">已服 %1$d · 跳过 %2$d · 漏服 %3$d</string>
+    <string name="rx_on_time">准时 %1$s</string>
+    <string name="rx_no_taken">还没有已服用的记录</string>
+    <string name="rx_within_window">在 ±%1$d 分钟内</string>
+    <string name="rx_view_logs">查看处方记录</string>
+    <string name="rx_view_logs_sub">已服用、跳过与按需服用记录</string>
+    <string name="rx_notes">备注</string>
+    <string name="rx_mark_complete">标记为已完成</string>
+    <string name="rx_archive">归档处方</string>
+    <string name="rx_reactivate">重新启用处方</string>
+    <string name="rx_restore">恢复处方</string>
+    <string name="rx_delete">删除处方</string>
+    <string name="rx_confirm_complete_title">标记为已完成？</string>
+    <string name="rx_confirm_complete_body">关联药品的后续提醒会停止。</string>
+    <string name="rx_confirm_archive_title">归档这份处方？</string>
+    <string name="rx_confirm_archive_body">处方及其关联药品会移入归档，之后可以恢复。</string>
+    <string name="rx_confirm_reactivate_title">重新启用这份处方？</string>
+    <string name="rx_confirm_reactivate_body">疗程会恢复进行，提醒也会重新开始。单独标记完成的药品仍保持完成状态。</string>
+    <string name="rx_confirm_restore_title">恢复这份处方？</string>
+    <string name="rx_confirm_restore_body">只有被这份处方改动过的药品会恢复；你自己归档的药品保持归档。</string>
+    <string name="rx_action_complete">全部完成</string>
+    <string name="rx_action_archive">归档</string>
+    <string name="rx_action_reactivate">重新启用</string>
+    <string name="rx_action_restore">恢复购买</string>
+    <string name="rx_confirm_delete_title">删除这个处方？</string>
+    <string name="rx_confirm_delete_body">它的药品会作为独立药品留在你的药柜里。</string>
+    <string name="rx_add_new_medication">新建药品</string>
+    <string name="rx_add_new_medication_sub">创建并关联一条新提醒</string>
+    <string name="rx_add_existing">添加已有药品</string>
+    <string name="rx_add_existing_sub">关联一个独立药品</string>
+    <string name="rx_no_standalone">没有可关联的独立药品。</string>
+    <string name="rx_editor_new">新建处方</string>
+    <string name="rx_editor_edit">编辑处方</string>
+    <string name="rx_field_plan_name">方案名称</string>
+    <string name="rx_field_condition">诊断</string>
+    <string name="rx_field_prescriber">开方医生</string>
+    <string name="rx_field_facility">机构 / 门诊</string>
+    <string name="rx_field_contact">联系方式</string>
+    <string name="rx_field_notes">备注</string>
+    <string name="rx_start">开始 · %1$s</string>
+    <string name="rx_end">结束 · %1$s</string>
+    <string name="rx_ongoing">长期治疗</string>
+    <plurals name="rx_update_linked">
+        <item quantity="other">更新 %1$d 种药品</item>
+    </plurals>
+    <string name="rx_apply_dates">把这段起止日期应用到关联的用药计划</string>
+    <string name="logs_empty">还没有任何服药记录。</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">添加药品</string>
+    <string name="form_edit_title">编辑药品</string>
+    <string name="form_step">第 %1$d 步，共 3 步</string>
+    <string name="form_add_to_routine">加入我的用药习惯</string>
+    <string name="form_save_changes">保存修改</string>
+    <string name="form_duplicate_title">药品重复</string>
+    <string name="form_duplicate_body">已经有一种名为“%1$s”且规格相同的药品。</string>
+    <string name="describe_label">用平常的话说</string>
+    <string name="describe_question">你在服用什么？</string>
+    <string name="describe_hint">试试“Metformin 500mg every morning with food”。</string>
+    <string name="describe_placeholder">药品、规格，以及什么时候服用…</string>
+    <string name="describe_examples">示例</string>
+    <string name="describe_understood">MediTick 已识别</string>
+    <string name="basics_label">基本信息</string>
+    <string name="basics_headline">起个一眼认得出的名字</string>
+    <string name="basics_field_name">药品名称</string>
+    <string name="basics_no_prescription">无（独立药品）</string>
+    <string name="basics_field_strength">规格</string>
+    <string name="basics_section_form">剂型</string>
+    <string name="basics_field_instructions">服用说明（可选）</string>
+    <string name="basics_track_supply">跟踪库存</string>
+    <string name="basics_track_supply_sub">在用完之前补货</string>
+    <string name="basics_field_stock">现有数量</string>
+    <string name="basics_field_alert">提醒值</string>
+    <string name="rhythm_label">你的节奏</string>
+    <string name="rhythm_headline">什么时候合适？</string>
+    <string name="rhythm_every_day">每天</string>
+    <string name="rhythm_every_day_sub">每天同一时间</string>
+    <string name="rhythm_specific">指定星期</string>
+    <string name="rhythm_specific_sub">选择星期几</string>
+    <string name="rhythm_every_other">隔天一次</string>
+    <string name="rhythm_every_other_sub">服 1 天，停 1 天</string>
+    <string name="rhythm_interval">间隔</string>
+    <string name="rhythm_interval_sub">每 N 个自然日</string>
+    <string name="rhythm_cyclic">周期</string>
+    <string name="rhythm_cyclic_sub">服用若干天，然后停药</string>
+    <string name="rhythm_as_needed">按需服用</string>
+    <string name="rhythm_as_needed_sub">没有固定计划</string>
+    <string name="rhythm_section_days">日期</string>
+    <string name="rhythm_days_on">服药天数</string>
+    <string name="rhythm_days_off">停药天数</string>
+    <string name="rhythm_repeat_every">每几天重复一次</string>
+    <string name="rhythm_section_doses">服药次数</string>
+    <string name="rhythm_add_dose">添加服药</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">与用餐关联的提醒</string>
+    <string name="rhythm_meal_auto">更改用餐时间后，提醒会自动跟着调整</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">已与提醒时间同步</string>
+    <string name="rhythm_amount_per_dose">每次用量</string>
+    <string name="rhythm_start_date">开始日期 · %1$s</string>
+    <string name="rhythm_ongoing">长期治疗</string>
+    <string name="rhythm_no_end_date">无结束日期</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="other">%1$d 天疗程</item>
+    </plurals>
+    <string name="dose_add_hint">选择准确时间，或从常用时段开始。</string>
+    <string name="dose_custom_time">自定义时间</string>
+    <string name="dose_edit_title">编辑服药</string>
+    <string name="dose_section_amount">用量</string>
+    <string name="dose_decrease">减少用量</string>
+    <string name="dose_increase">增加用量</string>
+    <string name="dose_section_timing">时间安排</string>
+    <string name="dose_relation_fixed">固定</string>
+    <string name="dose_relation_before">餐前</string>
+    <string name="dose_relation_with">随餐</string>
+    <string name="dose_relation_after">餐后</string>
+    <string name="dose_reminder_time">提醒时间 %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="other">餐前 %1$d 分钟</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="other">餐后 %1$d 分钟</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s %2$s · 更改用餐时间后，提醒会自动跟着调整</string>
+    <string name="dose_remove">删除这次服药</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_pro_active">Pro 已启用</string>
+    <string name="settings_pro_thanks">感谢你的支持</string>
+    <string name="settings_unlock_pro">解锁 MediTick Pro</string>
+    <string name="settings_unlock_pro_sub">用餐同步、补充提醒、完整记录，药品数量不限</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">偏好设置</string>
+    <string name="settings_group_notifications">通知</string>
+    <string name="settings_group_data">你的数据</string>
+    <string name="settings_group_community">社区</string>
+    <string name="settings_group_about">关于</string>
+    <string name="settings_redeem">兑换优惠码</string>
+    <string name="settings_redeem_sub">用 Play promo 码解锁 Pro</string>
+    <string name="settings_join_community">加入 MediTick 社区</string>
+    <string name="settings_join_community_sub">分享习惯、提出疑问、了解新进展</string>
+    <string name="settings_appearance">外观</string>
+    <string name="settings_appearance_summary">%1$s · %2$s主题色</string>
+    <string name="settings_appearance_mode">模式</string>
+    <string name="settings_appearance_accent">强调色</string>
+    <string name="appearance_auto">自动</string>
+    <string name="appearance_daylight">日光</string>
+    <string name="appearance_midnight">午夜</string>
+    <string name="accent_aurora">极光</string>
+    <string name="accent_ocean">海洋</string>
+    <string name="accent_orchid">兰花</string>
+    <string name="accent_ember">余烬</string>
+    <string name="settings_meal_times">用餐时间</string>
+    <string name="settings_meal_times_sub">早餐 · 午餐 · 晚餐 · 睡前</string>
+    <string name="settings_widgets">小组件</string>
+    <string name="settings_widgets_sub">主屏幕以及受支持的锁屏选项</string>
+    <string name="settings_dose_presets">用药时间预设</string>
+    <string name="settings_dose_presets_sub">早上 · 中午 · 傍晚 · 睡前</string>
+    <string name="settings_dose_presets_restore">恢复默认时间</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_language_system">跟随系统</string>
+    <string name="settings_system_language">系统语言设置</string>
+    <string name="settings_system_language_sub">打开 Android 的应用语言设置</string>
+    <string name="settings_haptics">触感反馈</string>
+    <string name="settings_haptics_sub">操作时的轻微震动</string>
+    <string name="settings_notif_permission">通知权限</string>
+    <string name="settings_notif_permission_sub">点按以允许提醒</string>
+    <string name="settings_notif_status">通知状态</string>
+    <string name="settings_notif_status_sub">打开 Android 通知设置</string>
+    <string name="settings_dose_reminders">用药提醒</string>
+    <string name="settings_dose_reminders_sub">每次用药都会通知</string>
+    <string name="settings_follow_up">追加提醒</string>
+    <string name="settings_follow_up_sub">记录之前会继续提醒你</string>
+    <string name="settings_follow_up_delay">补充提醒的间隔</string>
+    <plurals name="settings_minutes">
+        <item quantity="other">%1$d 分钟</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d 分钟</string>
+    <string name="settings_hide_names">在通知中隐藏药品名称</string>
+    <string name="settings_hide_names_sub">锁屏上不显示药品名称</string>
+    <string name="settings_alert_sound">提示音</string>
+    <string name="settings_urgent">紧急提醒</string>
+    <string name="settings_urgent_sub">高优先级通知渠道；“勿扰”模式仍可能生效</string>
+    <string name="settings_exact_alarm">精确闹钟权限</string>
+    <string name="settings_exact_alarm_sub">打开 Android 的“闹钟和提醒”</string>
+    <string name="settings_refill_reminders">续药提醒</string>
+    <string name="settings_refill_reminders_sub">库存低于设定值时提醒</string>
+    <string name="settings_sound_title">提醒声音</string>
+    <string name="settings_sound_hint">点按可试听。保存后才会生效。部分声音需要 MediTick Pro。</string>
+    <string name="sound_standard">MediTick（标准）</string>
+    <string name="sound_chime">风铃（长）</string>
+    <string name="sound_bell">铃声</string>
+    <string name="sound_urgent">紧急</string>
+    <string name="sound_silent">静音</string>
+    <string name="settings_export">导出备份</string>
+    <string name="settings_export_sub">全部数据导出为 JSON 文件</string>
+    <string name="settings_import">导入备份</string>
+    <string name="settings_import_sub">恢复来自 iOS 或 Android 的 MediTick 备份</string>
+    <string name="settings_erase">清除所有数据</string>
+    <string name="settings_erase_sub">所有药品、计划与记录</string>
+    <string name="settings_erase_title">清除全部数据？</string>
+    <string name="settings_erase_body">这会从本机永久删除所有药品、处方和历史记录。</string>
+    <string name="settings_msg_link_failed">无法打开该链接。</string>
+    <string name="settings_msg_exported">备份已导出。</string>
+    <string name="settings_msg_export_failed">备份导出失败。</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="other">备份已恢复，载入 %1$d 种药品。</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">这个文件看起来不是 MediTick 备份。</string>
+    <string name="settings_feedback">发送反馈 / 报告问题</string>
+    <string name="settings_feedback_sub">请提供设备信息和复现步骤</string>
+    <string name="settings_feature_request">提交功能建议</string>
+    <string name="settings_feature_request_sub">告诉我们怎样能让 MediTick 更好</string>
+    <string name="settings_review">撰写评价</string>
+    <string name="settings_share">分享 MediTick</string>
+    <string name="settings_share_text">MediTick — 从此告别漏服。用药计时、提醒与追踪。</string>
+    <string name="settings_community_title">这条路你不是一个人</string>
+    <string name="settings_community_body">和其他 MediTick 用户交流用药习惯、提出疑问、报告问题，并第一时间了解新功能。</string>
+    <string name="settings_website">网站</string>
+    <string name="settings_whats_new">新功能</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">隐私政策</string>
+    <string name="settings_privacy_sub">MediTick 如何处理你的数据</string>
+    <string name="settings_terms">服务条款</string>
+    <string name="settings_terms_sub">提醒工具的适用范围</string>
+    <string name="settings_about">关于 MediTick</string>
+    <string name="settings_version">版本 %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · 你的健康数据只保存在本机。\n这是提醒工具，不构成医疗建议。</string>
+    <string name="info_widgets_title">小组件</string>
+    <string name="info_widgets_body">在主屏幕的小部件选择器中添加 MediTick。锁屏小部件是否可用取决于你的 Android 版本和设备厂商，无法由应用自动开启。当前的小部件显示今天的进度和下一次服药；记录仍需打开应用。</string>
+    <string name="info_privacy_title">隐私</string>
+    <string name="info_privacy_body">药品数据、用药计划和记录都保存在这台设备上。只有你主动选择时才会导出。购买由 Google Play 处理，通知由 Android 发送。</string>
+    <string name="info_terms_title">使用条款</string>
+    <string name="info_terms_body">MediTick 是提醒和个人记录工具，不构成医疗建议。请始终遵循医生的指示，用药疑问请咨询专业人士。</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\n无需联网、注重隐私的 Android 用药提醒。</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">不用再想“我到底吃了没”。</string>
+    <string name="paywall_feature_alerts">让用药习惯始终看得见的提醒</string>
+    <string name="paywall_feature_follow_ups">持续跟进，直到每一次都记录完成</string>
+    <string name="paywall_feature_unlimited">药品和处方不限数量</string>
+    <string name="paywall_feature_insights">连续天数、洞察和小部件</string>
+    <string name="paywall_loading">正在加载 Google Play 方案…</string>
+    <string name="paywall_unavailable">暂时无法获取订阅方案。</string>
+    <string name="paywall_upgrade">升级到 Pro</string>
+    <string name="paywall_lifetime_note">一次付费，永久 Pro。</string>
+    <string name="paywall_renew_note">到期自动续订，可随时在 Google Play 取消。</string>
+    <string name="paywall_restore">恢复购买</string>
+    <string name="add_sheet_title">新建</string>
+    <string name="add_sheet_prescription">创建处方</string>
+    <string name="add_sheet_prescription_sub">把长期用药归为一组</string>
+    <string name="add_sheet_medication">添加药品</string>
+    <string name="add_sheet_medication_sub">为单个药品创建提醒</string>
+    <string name="release_latest">最新版本</string>
+    <string name="release_lead">本次更新让 MediTick 在 iPhone 和 Android 上功能一致：</string>
+    <string name="release_bullet_filters">治疗现在可以按类型，以及进行中、已完成或已归档来筛选。</string>
+    <string name="release_bullet_prescriptions">处方可以保存开方医生、门诊、联系方式、诊断和治疗周期，并可标记完成、归档或恢复。</string>
+    <string name="release_bullet_per_dose">每一次服药都能有自己的用量和与用餐的关系，所以同一种药可以既固定在 08:00，又安排在晚餐前 30 分钟。</string>
+    <string name="release_bullet_shapes">新增每 N 天以及服药/停药周期两种安排，此外还有指定星期和按需服用。</string>
+    <string name="release_bullet_take_all">“全部记录”一次点按即可处理同一时间段的全部服药。</string>
+    <string name="release_bullet_progress">进度新增覆盖全部日期的日历和按月切换，并提供依从性、准时和连续天数的说明。</string>
+    <string name="release_bullet_sounds">新增提醒声音、把药品名称挡在锁屏之外的私密通知，以及应用内语言选择。</string>
+    <string name="release_bullet_refills">补充库存时可先预览结果，记录过的时间也能事后修改。</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">早晨,早餐</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">中午,正午,午餐,午饭</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">晚上,傍晚,晚餐,晚饭</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">睡前,就寝前,临睡</string>
+    <string name="parse_meal_before" tools:ignore="Typos">饭前,餐前,早餐前,午餐前,晚餐前</string>
+    <string name="parse_meal_after" tools:ignore="Typos">饭后,餐后,早餐后,午餐后,晚餐后</string>
+    <string name="parse_meal_with" tools:ignore="Typos">随餐,与食物同服,餐中</string>
+    <string name="parse_twice" tools:ignore="Typos">每天两次,一日两次,两次</string>
+    <string name="parse_unit_day" tools:ignore="Typos">天,日</string>
+    <string name="parse_unit_week" tools:ignore="Typos">星期,周</string>
+    <string name="parse_unit_month" tools:ignore="Typos">个月</string>
+    <string name="parse_marker_am" tools:ignore="Typos">上午,早上</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">下午,晚上</string>
+    <string name="parse_stopwords" tools:ignore="Typos">每,每天,两次,一次,每日,服用,随,前,后,早上,晚上,傍晚,中午,睡前,午餐,晚餐,早餐,饭,餐,和</string>
+</resources>

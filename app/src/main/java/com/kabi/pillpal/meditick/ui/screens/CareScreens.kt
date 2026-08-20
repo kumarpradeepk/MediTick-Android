@@ -13,6 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.annotation.StringRes
+import com.kabi.pillpal.meditick.R
+import com.kabi.pillpal.meditick.formatMediumDate
+import com.kabi.pillpal.meditick.formatPercent
+import com.kabi.pillpal.meditick.formatShortDate
+import com.kabi.pillpal.meditick.formatTime
+import com.kabi.pillpal.meditick.formatWeekdayDate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,7 +34,18 @@ import com.kabi.pillpal.meditick.ui.theme.DS
 import java.text.SimpleDateFormat
 import java.util.*
 
-private enum class TreatmentType { ALL, MEDICATIONS, PRESCRIPTIONS }
+private enum class TreatmentType(@StringRes val title: Int) {
+    ALL(R.string.care_filter_all),
+    MEDICATIONS(R.string.care_filter_medications),
+    PRESCRIPTIONS(R.string.care_filter_prescriptions),
+}
+
+/** The word for a treatment status, shared by the chips, pills and dialogs. */
+@StringRes internal fun TreatmentStatus.titleRes(): Int = when (this) {
+    TreatmentStatus.active -> R.string.status_active
+    TreatmentStatus.completed -> R.string.status_completed
+    TreatmentStatus.archived -> R.string.status_archived
+}
 
 @Composable
 fun CareScreen(
@@ -50,37 +70,45 @@ fun CareScreen(
             item {
                 Spacer(Modifier.statusBarsPadding().height(1.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Care", style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.weight(1f))
-                    SelectChip("+ Add", true, { showAddMode = true })
+                    Text(stringResource(R.string.care_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.weight(1f))
+                    SelectChip(stringResource(R.string.care_add), true, { showAddMode = true })
                 }
             }
             item {
                 Spacer(Modifier.height(14.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    TreatmentType.entries.forEach { value -> SelectChip(value.name.lowercase().replaceFirstChar { it.uppercase() }, typeFilter == value, { typeFilter = value }) }
+                    TreatmentType.entries.forEach { value -> SelectChip(stringResource(value.title), typeFilter == value, { typeFilter = value }) }
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    TreatmentStatus.entries.forEach { value -> SelectChip(value.name.replaceFirstChar { it.uppercase() }, statusFilter == value, { statusFilter = value }) }
+                    TreatmentStatus.entries.forEach { value -> SelectChip(stringResource(value.titleRes()), statusFilter == value, { statusFilter = value }) }
                 }
             }
             if (snapshot.medications.isEmpty() && snapshot.prescriptions.isEmpty()) {
                 item {
                     Spacer(Modifier.height(74.dp))
-                    FriendlyEmptyState(Icons.Default.Medication, "Your cabinet is empty",
-                        "Add a prescription or a single medication and your daily plan builds itself.",
-                        "Add your first medication", { showAddMode = true })
+                    FriendlyEmptyState(Icons.Default.Medication, stringResource(R.string.care_empty_title),
+                        stringResource(R.string.care_empty_body),
+                        stringResource(R.string.today_add_first), { showAddMode = true })
                 }
             } else {
                 if (typeFilter != TreatmentType.MEDICATIONS && visiblePrescriptions.isNotEmpty()) {
-                    item { SectionLabel("Prescriptions", Modifier.padding(top = 25.dp, bottom = 10.dp)) }
+                    item { SectionLabel(stringResource(R.string.care_section_prescriptions), Modifier.padding(top = 25.dp, bottom = 10.dp)) }
                     items(visiblePrescriptions, key = { it.id }) { rx ->
                         PrescriptionCard(repository, rx) { onPrescription(rx.id) }
                         Spacer(Modifier.height(10.dp))
                     }
                 }
                 if (typeFilter != TreatmentType.PRESCRIPTIONS && visibleMedications.isNotEmpty()) {
-                    item { SectionLabel(if (typeFilter == TreatmentType.MEDICATIONS || snapshot.prescriptions.isEmpty()) "Medications" else "Standalone", Modifier.padding(top = 18.dp, bottom = 10.dp)) }
+                    item {
+                        SectionLabel(
+                            stringResource(
+                                if (typeFilter == TreatmentType.MEDICATIONS || snapshot.prescriptions.isEmpty()) R.string.care_section_medications
+                                else R.string.care_section_standalone,
+                            ),
+                            Modifier.padding(top = 18.dp, bottom = 10.dp),
+                        )
+                    }
                     item {
                         GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
                             visibleMedications.forEachIndexed { index, med -> if (index > 0) RowDivider(); MedicationRow(med) { onMedication(med.id) } }
@@ -91,7 +119,7 @@ fun CareScreen(
                 if (archived.isNotEmpty()) {
                     item {
                         Row(Modifier.fillMaxWidth().clickable { showArchived = !showArchived }.padding(top = 22.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-                            SectionLabel("Archived (${archived.size})"); Spacer(Modifier.width(5.dp))
+                            SectionLabel(stringResource(R.string.care_archived_count, archived.size)); Spacer(Modifier.width(5.dp))
                             Icon(if (showArchived) Icons.Default.ExpandMore else Icons.Default.ChevronRight, null, tint = DS.colors.ink3, modifier = Modifier.size(17.dp))
                         }
                     }
@@ -106,13 +134,13 @@ fun CareScreen(
     }
     if (showAddMode) ModalBottomSheet(onDismissRequest = { showAddMode = false }, containerColor = DS.colors.bg3) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            Text("What are we adding?", style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Text(stringResource(R.string.care_what_adding), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
             Spacer(Modifier.height(15.dp))
-            ModeCard(Icons.Default.Description, DS.colors.violet, "Prescription", "A treatment plan with one or more medicines") {
+            ModeCard(Icons.Default.Description, DS.colors.violet, stringResource(R.string.care_mode_prescription), stringResource(R.string.care_mode_prescription_sub)) {
                 showAddMode = false; showPrescription = true
             }
             Spacer(Modifier.height(10.dp))
-            ModeCard(Icons.Default.Medication, DS.colors.mint, "Single medication", "Add it directly to your daily plan") {
+            ModeCard(Icons.Default.Medication, DS.colors.mint, stringResource(R.string.care_mode_single), stringResource(R.string.care_mode_single_sub)) {
                 showAddMode = false; onAddMedication(null)
             }
         }
@@ -138,11 +166,11 @@ private fun PrescriptionCard(repository: AppRepository, rx: Prescription, onClic
     val effectiveStatus = rx.effectiveStatus()
     GradientCard(Modifier.fillMaxWidth(), onClick = onClick) {
         Column(Modifier.padding(20.dp)) {
-            Row { StatusPill(effectiveStatus.name.replaceFirstChar { it.uppercase() }, when (effectiveStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 }); Spacer(Modifier.weight(1f)); Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink2) }
+            Row { StatusPill(stringResource(effectiveStatus.titleRes()), when (effectiveStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 }); Spacer(Modifier.weight(1f)); Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink2) }
             Spacer(Modifier.height(20.dp))
             Text(rx.name, style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
             val count = repository.medicationsIn(rx.id).size
-            Text(listOf(rx.condition, rx.prescriber, "$count ${if (count == 1) "medication" else "medications"}").filter { it.isNotBlank() }.joinToString(" · "),
+            Text(listOf(rx.condition, rx.prescriber, pluralStringResource(R.plurals.care_medication_count, count, count)).filter { it.isNotBlank() }.joinToString(" · "),
                 color = DS.colors.ink3, fontSize = 12.sp)
         }
     }
@@ -150,14 +178,15 @@ private fun PrescriptionCard(repository: AppRepository, rx: Prescription, onClic
 
 @Composable
 private fun MedicationRow(med: Medication, onClick: () -> Unit) {
+    val context = LocalContext.current
     Row(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 13.dp), verticalAlignment = Alignment.CenterVertically) {
         MedicationIcon(med, 40.dp); Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(med.name, color = DS.colors.ink, fontWeight = FontWeight.Bold)
-            Text(listOfNotNull(med.strengthLabel, med.schedule.summary()).joinToString(" · "), color = DS.colors.ink3, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(listOfNotNull(med.strengthLabel, med.schedule.summary(context)).joinToString(" · "), color = DS.colors.ink3, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         if (med.inventoryEnabled) {
-            Text("${prettyNumber(med.stock)} left", color = if (med.needsRefill) DS.colors.amber else DS.colors.ink3, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.care_stock_left, prettyNumber(med.stock)), color = if (med.needsRefill) DS.colors.amber else DS.colors.ink3, fontSize = 11.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.width(7.dp))
         }
         if (med.needsRefill) Icon(Icons.Default.Inventory2, null, tint = DS.colors.amber, modifier = Modifier.size(17.dp))
@@ -167,6 +196,7 @@ private fun MedicationRow(med: Medication, onClick: () -> Unit) {
 
 @Composable
 fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBack: () -> Unit, onEdit: () -> Unit) {
+    val context = LocalContext.current
     val med = repository.medication(medicationId)
     if (med == null) { LaunchedEffect(Unit) { onBack() }; return }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -189,70 +219,72 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
                         MedicationIcon(med, 66.dp); Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
                             Text(med.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
-                            Text(listOfNotNull(med.strengthLabel, med.form.title).joinToString(" · "), color = DS.colors.ink2)
-                            Spacer(Modifier.height(7.dp)); StatusPill(medicationStatus.name.replaceFirstChar { it.uppercase() }, when (medicationStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 })
+                            Text(listOfNotNull(med.strengthLabel, med.form.title(context)).joinToString(" · "), color = DS.colors.ink2)
+                            Spacer(Modifier.height(7.dp)); StatusPill(stringResource(medicationStatus.titleRes()), when (medicationStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 })
                         }
                     }
                 }
             }
-            nextDose?.let { next -> item { DetailSection("Next dose") {
-                SettingsRow(Icons.Default.Schedule, DS.colors.mint, TimeOfDay.fromEpoch(next.time).label(), SimpleDateFormat("EEE, MMM d", Locale.getDefault()).format(Date(next.time)))
-                RowDivider(); SettingsRow(Icons.Default.CheckCircle, DS.colors.mint, "Take Now", med.doseLabel, onClick = { logDose = next })
+            nextDose?.let { next -> item { DetailSection(stringResource(R.string.detail_next_dose)) {
+                SettingsRow(Icons.Default.Schedule, DS.colors.mint, TimeOfDay.fromEpoch(next.time).label(context), formatWeekdayDate(next.time))
+                RowDivider(); SettingsRow(Icons.Default.CheckCircle, DS.colors.mint, stringResource(R.string.action_take_now), med.doseLabel(context), onClick = { logDose = next })
             } } }
             if (nextDose == null && med.schedule.kind == ScheduleKind.asNeeded && medicationStatus == TreatmentStatus.active) item {
-                DetailSection("As needed") {
-                    SettingsRow(Icons.Default.CheckCircle, DS.colors.mint, "Take Now", med.doseLabel, onClick = { showAsNeeded = true })
+                DetailSection(stringResource(R.string.detail_as_needed)) {
+                    SettingsRow(Icons.Default.CheckCircle, DS.colors.mint, stringResource(R.string.action_take_now), med.doseLabel(context), onClick = { showAsNeeded = true })
                 }
             }
-            item { DetailSection("Schedule") {
-                SettingsRow(Icons.Default.Schedule, DS.colors.mint, med.schedule.summary(), med.schedule.frequencySummary())
-                RowDivider(); SettingsRow(Icons.Default.Medication, DS.colors.cyan, med.doseLabel, "Amount per dose")
+            item { DetailSection(stringResource(R.string.detail_schedule)) {
+                SettingsRow(Icons.Default.Schedule, DS.colors.mint, med.schedule.summary(context), med.schedule.frequencySummary(context))
+                RowDivider(); SettingsRow(Icons.Default.Medication, DS.colors.cyan, med.doseLabel(context), stringResource(R.string.detail_amount_per_dose))
                 if (med.instructions.isNotBlank()) { RowDivider(); SettingsRow(Icons.Default.Notes, DS.colors.violet, med.instructions) }
             } }
-            item { DetailSection("Supply") {
+            item { DetailSection(stringResource(R.string.detail_supply)) {
                 if (med.inventoryEnabled) SettingsRow(Icons.Default.Inventory2, if (med.needsRefill) DS.colors.amber else DS.colors.mint,
-                    "${prettyNumber(med.stock)} remaining", "Alert at ${prettyNumber(med.refillReminderThreshold)}" + (med.daysOfStockRemaining?.let { " · About $it days" } ?: ""),
-                    onClick = { showRefill = true }) { Text("+ Refill", color = DS.colors.mint, fontWeight = FontWeight.Bold, fontSize = 12.sp) }
-                else SettingsRow(Icons.Default.Inventory2, DS.colors.ink3, "Inventory not tracked", "Enable tracking when editing this medication")
+                    stringResource(R.string.detail_supply_remaining, prettyNumber(med.stock)),
+                    med.daysOfStockRemaining?.let { stringResource(R.string.detail_supply_alert_days, prettyNumber(med.refillReminderThreshold), it) }
+                        ?: stringResource(R.string.detail_supply_alert, prettyNumber(med.refillReminderThreshold)),
+                    onClick = { showRefill = true }) { Text(stringResource(R.string.detail_refill), color = DS.colors.mint, fontWeight = FontWeight.Bold, fontSize = 12.sp) }
+                else SettingsRow(Icons.Default.Inventory2, DS.colors.ink3, stringResource(R.string.detail_supply_untracked), stringResource(R.string.detail_supply_enable))
             } }
             val history = repository.logs.filter { it.medicationID == med.id }.sortedByDescending { it.actedAt }.take(10)
-            if (history.isNotEmpty()) item { DetailSection("Recent history") {
+            if (history.isNotEmpty()) item { DetailSection(stringResource(R.string.detail_recent_history)) {
                 history.forEachIndexed { index, log ->
                     if (index > 0) RowDivider()
                     SettingsRow(if (log.status == DoseStatus.taken) Icons.Default.CheckCircle else Icons.Default.RemoveCircle,
                         if (log.status == DoseStatus.taken) DS.colors.mint else DS.colors.amber,
-                        if (log.isAsNeeded) "As-needed dose" else log.status.name.replaceFirstChar { it.uppercase() },
-                        SimpleDateFormat("EEE, MMM d · h:mm a", Locale.getDefault()).format(Date(log.actedAt)))
+                        if (log.isAsNeeded) stringResource(R.string.detail_history_as_needed) else stringResource(doseStatusRes(log.status)),
+                        formatWeekdayDate(log.actedAt) + " · " + formatTime(context, log.actedAt))
                 }
-                RowDivider(); SettingsRow(Icons.Default.List, DS.colors.cyan, "View medication logs", "Full taken and skipped history", onClick = { showLogs = true })
+                RowDivider(); SettingsRow(Icons.Default.List, DS.colors.cyan, stringResource(R.string.detail_view_medication_logs), stringResource(R.string.detail_view_medication_logs_sub), onClick = { showLogs = true })
             } }
             item {
                 Spacer(Modifier.height(18.dp))
                 OutlinedButton({ if (med.isArchived) repository.archiveMedication(med.id, false) else confirmArchive = true }, Modifier.fillMaxWidth()) {
-                    Icon(if (med.isArchived) Icons.Default.Unarchive else Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text(if (med.isArchived) "Restore medication" else "Archive medication")
+                    Icon(if (med.isArchived) Icons.Default.Unarchive else Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text(stringResource(if (med.isArchived) R.string.detail_restore_medication else R.string.detail_archive_medication))
                 }
                 TextButton({ confirmDelete = true }, Modifier.fillMaxWidth(), colors = ButtonDefaults.textButtonColors(contentColor = DS.colors.coral)) {
-                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text("Delete medication")
+                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.detail_delete_medication))
                 }
                 Spacer(Modifier.navigationBarsPadding().height(10.dp))
             }
         }
     }
-    if (confirmDelete) AlertDialog(onDismissRequest = { confirmDelete = false }, title = { Text("Delete ${med.name}?") },
-        text = { Text("Its medication history will also be removed. This cannot be undone.") },
-        confirmButton = { TextButton({ repository.deleteMedication(med.id); onBack() }) { Text("Delete", color = DS.colors.coral) } },
-        dismissButton = { TextButton({ confirmDelete = false }) { Text("Cancel") } })
-    if (confirmArchive) AlertDialog(onDismissRequest = { confirmArchive = false }, title = { Text("Archive ${med.name}?") },
-        text = { Text("Upcoming reminders will stop. You can restore this medication later from Archived.") },
-        confirmButton = { TextButton({ repository.archiveMedication(med.id, true); confirmArchive = false }) { Text("Archive") } },
-        dismissButton = { TextButton({ confirmArchive = false }) { Text("Cancel") } })
-    if (showRefill) AlertDialog(onDismissRequest = { showRefill = false }, title = { Text("Add a refill") },
-        text = { OutlinedTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, label = { Text("Units to add") }) },
-        confirmButton = { TextButton({ repository.refillStock(med.id, refillAmount.toDoubleOrNull() ?: 0.0); showRefill = false }) { Text("Add") } },
-        dismissButton = { TextButton({ showRefill = false }) { Text("Cancel") } })
+    if (confirmDelete) AlertDialog(onDismissRequest = { confirmDelete = false }, title = { Text(stringResource(R.string.confirm_delete_medication_title, med.name)) },
+        text = { Text(stringResource(R.string.confirm_delete_medication_body)) },
+        confirmButton = { TextButton({ repository.deleteMedication(med.id); onBack() }) { Text(stringResource(R.string.action_delete), color = DS.colors.coral) } },
+        dismissButton = { TextButton({ confirmDelete = false }) { Text(stringResource(R.string.action_cancel)) } })
+    if (confirmArchive) AlertDialog(onDismissRequest = { confirmArchive = false }, title = { Text(stringResource(R.string.confirm_archive_medication_title, med.name)) },
+        text = { Text(stringResource(R.string.confirm_archive_medication_body)) },
+        confirmButton = { TextButton({ repository.archiveMedication(med.id, true); confirmArchive = false }) { Text(stringResource(R.string.rx_action_archive)) } },
+        dismissButton = { TextButton({ confirmArchive = false }) { Text(stringResource(R.string.action_cancel)) } })
+    if (showRefill) AlertDialog(onDismissRequest = { showRefill = false }, title = { Text(stringResource(R.string.refill_title)) },
+        text = { OutlinedTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, label = { Text(stringResource(R.string.refill_units_label)) }) },
+        confirmButton = { TextButton({ repository.refillStock(med.id, refillAmount.toDoubleOrNull() ?: 0.0); showRefill = false }) { Text(stringResource(R.string.action_add)) } },
+        dismissButton = { TextButton({ showRefill = false }) { Text(stringResource(R.string.action_cancel)) } })
     logDose?.let { dose -> LogDoseDialog(repository, dose, { logDose = null }) }
     if (showAsNeeded) AsNeededSheet(repository, med) { showAsNeeded = false }
-    if (showLogs) LogsDialog("${med.name} logs", repository.logs.filter { it.medicationID == med.id }.sortedByDescending { it.actedAt }, repository, { showLogs = false })
+    if (showLogs) LogsDialog(stringResource(R.string.logs_title, med.name), repository.logs.filter { it.medicationID == med.id }.sortedByDescending { it.actedAt }, repository, { showLogs = false })
 }
 
 @Composable
@@ -260,6 +292,7 @@ fun PrescriptionDetailScreen(
     repository: AppRepository, prescriptionId: String, isPro: Boolean, onBack: () -> Unit,
     onMedication: (String) -> Unit, onAddMedication: () -> Unit,
 ) {
+    val context = LocalContext.current
     val rx = repository.prescription(prescriptionId)
     if (rx == null) { LaunchedEffect(Unit) { onBack() }; return }
     var edit by remember { mutableStateOf(false) }
@@ -296,46 +329,51 @@ fun PrescriptionDetailScreen(
             item {
                 GradientCard(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(21.dp)) {
-                        StatusPill(effectiveStatus.name.replaceFirstChar { it.uppercase() } + " treatment", when (effectiveStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 }); Spacer(Modifier.height(18.dp))
+                        StatusPill(stringResource(R.string.status_treatment, stringResource(effectiveStatus.titleRes())), when (effectiveStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 }); Spacer(Modifier.height(18.dp))
                         Text(rx.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
                         if (rx.condition.isNotBlank()) Text(rx.condition, color = DS.colors.ink2)
-                        if (rx.prescriber.isNotBlank()) Text("Prescribed by ${rx.prescriber}", color = DS.colors.ink3, fontSize = 12.sp)
+                        if (rx.prescriber.isNotBlank()) Text(stringResource(R.string.rx_prescribed_by, rx.prescriber), color = DS.colors.ink3, fontSize = 12.sp)
                         if (rx.facility.isNotBlank()) Text(rx.facility, color = DS.colors.ink3, fontSize = 12.sp)
                         if (rx.contact.isNotBlank()) Text(rx.contact, color = DS.colors.ink3, fontSize = 12.sp)
-                        Text(SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(rx.startDate)) + (rx.endDate?.let { " – ${SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(it))}" } ?: " · Ongoing"), color = DS.colors.ink3, fontSize = 12.sp)
+                        Text(
+                            rx.endDate?.let { stringResource(R.string.rx_period_range, formatMediumDate(rx.startDate), formatMediumDate(it)) }
+                                ?: stringResource(R.string.rx_period_ongoing, formatMediumDate(rx.startDate)),
+                            color = DS.colors.ink3, fontSize = 12.sp,
+                        )
                     }
                 }
             }
-            item { SectionLabel("Medications", Modifier.padding(top = 24.dp, bottom = 10.dp)) }
+            item { SectionLabel(stringResource(R.string.care_section_medications), Modifier.padding(top = 24.dp, bottom = 10.dp)) }
             item {
                 GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
                     medications.forEachIndexed { index, med -> if (index > 0) RowDivider(); MedicationRow(med) { onMedication(med.id) } }
                     if (medications.isNotEmpty()) RowDivider()
-                    SettingsRow(Icons.Default.Add, DS.colors.mint, "Add medication", if (!isPro && repository.activeMedications.isNotEmpty()) "MediTick Pro" else "New or existing medication", onClick = { if (!isPro && repository.activeMedications.isNotEmpty()) onAddMedication() else addMenu = true })
+                    SettingsRow(Icons.Default.Add, DS.colors.mint, stringResource(R.string.rx_add_medication), stringResource(if (!isPro && repository.activeMedications.isNotEmpty()) R.string.rx_add_medication_locked else R.string.rx_add_medication_sub), onClick = { if (!isPro && repository.activeMedications.isNotEmpty()) onAddMedication() else addMenu = true })
                 }
             }
-            item { DetailSection("Progress & logs") {
+            item { DetailSection(stringResource(R.string.rx_progress_and_logs)) {
                 SettingsRow(Icons.Default.BarChart, DS.colors.cyan,
-                    if (rxStats.decided == 0) "No decided doses yet" else "${(rxStats.ratio * 100).toInt()}% adherence",
-                    "${rxStats.taken} taken · ${rxStats.skipped} skipped · ${rxStats.missed} missed")
+                    if (rxStats.decided == 0) stringResource(R.string.rx_no_decided)
+                    else stringResource(R.string.rx_adherence, formatPercent((rxStats.ratio * 100).toInt())),
+                    stringResource(R.string.rx_counts, rxStats.taken, rxStats.skipped, rxStats.missed))
                 RowDivider(); SettingsRow(Icons.Default.Timer, DS.colors.violet,
-                    rxOnTime?.let { "${(it * 100).toInt()}% on time" } ?: "No taken doses yet",
-                    "Within ±${progressSettings.onTimeWindowMinutes} minutes")
-                RowDivider(); SettingsRow(Icons.Default.List, DS.colors.mint, "View prescription logs", "Taken, skipped and as-needed history", onClick = { showLogs = true })
+                    rxOnTime?.let { stringResource(R.string.rx_on_time, formatPercent((it * 100).toInt())) } ?: stringResource(R.string.rx_no_taken),
+                    stringResource(R.string.rx_within_window, progressSettings.onTimeWindowMinutes))
+                RowDivider(); SettingsRow(Icons.Default.List, DS.colors.mint, stringResource(R.string.rx_view_logs), stringResource(R.string.rx_view_logs_sub), onClick = { showLogs = true })
             } }
-            if (rx.notes.isNotBlank()) item { DetailSection("Notes") { Text(rx.notes, Modifier.padding(16.dp), color = DS.colors.ink2) } }
+            if (rx.notes.isNotBlank()) item { DetailSection(stringResource(R.string.rx_notes)) { Text(rx.notes, Modifier.padding(16.dp), color = DS.colors.ink2) } }
             item {
                 Spacer(Modifier.height(22.dp))
                 when (effectiveStatus) {
                     TreatmentStatus.active -> {
-                        OutlinedButton({ pendingStatus = TreatmentStatus.completed }, Modifier.fillMaxWidth()) { Icon(Icons.Default.CheckCircle, null); Spacer(Modifier.width(7.dp)); Text("Mark as complete") }
-                        OutlinedButton({ pendingStatus = TreatmentStatus.archived }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text("Archive prescription") }
+                        OutlinedButton({ pendingStatus = TreatmentStatus.completed }, Modifier.fillMaxWidth()) { Icon(Icons.Default.CheckCircle, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_mark_complete)) }
+                        OutlinedButton({ pendingStatus = TreatmentStatus.archived }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_archive)) }
                     }
-                    TreatmentStatus.completed -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Refresh, null); Spacer(Modifier.width(7.dp)); Text("Reactivate prescription") }
-                    TreatmentStatus.archived -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Restore, null); Spacer(Modifier.width(7.dp)); Text("Restore prescription") }
+                    TreatmentStatus.completed -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Refresh, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_reactivate)) }
+                    TreatmentStatus.archived -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Restore, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_restore)) }
                 }
                 TextButton({ delete = true }, Modifier.fillMaxWidth(), colors = ButtonDefaults.textButtonColors(contentColor = DS.colors.coral)) {
-                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text("Delete prescription")
+                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_delete))
                 }
                 Spacer(Modifier.navigationBarsPadding().height(10.dp))
             }
@@ -347,38 +385,51 @@ fun PrescriptionDetailScreen(
     pendingStatus?.let { status ->
         val reactivating = status == TreatmentStatus.active && effectiveStatus == TreatmentStatus.completed
         AlertDialog(onDismissRequest = { pendingStatus = null },
-        title = { Text(when (status) { TreatmentStatus.completed -> "Mark as complete?"; TreatmentStatus.archived -> "Archive prescription?"; TreatmentStatus.active -> if (reactivating) "Reactivate prescription?" else "Restore prescription?" }) },
-        text = { Text(when (status) { TreatmentStatus.completed -> "Upcoming reminders for linked medications will stop."; TreatmentStatus.archived -> "The prescription and its linked medications move to Archived. You can restore them later."; TreatmentStatus.active -> if (reactivating) "The course becomes ongoing and reminders resume. Medications completed independently stay completed." else "Only medications changed by this prescription will be restored; medications you archived yourself stay archived." }) },
-        confirmButton = { TextButton({ repository.setPrescriptionStatus(rx.id, status); pendingStatus = null }) { Text(if (status == TreatmentStatus.active) if (reactivating) "Reactivate" else "Restore" else if (status == TreatmentStatus.completed) "Complete" else "Archive") } },
-        dismissButton = { TextButton({ pendingStatus = null }) { Text("Cancel") } }) }
-    if (delete) AlertDialog(onDismissRequest = { delete = false }, title = { Text("Delete this prescription?") },
-        text = { Text("Its medications will stay in your cabinet as standalone medications.") },
-        confirmButton = { TextButton({ repository.deletePrescription(rx.id); onBack() }) { Text("Delete", color = DS.colors.coral) } },
-        dismissButton = { TextButton({ delete = false }) { Text("Cancel") } })
+        title = { Text(stringResource(when (status) {
+            TreatmentStatus.completed -> R.string.rx_confirm_complete_title
+            TreatmentStatus.archived -> R.string.rx_confirm_archive_title
+            TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_title else R.string.rx_confirm_restore_title
+        })) },
+        text = { Text(stringResource(when (status) {
+            TreatmentStatus.completed -> R.string.rx_confirm_complete_body
+            TreatmentStatus.archived -> R.string.rx_confirm_archive_body
+            TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_body else R.string.rx_confirm_restore_body
+        })) },
+        confirmButton = { TextButton({ repository.setPrescriptionStatus(rx.id, status); pendingStatus = null }) { Text(stringResource(when {
+            status == TreatmentStatus.active && reactivating -> R.string.rx_action_reactivate
+            status == TreatmentStatus.active -> R.string.rx_action_restore
+            status == TreatmentStatus.completed -> R.string.rx_action_complete
+            else -> R.string.rx_action_archive
+        })) } },
+        dismissButton = { TextButton({ pendingStatus = null }) { Text(stringResource(R.string.action_cancel)) } }) }
+    if (delete) AlertDialog(onDismissRequest = { delete = false }, title = { Text(stringResource(R.string.rx_confirm_delete_title)) },
+        text = { Text(stringResource(R.string.rx_confirm_delete_body)) },
+        confirmButton = { TextButton({ repository.deletePrescription(rx.id); onBack() }) { Text(stringResource(R.string.action_delete), color = DS.colors.coral) } },
+        dismissButton = { TextButton({ delete = false }) { Text(stringResource(R.string.action_cancel)) } })
     if (addMenu) ModalBottomSheet(onDismissRequest = { addMenu = false }, containerColor = DS.colors.bg3) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            Text("Add medication", style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
-            SettingsRow(Icons.Default.Add, DS.colors.mint, "Add new medication", "Create and link a new reminder", onClick = { addMenu = false; onAddMedication() })
-            SettingsRow(Icons.Default.Link, DS.colors.cyan, "Add existing medications", "Link a standalone medication", onClick = { addMenu = false; chooseExisting = true })
+            Text(stringResource(R.string.rx_add_medication), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            SettingsRow(Icons.Default.Add, DS.colors.mint, stringResource(R.string.rx_add_new_medication), stringResource(R.string.rx_add_new_medication_sub), onClick = { addMenu = false; onAddMedication() })
+            SettingsRow(Icons.Default.Link, DS.colors.cyan, stringResource(R.string.rx_add_existing), stringResource(R.string.rx_add_existing_sub), onClick = { addMenu = false; chooseExisting = true })
         }
     }
     if (chooseExisting) ModalBottomSheet(onDismissRequest = { chooseExisting = false }, containerColor = DS.colors.bg3) {
         val standalone = repository.medications.filter { it.prescriptionID == null }
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            Text("Add existing medications", style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
-            if (standalone.isEmpty()) Text("No standalone medications are available.", color = DS.colors.ink3, modifier = Modifier.padding(vertical = 20.dp))
+            Text(stringResource(R.string.rx_add_existing), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            if (standalone.isEmpty()) Text(stringResource(R.string.rx_no_standalone), color = DS.colors.ink3, modifier = Modifier.padding(vertical = 20.dp))
             standalone.forEach { med -> SettingsRow(Icons.Default.Medication, DS.colors.mint, med.name, med.strengthLabel, onClick = { repository.linkMedication(med.id, rx.id); chooseExisting = false }) }
         }
     }
-    if (showLogs) LogsDialog("${rx.name} logs", repository.logsForPrescription(rx.id), repository, { showLogs = false })
+    if (showLogs) LogsDialog(stringResource(R.string.logs_title, rx.name), repository.logsForPrescription(rx.id), repository, { showLogs = false })
 }
 
 @Composable
 private fun DetailTopBar(title: String, onBack: () -> Unit, onEdit: () -> Unit) {
     Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onBack) { Icon(Icons.Default.ArrowBack, "Back", tint = DS.colors.ink) }
+        IconButton(onBack) { Icon(Icons.Default.ArrowBack, stringResource(R.string.action_back), tint = DS.colors.ink) }
         Text(title, Modifier.weight(1f), color = DS.colors.ink, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        IconButton(onEdit) { Icon(Icons.Default.Edit, "Edit", tint = DS.colors.mint) }
+        IconButton(onEdit) { Icon(Icons.Default.Edit, stringResource(R.string.action_edit), tint = DS.colors.mint) }
     }
 }
 
@@ -405,29 +456,29 @@ fun PrescriptionEditor(
     var ongoing by remember { mutableStateOf(existing?.endDate == null) }
     var endDate by remember { mutableLongStateOf(existing?.endDate ?: DoseEngine.addDays(startDate, 14)) }
     var updateLinkedDates by remember(existing?.id) { mutableStateOf(true) }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(if (existing == null) "New prescription" else "Edit prescription") },
+    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(if (existing == null) R.string.rx_editor_new else R.string.rx_editor_edit)) },
         text = { LazyColumn(Modifier.heightIn(max = 520.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            item { OutlinedTextField(name, { name = it }, label = { Text("Plan name") }, singleLine = true) }
-            item { OutlinedTextField(condition, { condition = it }, label = { Text("Condition") }, singleLine = true) }
-            item { OutlinedTextField(prescriber, { prescriber = it }, label = { Text("Prescriber") }, singleLine = true) }
-            item { OutlinedTextField(facility, { facility = it }, label = { Text("Facility / clinic") }, singleLine = true) }
-            item { OutlinedTextField(contact, { contact = it }, label = { Text("Contact") }, singleLine = true) }
-            item { OutlinedButton({ showDatePicker(context, startDate) { startDate = it; if (endDate < it) endDate = it } }, Modifier.fillMaxWidth()) { Text("Start · ${SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(startDate))}") } }
-            item { Row(verticalAlignment = Alignment.CenterVertically) { Text("Ongoing treatment", Modifier.weight(1f)); Switch(ongoing, { ongoing = it }) } }
-            if (!ongoing) item { OutlinedButton({ showDatePicker(context, endDate) { endDate = it.coerceAtLeast(startDate) } }, Modifier.fillMaxWidth()) { Text("End · ${SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date(endDate))}") } }
+            item { OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.rx_field_plan_name)) }, singleLine = true) }
+            item { OutlinedTextField(condition, { condition = it }, label = { Text(stringResource(R.string.rx_field_condition)) }, singleLine = true) }
+            item { OutlinedTextField(prescriber, { prescriber = it }, label = { Text(stringResource(R.string.rx_field_prescriber)) }, singleLine = true) }
+            item { OutlinedTextField(facility, { facility = it }, label = { Text(stringResource(R.string.rx_field_facility)) }, singleLine = true) }
+            item { OutlinedTextField(contact, { contact = it }, label = { Text(stringResource(R.string.rx_field_contact)) }, singleLine = true) }
+            item { OutlinedButton({ showDatePicker(context, startDate) { startDate = it; if (endDate < it) endDate = it } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_start, formatMediumDate(startDate))) } }
+            item { Row(verticalAlignment = Alignment.CenterVertically) { Text(stringResource(R.string.rx_ongoing), Modifier.weight(1f)); Switch(ongoing, { ongoing = it }) } }
+            if (!ongoing) item { OutlinedButton({ showDatePicker(context, endDate) { endDate = it.coerceAtLeast(startDate) } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_end, formatMediumDate(endDate))) } }
             if (existing != null && linkedMedicationCount > 0) item {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text("Update $linkedMedicationCount ${if (linkedMedicationCount == 1) "medication" else "medications"}")
-                        Text("Apply these start and end dates to linked schedules", color = DS.colors.ink3, fontSize = 11.sp)
+                        Text(pluralStringResource(R.plurals.rx_update_linked, linkedMedicationCount, linkedMedicationCount))
+                        Text(stringResource(R.string.rx_apply_dates), color = DS.colors.ink3, fontSize = 11.sp)
                     }
                     Switch(updateLinkedDates, { updateLinkedDates = it })
                 }
             }
-            item { OutlinedTextField(notes, { notes = it }, label = { Text("Notes") }, minLines = 2) }
+            item { OutlinedTextField(notes, { notes = it }, label = { Text(stringResource(R.string.rx_field_notes)) }, minLines = 2) }
         } },
-        confirmButton = { TextButton({ if (name.isNotBlank()) onSave((existing ?: Prescription()).copy(name = name.trim(), condition = condition.trim(), prescriber = prescriber.trim(), facility = facility.trim(), contact = contact.trim(), startDate = startDate, endDate = if (ongoing) null else endDate, notes = notes.trim()), updateLinkedDates) }, enabled = name.isNotBlank()) { Text("Save") } },
-        dismissButton = { TextButton(onDismiss) { Text("Cancel") } })
+        confirmButton = { TextButton({ if (name.isNotBlank()) onSave((existing ?: Prescription()).copy(name = name.trim(), condition = condition.trim(), prescriber = prescriber.trim(), facility = facility.trim(), contact = contact.trim(), startDate = startDate, endDate = if (ongoing) null else endDate, notes = notes.trim()), updateLinkedDates) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.action_save)) } },
+        dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } })
 }
 
 private fun showDatePicker(context: android.content.Context, initial: Long, onDate: (Long) -> Unit) {
@@ -440,35 +491,47 @@ fun LogDoseDialog(repository: AppRepository, dose: ScheduledDose, onDismiss: () 
     val context = LocalContext.current
     var actedAt by remember(dose.id) { mutableLongStateOf(System.currentTimeMillis()) }
     var note by remember(dose.id) { mutableStateOf("") }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text("Log dose") }, text = {
+    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.dose_log_title)) }, text = {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("${dose.medication.name} · ${dose.medication.doseLabel}")
+            Text(stringResource(R.string.today_dose_line, dose.medication.name, dose.medication.doseLabel(context)))
             OutlinedButton({
                 val calendar = Calendar.getInstance().apply { timeInMillis = actedAt }
                 android.app.TimePickerDialog(context, { _, hour, minute ->
                     actedAt = Calendar.getInstance().apply { timeInMillis = actedAt; set(Calendar.HOUR_OF_DAY, hour); set(Calendar.MINUTE, minute) }.timeInMillis
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-            }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(7.dp)); Text("Logged time · ${SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(actedAt))}") }
-            OutlinedTextField(note, { note = it }, label = { Text("Note (optional)") }, modifier = Modifier.fillMaxWidth())
+            }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.dose_logged_time, formatTime(context, actedAt))) }
+            OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth())
         }
-    }, confirmButton = { TextButton({ repository.logDose(dose, DoseStatus.taken, actedAt, note); onDismiss() }) { Text("Take") } },
-        dismissButton = { Row { TextButton({ repository.logDose(dose, DoseStatus.skipped, actedAt, note); onDismiss() }) { Text("Skip") }; TextButton(onDismiss) { Text("Cancel") } } })
+    }, confirmButton = { TextButton({ repository.logDose(dose, DoseStatus.taken, actedAt, note); onDismiss() }) { Text(stringResource(R.string.action_take)) } },
+        dismissButton = { Row { TextButton({ repository.logDose(dose, DoseStatus.skipped, actedAt, note); onDismiss() }) { Text(stringResource(R.string.action_skip)) }; TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } } })
 }
 
 @Composable
 fun LogsDialog(title: String, logs: List<DoseLog>, repository: AppRepository, onDismiss: () -> Unit) {
+    val context = LocalContext.current
     AlertDialog(onDismissRequest = onDismiss, title = { Text(title) }, text = {
-        if (logs.isEmpty()) Text("No doses have been logged yet.") else LazyColumn(Modifier.heightIn(max = 420.dp)) {
+        if (logs.isEmpty()) Text(stringResource(R.string.logs_empty)) else LazyColumn(Modifier.heightIn(max = 420.dp)) {
             items(logs, key = { it.id }) { log ->
                 Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(if (log.status == DoseStatus.taken) Icons.Default.CheckCircle else Icons.Default.RemoveCircle, null, tint = if (log.status == DoseStatus.taken) DS.colors.mint else DS.colors.amber)
                     Spacer(Modifier.width(9.dp)); Column(Modifier.weight(1f)) {
-                        Text(repository.medication(log.medicationID)?.name ?: "Medication", color = DS.colors.ink, fontWeight = FontWeight.Bold)
-                        Text("${log.status.name.replaceFirstChar { it.uppercase() }} · ${SimpleDateFormat("MMM d, h:mm a", Locale.getDefault()).format(Date(log.actedAt))}", color = DS.colors.ink3, fontSize = 12.sp)
+                        Text(repository.medication(log.medicationID)?.name ?: stringResource(R.string.progress_generic_medication), color = DS.colors.ink, fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(
+                                R.string.log_row,
+                                stringResource(doseStatusRes(log.status)),
+                                formatShortDate(log.actedAt) + " " + formatTime(context, log.actedAt),
+                            ),
+                            color = DS.colors.ink3, fontSize = 12.sp,
+                        )
                     }
-                    IconButton({ repository.deleteLog(log.id) }) { Icon(Icons.Default.DeleteOutline, "Delete log", tint = DS.colors.ink3) }
+                    IconButton({ repository.deleteLog(log.id) }) { Icon(Icons.Default.DeleteOutline, stringResource(R.string.progress_delete_log), tint = DS.colors.ink3) }
                 }
             }
         }
-    }, confirmButton = { TextButton(onDismiss) { Text("Done") } })
+    }, confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } })
 }
+
+/** The word for a logged outcome — "Taken" / "Skipped". */
+@StringRes internal fun doseStatusRes(status: DoseStatus): Int =
+    if (status == DoseStatus.taken) R.string.state_taken else R.string.state_skipped

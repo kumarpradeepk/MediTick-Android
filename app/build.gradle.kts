@@ -50,6 +50,16 @@ android {
             }
         }
     }
+    // MediTick has an in-app language picker, so every translation must be
+    // present in the installed app. Play's default bundle behaviour installs
+    // only the device's own locales, which would make the picker silently fall
+    // back to English for anything else.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

@@ -1,5 +1,7 @@
 package com.kabi.pillpal.meditick
 
+import androidx.annotation.StringRes
+
 /**
  * Every outbound destination the app can open, in one place. Replace the
  * placeholder hosts below with the real MediTick addresses before shipping —
@@ -45,22 +47,27 @@ object AppLinks {
  */
 object ReleaseNotes {
 
-    data class Entry(val version: String, val date: String, val lead: String, val bullets: List<String>)
+    data class Entry(
+        @StringRes val version: Int,
+        val date: String,
+        @StringRes val lead: Int,
+        val bullets: List<Int>,
+    )
 
     val entries = listOf(
         Entry(
-            version = "Latest",
+            version = R.string.release_latest,
             date = "",
-            lead = "This update brings MediTick to full feature parity across iPhone and Android:",
+            lead = R.string.release_lead,
             bullets = listOf(
-                "Treatments now filters by type and by Active, Completed or Archived.",
-                "Prescriptions keep prescriber, clinic, contact, diagnosis and a treatment period, and can be marked complete, archived or restored.",
-                "Each dose can have its own amount and its own meal relation, so one medication can be 08:00 fixed and 30 minutes before dinner.",
-                "New schedule shapes: every N days and intake/pause cycles, alongside specific days and as-needed.",
-                "Take All resolves a whole time group in one tap.",
-                "Progress adds an all-days calendar with month navigation, plus adherence, on-time and streak explainers.",
-                "Reminder sounds, private notifications that keep drug names off the lock screen, and an in-app language picker.",
-                "Refills preview the resulting stock before you commit, and logged times can be corrected after the fact.",
+                R.string.release_bullet_filters,
+                R.string.release_bullet_prescriptions,
+                R.string.release_bullet_per_dose,
+                R.string.release_bullet_shapes,
+                R.string.release_bullet_take_all,
+                R.string.release_bullet_progress,
+                R.string.release_bullet_sounds,
+                R.string.release_bullet_refills,
             ),
         ),
     )

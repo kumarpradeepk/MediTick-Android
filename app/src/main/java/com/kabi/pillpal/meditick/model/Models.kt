@@ -1,7 +1,13 @@
 package com.kabi.pillpal.meditick.model
 
+import android.content.Context
+import androidx.annotation.PluralsRes
+import androidx.annotation.StringRes
+import com.kabi.pillpal.meditick.R
+import com.kabi.pillpal.meditick.formatTime
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -11,10 +17,8 @@ import java.util.UUID
 data class TimeOfDay(val hour: Int = 8, val minute: Int = 0) : Comparable<TimeOfDay> {
     val totalMinutes: Int get() = hour * 60 + minute
     override fun compareTo(other: TimeOfDay) = totalMinutes.compareTo(other.totalMinutes)
-    fun label(): String {
-        val displayHour = when (val h = hour % 12) { 0 -> 12; else -> h }
-        return "%d:%02d %s".format(displayHour, minute, if (hour < 12) "AM" else "PM")
-    }
+    /** Uses the device's 12h/24h setting and locale — most of the world is not "8:00 AM". */
+    fun label(context: Context): String = formatTime(context, hour, minute)
     fun toJson() = JSONObject().put("hour", hour).put("minute", minute)
 
     companion object {
@@ -28,6 +32,24 @@ data class TimeOfDay(val hour: Int = 8, val minute: Int = 0) : Comparable<TimeOf
 enum class MealSlot { breakfast, lunch, dinner, bedtime }
 enum class MealRelation { before, with, after }
 
+/** Standalone meal name, e.g. heading a settings row. */
+@StringRes fun MealSlot.titleRes(): Int = when (this) {
+    MealSlot.breakfast -> R.string.meal_breakfast
+    MealSlot.lunch -> R.string.meal_lunch
+    MealSlot.dinner -> R.string.meal_dinner
+    MealSlot.bedtime -> R.string.meal_bedtime
+}
+
+/** Meal name as it appears inside a sentence, e.g. "With breakfast". */
+@StringRes fun MealSlot.inlineRes(): Int = when (this) {
+    MealSlot.breakfast -> R.string.meal_breakfast_inline
+    MealSlot.lunch -> R.string.meal_lunch_inline
+    MealSlot.dinner -> R.string.meal_dinner_inline
+    MealSlot.bedtime -> R.string.meal_bedtime_inline
+}
+
+fun MealSlot.title(context: Context): String = context.getString(titleRes())
+
 data class MealAnchor(
     val id: String = UUID.randomUUID().toString(),
     val slot: MealSlot = MealSlot.breakfast,
@@ -39,14 +61,20 @@ data class MealAnchor(
         MealRelation.with -> 0
         MealRelation.after -> offsetMinutes
     }
-    /** "With breakfast" / "30 min before Breakfast" — matching the dose rows. */
-    fun label(): String {
-        val meal = slot.name.replaceFirstChar { it.uppercase() }
-        if (slot == MealSlot.bedtime && relation == MealRelation.with) return "At bedtime"
+    /** "With breakfast" / "30 min before breakfast" — matching the dose rows. */
+    fun label(context: Context): String {
+        val meal = context.getString(slot.inlineRes())
+        if (slot == MealSlot.bedtime && relation == MealRelation.with) {
+            return context.getString(R.string.anchor_at_bedtime)
+        }
         return when (relation) {
-            MealRelation.with -> "With ${meal.lowercase()}"
-            MealRelation.before -> if (offsetMinutes > 0) "$offsetMinutes min before $meal" else "Before ${meal.lowercase()}"
-            MealRelation.after -> if (offsetMinutes > 0) "$offsetMinutes min after $meal" else "After ${meal.lowercase()}"
+            MealRelation.with -> context.getString(R.string.anchor_with, meal)
+            MealRelation.before ->
+                if (offsetMinutes > 0) context.getString(R.string.anchor_before_offset, offsetMinutes, meal)
+                else context.getString(R.string.anchor_before, meal)
+            MealRelation.after ->
+                if (offsetMinutes > 0) context.getString(R.string.anchor_after_offset, offsetMinutes, meal)
+                else context.getString(R.string.anchor_after, meal)
         }
     }
     fun toJson() = JSONObject()
@@ -95,18 +123,35 @@ data class MealTimes(
     }
 }
 
-enum class MedicationForm(val title: String, val unit: String) {
-    pill("Pill", "pill"), capsule("Capsule", "capsule"), tablet("Tablet", "tablet"),
-    liquid("Liquid", "ml"), drops("Drop", "drop"), injection("Injection", "shot"),
-    patch("Patch", "patch"), cream("Cream", "application"), inhaler("Inhaler", "puff"),
-    powder("Powder", "scoop"), gummy("Gummy", "gummy"), spray("Spray", "spray"),
-    other("Other", "dose");
+enum class MedicationForm(@StringRes val titleRes: Int, @PluralsRes val unitRes: Int) {
+    pill(R.string.form_pill, R.plurals.unit_pill),
+    capsule(R.string.form_capsule, R.plurals.unit_capsule),
+    tablet(R.string.form_tablet, R.plurals.unit_tablet),
+    liquid(R.string.form_liquid, R.plurals.unit_ml),
+    drops(R.string.form_drops, R.plurals.unit_drop),
+    injection(R.string.form_injection, R.plurals.unit_shot),
+    patch(R.string.form_patch, R.plurals.unit_patch),
+    cream(R.string.form_cream, R.plurals.unit_application),
+    inhaler(R.string.form_inhaler, R.plurals.unit_puff),
+    powder(R.string.form_powder, R.plurals.unit_scoop),
+    gummy(R.string.form_gummy, R.plurals.unit_gummy),
+    spray(R.string.form_spray, R.plurals.unit_spray),
+    other(R.string.form_other, R.plurals.unit_dose);
 
-    fun unitName(amount: Double) = if (amount == 1.0 || unit == "ml") unit else when (unit) {
-        "patch" -> "patches"
-        "gummy" -> "gummies"
-        else -> "${unit}s"
-    }
+    fun title(context: Context): String = context.getString(titleRes)
+
+    /**
+     * The unit word for [amount], in the plural form the active language needs.
+     *
+     * Android's plural rules take an Int, so a fractional amount (half a tablet)
+     * falls back to the general plural — which is what English "0.5 tablets"
+     * already did, and what Arabic and Russian need for non-integers too.
+     */
+    fun unitName(context: Context, amount: Double): String =
+        context.resources.getQuantityString(unitRes, quantityFor(amount))
+
+    private fun quantityFor(amount: Double): Int =
+        if (amount.isFinite() && amount == kotlin.math.floor(amount)) amount.toInt() else 2
 
     companion object {
         /** The order the picker offers; `other` stays last as the catch-all. */
@@ -147,9 +192,12 @@ data class DoseSpec(
         return TimeOfDay(wrapped / 60, wrapped % 60)
     }
 
-    fun summary(form: MedicationForm): String {
-        val quantity = "${prettyNumber(amount)} ${form.unitName(amount)}"
-        return "$quantity • ${anchor?.label() ?: "Fixed time"}"
+    fun summary(context: Context, form: MedicationForm): String {
+        val quantity = context.getString(
+            R.string.amount_with_unit, prettyNumber(amount), form.unitName(context, amount),
+        )
+        val timing = anchor?.label(context) ?: context.getString(R.string.anchor_fixed_time)
+        return context.getString(R.string.dose_spec_summary, quantity, timing)
     }
 
     fun toJson(): JSONObject = JSONObject()
@@ -232,23 +280,31 @@ data class DoseSchedule(
         ScheduleKind.asNeeded -> 0.0
     }
 
-    fun dosesPerDayLabel(): String =
-        if (dosesPerDay == 1) "1 time/day" else "$dosesPerDay times/day"
+    fun dosesPerDayLabel(context: Context): String =
+        context.resources.getQuantityString(R.plurals.schedule_times_per_day, dosesPerDay, dosesPerDay)
 
-    fun summary(): String = when (kind) {
+    fun summary(context: Context): String = when (kind) {
         ScheduleKind.fixedTimes, ScheduleKind.mealBased -> resolvedDoses
-            .joinToString(", ") { it.anchor?.label() ?: it.time.label() }
-            .ifEmpty { "No times set" }
-        ScheduleKind.interval -> "Every ${intervalHours}h, ${intervalStart.label()} – ${intervalEnd.label()}"
-        ScheduleKind.asNeeded -> "As needed"
+            .joinToString(", ") { it.anchor?.label(context) ?: it.time.label(context) }
+            .ifEmpty { context.getString(R.string.schedule_no_times_set) }
+        ScheduleKind.interval -> context.getString(
+            R.string.schedule_interval, intervalHours, intervalStart.label(context), intervalEnd.label(context),
+        )
+        ScheduleKind.asNeeded -> context.getString(R.string.schedule_as_needed)
     }
-    fun frequencySummary(): String {
-        if (kind == ScheduleKind.asNeeded) return "When needed"
-        val day = if (dayInterval > 1) "Every $dayInterval days"
-            else if (weekdays.isEmpty() || weekdays.size == 7) "Every day"
-            else weekdays.sorted().joinToString(" ") { listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")[it - 1] }
+    fun frequencySummary(context: Context): String {
+        if (kind == ScheduleKind.asNeeded) return context.getString(R.string.schedule_when_needed)
+        // Weekday names come from the platform, so they are already correct in
+        // every locale and never need translating.
+        val shortWeekdays = DateFormatSymbols.getInstance().shortWeekdays
+        val day = when {
+            dayInterval > 1 ->
+                context.resources.getQuantityString(R.plurals.schedule_every_n_days, dayInterval, dayInterval)
+            weekdays.isEmpty() || weekdays.size == 7 -> context.getString(R.string.schedule_every_day)
+            else -> weekdays.sorted().joinToString(" ") { shortWeekdays[it] }
+        }
         val cycle = if ((cycleActiveDays ?: 0) > 0 && (cyclePauseDays ?: 0) > 0)
-            " · $cycleActiveDays days on, $cyclePauseDays off" else ""
+            context.getString(R.string.schedule_cycle_suffix, cycleActiveDays, cyclePauseDays) else ""
         return day + cycle
     }
     fun toJson() = JSONObject()
@@ -312,7 +368,11 @@ data class Medication(
     val createdAt: Long = System.currentTimeMillis(),
 ) {
     val strengthLabel: String? get() = strengthValue?.takeIf { it > 0 }?.let { "${prettyNumber(it)} $strengthUnit" }
-    val doseLabel: String get() = "${prettyNumber(schedule.amountPerDose)} ${form.unitName(schedule.amountPerDose)}"
+    fun doseLabel(context: Context): String = context.getString(
+        R.string.amount_with_unit,
+        prettyNumber(schedule.amountPerDose),
+        form.unitName(context, schedule.amountPerDose),
+    )
     val daysOfStockRemaining: Int? get() {
         if (!inventoryEnabled) return null
         val daily = schedule.unitsPerActiveDay
@@ -327,8 +387,9 @@ data class Medication(
     val needsRefill: Boolean get() = inventoryEnabled && stock <= refillReminderThreshold
 
     /** "30 pills" / "Not tracked" — the Treatments inventory line. */
-    val remainingLabel: String get() =
-        if (!inventoryEnabled) "Not tracked" else "${prettyNumber(stock)} ${form.unitName(stock)}"
+    fun remainingLabel(context: Context): String =
+        if (!inventoryEnabled) context.getString(R.string.inventory_not_tracked)
+        else context.getString(R.string.amount_with_unit, prettyNumber(stock), form.unitName(context, stock))
     fun toJson() = JSONObject().put("id", id).put("name", name).put("form", form.name)
         .putNullable("strengthValue", strengthValue).put("strengthUnit", strengthUnit)
         .put("colorName", colorName).put("schedule", schedule.toJson())
@@ -460,8 +521,11 @@ data class ScheduledDose(
     val amount: Double = 1.0,
 ) {
     val id: String get() = occurrenceKey(medication.id, time)
-    val timeLabel: String get() = mealAnchor?.label() ?: TimeOfDay.fromEpoch(time).label()
-    val amountLabel: String get() = "${prettyNumber(amount)} ${medication.form.unitName(amount)}"
+    fun timeLabel(context: Context): String =
+        mealAnchor?.label(context) ?: TimeOfDay.fromEpoch(time).label(context)
+    fun amountLabel(context: Context): String = context.getString(
+        R.string.amount_with_unit, prettyNumber(amount), medication.form.unitName(context, amount),
+    )
     companion object {
         fun occurrenceKey(medicationID: String, time: Long) = "$medicationID-${time / 60_000L}"
     }
