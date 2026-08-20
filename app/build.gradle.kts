@@ -47,7 +47,7 @@ dependencies {
     implementation("androidx.compose.animation:animation:1.9.5")
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:9.1.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.9.5")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

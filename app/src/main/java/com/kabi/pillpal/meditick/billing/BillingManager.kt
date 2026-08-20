@@ -16,7 +16,11 @@ data class BillingPlan(
 class BillingManager private constructor(private val context: Context) : PurchasesUpdatedListener {
     private val prefs = context.getSharedPreferences("meditick-billing", Context.MODE_PRIVATE)
     private val client = BillingClient.newBuilder(context)
-        .setListener(this).enablePendingPurchases().build()
+        .setListener(this)
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder().enableOneTimeProducts().build(),
+        )
+        .build()
 
     var isPro by mutableStateOf(prefs.getBoolean("is_pro", false)); private set
     var plans by mutableStateOf<List<BillingPlan>>(emptyList()); private set
@@ -51,12 +55,12 @@ class BillingManager private constructor(private val context: Context) : Purchas
             },
         ).build()
         client.queryProductDetailsAsync(subParams) { result, details ->
-            val subscriptions: List<ProductDetails> = if (result.responseCode == BillingClient.BillingResponseCode.OK) details else emptyList()
+            val subscriptions: List<ProductDetails> = if (result.responseCode == BillingClient.BillingResponseCode.OK) details.productDetailsList else emptyList()
             val inAppParams = QueryProductDetailsParams.newBuilder().setProductList(
                 listOf(QueryProductDetailsParams.Product.newBuilder().setProductId("lifetime").setProductType(BillingClient.ProductType.INAPP).build()),
             ).build()
             client.queryProductDetailsAsync(inAppParams) { inAppResult, inAppDetails ->
-                val lifetime: List<ProductDetails> = if (inAppResult.responseCode == BillingClient.BillingResponseCode.OK) inAppDetails else emptyList()
+                val lifetime: List<ProductDetails> = if (inAppResult.responseCode == BillingClient.BillingResponseCode.OK) inAppDetails.productDetailsList else emptyList()
                 plans = (subscriptions + lifetime).mapNotNull(::toPlan).sortedBy { listOf("monthly", "yearly", "lifetime").indexOf(it.id) }
                 isLoading = false
                 if (plans.isEmpty()) lastMessage = "Connect monthly, yearly and lifetime products in Google Play Console."

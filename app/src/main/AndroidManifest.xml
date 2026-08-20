@@ -13,7 +13,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/meditick_icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/meditick_icon"
+        android:roundIcon="@drawable/meditick_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediTickPillTimerReminder"
         tools:targetApi="36">
