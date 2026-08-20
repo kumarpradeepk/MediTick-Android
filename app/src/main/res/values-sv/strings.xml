@@ -395,6 +395,12 @@
     <string name="form_save_changes">Spara ändringar</string>
     <string name="form_duplicate_title">Dubblett av läkemedel</string>
     <string name="form_duplicate_body">Ett läkemedel som heter ”%1$s” med den här styrkan finns redan.</string>
+    <string name="form_success_scheduled">%1$s är schemalagt</string>
+    <string name="form_success_added_rx">%1$s lades till i ditt recept</string>
+    <string name="form_success_done">Klart — se det under Idag</string>
+    <string name="form_success_view_rx">Visa mitt recept</string>
+    <string name="form_success_add_another">Lägg till ett läkemedel till</string>
+    <string name="form_success_add_more_pro">Lägg till fler med Pro</string>
     <string name="describe_label">Säg det med egna ord</string>
     <string name="describe_question">Vad tar du?</string>
     <string name="describe_hint">Testa ”Metformin 500mg every morning with food”.</string>

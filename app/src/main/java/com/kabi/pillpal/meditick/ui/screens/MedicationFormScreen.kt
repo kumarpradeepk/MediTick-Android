@@ -3,7 +3,21 @@
 package com.kabi.pillpal.meditick.ui.screens
 
 import android.app.TimePickerDialog
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +29,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -100,9 +116,11 @@ private fun sundayFirstInitials(): List<String> {
 fun MedicationFormScreen(
     repository: AppRepository, editingId: String?, prescriptionId: String?,
     onClose: () -> Unit, onSaved: () -> Unit,
+    isPro: Boolean = true, onShowPaywall: () -> Unit = {},
 ) {
     val existing = repository.medication(editingId)
     val context = LocalContext.current
+    val haptics = rememberHaptics()
     val catalog = remember { MedicationCatalog.get(context) }
     val presets = remember { SettingsStore.get(context) }.doseTimePresets
     var step by remember { mutableIntStateOf(if (existing == null) 0 else 1) }
@@ -128,21 +146,50 @@ fun MedicationFormScreen(
     var startDate by remember { mutableLongStateOf(existing?.schedule?.startDate ?: startOfToday()) }
     var durationDays by remember { mutableIntStateOf(existing?.schedule?.endDate?.let { ((it - existing.schedule.startDate) / 86_400_000L).toInt().coerceAtLeast(1) } ?: 14) }
     var duplicateName by remember { mutableStateOf<String?>(null) }
+    var saved by remember { mutableStateOf<Medication?>(null) }
+
+    /** Clears the whole draft for "Add another" from the success screen. */
+    fun resetForAnother() {
+        saved = null; step = 0; describe = ""; name = ""; strength = ""; strengthUnit = "mg"
+        form = MedicationForm.tablet; instructions = ""; trackStock = false
+        stock = prettyNumber(30.0); alertAt = prettyNumber(7.0)
+        mode = RhythmMode.EVERY_DAY; weekdays = emptySet(); cycleOn = 21; cycleOff = 7; dayInterval = 2
+        doses = listOf(FormDose(time = presets.morning)); amount = prettyNumber(1.0)
+        ongoing = true; startDate = startOfToday(); durationDays = 14
+        // The prescription being added to is deliberately kept.
+    }
 
     val suggestions = remember(name) { catalog.search(name) }
     ScreenBackground {
+        saved?.let { done ->
+            SavedCelebration(
+                medication = done, canAddAnother = isPro,
+                onDone = onSaved, onAddAnother = ::resetForAnother,
+                onAddMorePro = onShowPaywall,
+            )
+            return@ScreenBackground
+        }
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
-            Row(Modifier.fillMaxWidth().height(58.dp).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClose) { Icon(Icons.Default.Close, stringResource(R.string.action_close), tint = DS.colors.ink) }
-                Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(if (existing == null) R.string.form_add_title else R.string.form_edit_title), color = DS.colors.ink, fontWeight = FontWeight.Bold)
-                    Text(stringResource(R.string.form_step, step + 1), color = DS.colors.ink3, fontSize = 11.sp)
-                }
-                Spacer(Modifier.width(48.dp))
-            }
-            LinearProgressIndicator(progress = { (step + 1) / 3f }, Modifier.fillMaxWidth().height(2.dp), color = DS.colors.mint, trackColor = DS.colors.line)
-            Box(Modifier.weight(1f)) {
-                when (step) {
+            ScreenTopBar(
+                title = stringResource(if (existing == null) R.string.form_add_title else R.string.form_edit_title),
+                subtitle = stringResource(R.string.form_step, step + 1),
+                leadingIcon = Icons.Default.Close, leadingDescription = stringResource(R.string.action_close), onLeading = onClose,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+            )
+            // The step bar glides instead of jumping.
+            val stepProgress by animateFloatAsState((step + 1) / 3f, spring(dampingRatio = 0.9f, stiffness = 160f), label = "stepBar")
+            LinearProgressIndicator(progress = { stepProgress }, Modifier.fillMaxWidth().height(2.dp), color = DS.colors.mint, trackColor = DS.colors.line)
+            // Steps slide in from the side they came from.
+            AnimatedContent(
+                targetState = step, modifier = Modifier.weight(1f),
+                transitionSpec = {
+                    val forward = targetState > initialState
+                    (slideInHorizontally(spring(dampingRatio = 0.9f, stiffness = 380f)) { if (forward) it / 4 else -it / 4 } + fadeIn(tween(200))) togetherWith
+                        fadeOut(tween(140))
+                },
+                label = "formStep",
+            ) { active ->
+                when (active) {
                     0 -> DescribeStep(describe, { describe = it }, catalog, presets, onParsed = { parsed ->
                         name = parsed.name; parsed.strength?.let { strength = it.first; strengthUnit = it.second }
                         parsed.form?.let { form = it }; doses = parsed.doses
@@ -161,8 +208,10 @@ fun MedicationFormScreen(
                         ongoing, { ongoing = it }, durationDays, { durationDays = it }, presets, mealTimes, repository)
                 }
             }
-            Row(Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                if (step > 0 && !(existing != null && step == 1)) OutlinedButton({ step-- }, Modifier.height(56.dp)) { Icon(Icons.Default.ArrowBack, null) }
+            Row(Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (step > 0 && !(existing != null && step == 1)) {
+                    RoundIconButton(Icons.Default.ArrowBack, stringResource(R.string.action_back), onClick = { step-- }, modifier = Modifier.size(52.dp))
+                }
                 PrimaryButton(
                     if (step == 2) stringResource(if (existing == null) R.string.form_add_to_routine else R.string.form_save_changes)
                     else stringResource(R.string.action_continue),
@@ -179,7 +228,7 @@ fun MedicationFormScreen(
                         } else if (step == 1) step = 2 else {
                             val parsedStrength = strength.toDoubleOrNull()
                             val duplicate = repository.duplicateMedication(name, parsedStrength, strengthUnit, existing?.id)
-                            if (duplicate != null) { duplicateName = duplicate.name; return@PrimaryButton }
+                            if (duplicate != null) { haptics.warning(); duplicateName = duplicate.name; return@PrimaryButton }
                             val schedule = buildSchedule(mode, weekdays, cycleOn, cycleOff, dayInterval, doses,
                                 amount.toDoubleOrNull() ?: 1.0, ongoing, durationDays, startDate, mealTimes)
                             val medication = (existing ?: Medication()).copy(
@@ -189,8 +238,9 @@ fun MedicationFormScreen(
                                 instructions = instructions.trim(), inventoryEnabled = trackStock,
                                 stock = stock.toDoubleOrNull() ?: 30.0, refillReminderThreshold = alertAt.toDoubleOrNull() ?: 7.0,
                             )
-                            if (existing == null) repository.addMedication(medication) else repository.updateMedication(medication)
-                            onSaved()
+                            haptics.success()
+                            if (existing == null) { repository.addMedication(medication); saved = medication }
+                            else { repository.updateMedication(medication); onSaved() }
                         }
                     }, modifier = Modifier.weight(1f), enabled = when (step) { 0 -> describe.trim().length > 2; 1 -> name.isNotBlank(); else -> mode == RhythmMode.AS_NEEDED || doses.isNotEmpty() },
                     leading = if (step == 2) Icons.Default.Check else Icons.Default.ArrowForward,
@@ -201,6 +251,69 @@ fun MedicationFormScreen(
     duplicateName?.let { duplicate -> AlertDialog(onDismissRequest = { duplicateName = null }, title = { Text(stringResource(R.string.form_duplicate_title)) },
         text = { Text(stringResource(R.string.form_duplicate_body, duplicate)) },
         confirmButton = { TextButton({ duplicateName = null }) { Text(stringResource(R.string.action_ok)) } }) }
+}
+
+/**
+ * The post-save celebration, mirroring the iOS success screen: confetti, a
+ * springing gradient check tile, the medication's name, and the next move —
+ * done, add another, or the Pro gate when the free tier is already full.
+ */
+@Composable
+private fun SavedCelebration(
+    medication: Medication, canAddAnother: Boolean,
+    onDone: () -> Unit, onAddAnother: () -> Unit, onAddMorePro: () -> Unit,
+) {
+    val c = DS.colors
+    val context = LocalContext.current
+    var shown by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { shown = true }
+    Box(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
+        ConfettiBurst()
+        Column(
+            Modifier.fillMaxSize().padding(horizontal = 26.dp),
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+        ) {
+            AnimatedVisibility(
+                shown,
+                enter = scaleIn(spring(dampingRatio = 0.5f, stiffness = 300f), initialScale = 0.4f) + fadeIn(tween(220)),
+            ) {
+                Box(
+                    Modifier.size(92.dp)
+                        .shadow(20.dp, RoundedCornerShape(32.dp), ambientColor = c.glow.copy(.5f), spotColor = c.glow.copy(.5f))
+                        .clip(RoundedCornerShape(32.dp)).background(c.gradient),
+                    contentAlignment = Alignment.Center,
+                ) { Icon(Icons.Default.Check, null, tint = c.onMint, modifier = Modifier.size(44.dp)) }
+            }
+            Spacer(Modifier.height(22.dp))
+            Text(
+                stringResource(
+                    if (medication.prescriptionID != null) R.string.form_success_added_rx else R.string.form_success_scheduled,
+                    medication.name,
+                ),
+                style = MaterialTheme.typography.headlineMedium, color = c.ink, textAlign = TextAlign.Center,
+                modifier = Modifier.appearFluidly(1),
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                medication.schedule.summary(context),
+                color = c.ink2, fontSize = 14.sp, textAlign = TextAlign.Center,
+                modifier = Modifier.appearFluidly(2),
+            )
+            Spacer(Modifier.height(30.dp))
+            PrimaryButton(
+                stringResource(if (medication.prescriptionID != null) R.string.form_success_view_rx else R.string.form_success_done),
+                onDone, Modifier.fillMaxWidth().appearFluidly(3),
+            )
+            Spacer(Modifier.height(10.dp))
+            if (canAddAnother) {
+                GhostButton(stringResource(R.string.form_success_add_another), onAddAnother, Modifier.fillMaxWidth().appearFluidly(4))
+            } else {
+                // The free tier caps at one active medication — the success
+                // screen must not offer a way around the gate.
+                GhostButton(stringResource(R.string.form_success_add_more_pro), onAddMorePro, Modifier.fillMaxWidth().appearFluidly(4))
+            }
+        }
+    }
 }
 
 private data class ParsedDraft(
@@ -229,21 +342,43 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
                     SelectChip(chip, false, { onText((text.trim() + " " + chip).trim()) })
                 }
             }
-            Spacer(Modifier.height(14.dp)); SectionLabel(stringResource(R.string.describe_examples))
+            Spacer(Modifier.height(16.dp)); SectionLabel(stringResource(R.string.describe_examples))
+            Spacer(Modifier.height(8.dp))
             listOf(
                 R.string.describe_example_1, R.string.describe_example_2,
                 R.string.describe_example_3, R.string.describe_example_4,
-            ).map { stringResource(it) }.forEach { example -> TextButton({ onText(example) }, Modifier.fillMaxWidth()) { Text(example, textAlign = TextAlign.Start, modifier = Modifier.fillMaxWidth()) } }
-            parsed?.let {
-                Spacer(Modifier.height(20.dp)); GradientCard(Modifier.fillMaxWidth(), onClick = { onParsed(it) }) {
-                    Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
-                        IconTile(Icons.Default.AutoAwesome, DS.colors.mint, 46.dp); Spacer(Modifier.width(13.dp))
-                        Column(Modifier.weight(1f)) {
-                            SectionLabel(stringResource(R.string.describe_understood))
-                            Text(listOfNotNull(it.name, it.strength?.let { s -> context.getString(R.string.amount_with_unit, s.first, s.second) }).joinToString(" · "), color = DS.colors.ink, fontWeight = FontWeight.Bold)
-                            Text(it.doses.joinToString { d -> d.time.label(context) }, color = DS.colors.ink3, fontSize = 12.sp)
+            ).map { stringResource(it) }.forEach { example ->
+                // Quote-card examples, like iOS "Examples you can type".
+                GlassCard(
+                    Modifier.fillMaxWidth().padding(bottom = 8.dp), radius = 16.dp,
+                    onClick = { onText(example) }, contentPadding = PaddingValues(horizontal = 14.dp, vertical = 11.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.FormatQuote, null, tint = DS.colors.ink3, modifier = Modifier.size(14.dp))
+                        Spacer(Modifier.width(10.dp))
+                        Text(example, color = DS.colors.ink2, fontSize = 13.sp)
+                    }
+                }
+            }
+            AnimatedVisibility(
+                parsed != null,
+                enter = expandVertically(spring(dampingRatio = 0.85f, stiffness = 380f)) + fadeIn(tween(220)),
+                exit = shrinkVertically(tween(180)) + fadeOut(tween(140)),
+            ) {
+                parsed?.let {
+                    Column {
+                        Spacer(Modifier.height(12.dp))
+                        GradientCard(Modifier.fillMaxWidth(), onClick = { onParsed(it) }) {
+                            Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+                                IconTile(Icons.Default.AutoAwesome, DS.colors.mint, 46.dp); Spacer(Modifier.width(13.dp))
+                                Column(Modifier.weight(1f)) {
+                                    SectionLabel(stringResource(R.string.describe_understood))
+                                    Text(listOfNotNull(it.name, it.strength?.let { s -> context.getString(R.string.amount_with_unit, s.first, s.second) }).joinToString(" · "), color = DS.colors.ink, fontWeight = FontWeight.Bold)
+                                    Text(it.doses.joinToString { d -> d.time.label(context) }, color = DS.colors.ink3, fontSize = 12.sp)
+                                }
+                                Icon(Icons.Default.ChevronRight, null, tint = DS.colors.mint)
+                            }
                         }
-                        Icon(Icons.Default.ChevronRight, null, tint = DS.colors.mint)
                     }
                 }
             }
@@ -390,10 +525,14 @@ private fun RhythmStep(
             OutlinedTextField(amount, { onAmount(it.filter { ch -> ch.isDigit() || ch == '.' }) }, label = { Text(stringResource(R.string.rhythm_amount_per_dose)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
         }
         if (mode != RhythmMode.AS_NEEDED) item {
-            OutlinedButton({
-                val cal = Calendar.getInstance().apply { timeInMillis = startDate }
-                android.app.DatePickerDialog(context, { _, y, m, d -> onStartDate(Calendar.getInstance().apply { clear(); set(y, m, d) }.timeInMillis) }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-            }, Modifier.fillMaxWidth()) { Icon(Icons.Default.CalendarMonth, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.rhythm_start_date, formatMediumDate(startDate))) }
+            GhostButton(
+                stringResource(R.string.rhythm_start_date, formatMediumDate(startDate)),
+                onClick = {
+                    val cal = Calendar.getInstance().apply { timeInMillis = startDate }
+                    android.app.DatePickerDialog(context, { _, y, m, d -> onStartDate(Calendar.getInstance().apply { clear(); set(y, m, d) }.timeInMillis) }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
+                },
+                Modifier.fillMaxWidth(), leading = Icons.Default.CalendarMonth,
+            )
         }
         if (mode != RhythmMode.AS_NEEDED) item { GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(15.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -433,31 +572,36 @@ private fun RhythmStep(
 private fun AddDoseDialog(presets: DoseTimePresets, onDismiss: () -> Unit, onAdd: (FormDose) -> Unit) {
     val context = LocalContext.current
     val labels = dayPartLabels()
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.rhythm_add_dose)) },
-        text = {
-            Column {
-                Text(stringResource(R.string.dose_add_hint), color = DS.colors.ink3, fontSize = 12.sp)
-                Spacer(Modifier.height(12.dp))
+    val slotTints = listOf(DS.colors.amber, DS.colors.cyan, DS.colors.violet, DS.colors.mint)
+    val slotIcons = listOf(Icons.Default.WbSunny, Icons.Default.LightMode, Icons.Default.NightsStay, Icons.Default.Bedtime)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
+            Text(stringResource(R.string.rhythm_add_dose), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Spacer(Modifier.height(4.dp))
+            Text(stringResource(R.string.dose_add_hint), color = DS.colors.ink3, fontSize = 12.sp)
+            Spacer(Modifier.height(16.dp))
+            GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
                 presets.all().forEachIndexed { index, preset ->
-                    Row(
-                        Modifier.fillMaxWidth().clickable { onAdd(FormDose(time = preset)) }.padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(labels[index], color = DS.colors.ink)
-                        Spacer(Modifier.weight(1f))
-                        Text(preset.label(context), color = DS.colors.ink2, fontWeight = FontWeight.Bold)
+                    if (index > 0) RowDivider()
+                    SettingsRow(slotIcons[index], slotTints[index], labels[index], onClick = { onAdd(FormDose(time = preset)) }) {
+                        Text(preset.label(context), color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                     }
                 }
-                TextButton({
+            }
+            Spacer(Modifier.height(12.dp))
+            GhostButton(
+                stringResource(R.string.dose_custom_time),
+                onClick = {
                     TimePickerDialog(context, { _, h, m -> onAdd(FormDose(time = TimeOfDay(h, m))) },
                         presets.morning.hour, presets.morning.minute, false).show()
-                }) { Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.dose_custom_time)) }
-            }
-        },
-        confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } },
-    )
+                },
+                Modifier.fillMaxWidth(), leading = Icons.Default.Schedule,
+            )
+        }
+    }
 }
 
 /** The four dose-time presets, in order. Shared with Settings. */
@@ -474,87 +618,92 @@ private fun DoseEditorDialog(
     onSave: (FormDose) -> Unit, onRemove: () -> Unit, canRemove: Boolean,
 ) {
     val context = LocalContext.current
+    val haptics = rememberHaptics()
     var working by remember(draft.id) { mutableStateOf(draft) }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.dose_edit_title)) },
-        text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                Text(working.firingTime(mealTimes).label(context), color = DS.colors.mint, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(14.dp))
+    ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp).verticalScroll(rememberScrollState())) {
+            Text(stringResource(R.string.dose_edit_title), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Text(working.firingTime(mealTimes).label(context), color = DS.colors.mint, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp)
+            Spacer(Modifier.height(16.dp))
 
-                SectionLabel(stringResource(R.string.dose_section_amount))
-                Spacer(Modifier.height(6.dp))
+            SectionLabel(stringResource(R.string.dose_section_amount))
+            Spacer(Modifier.height(6.dp))
+            GlassCard(Modifier.fillMaxWidth(), radius = 18.dp, contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     // Half-dose steps: splitting a tablet is routine.
-                    IconButton({ working = working.copy(amount = (working.amount - 0.5).coerceAtLeast(0.5)) }) {
+                    IconButton({ haptics.tick(); working = working.copy(amount = (working.amount - 0.5).coerceAtLeast(0.5)) }) {
                         Icon(Icons.Default.Remove, stringResource(R.string.dose_decrease), tint = DS.colors.ink)
                     }
-                    Text(prettyNumber(working.amount), color = DS.colors.ink, fontWeight = FontWeight.Bold)
-                    IconButton({ working = working.copy(amount = (working.amount + 0.5).coerceAtMost(20.0)) }) {
+                    Text(prettyNumber(working.amount), color = DS.colors.ink, fontWeight = FontWeight.ExtraBold, fontSize = 19.sp,
+                        textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
+                    IconButton({ haptics.tick(); working = working.copy(amount = (working.amount + 0.5).coerceAtMost(20.0)) }) {
                         Icon(Icons.Default.Add, stringResource(R.string.dose_increase), tint = DS.colors.ink)
                     }
                 }
+            }
 
-                Spacer(Modifier.height(14.dp))
-                SectionLabel(stringResource(R.string.dose_section_timing))
-                Spacer(Modifier.height(6.dp))
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                    FormMealRelation.entries.forEach { option ->
-                        SelectChip(stringResource(option.title), working.relation == option, { working = working.copy(relation = option) })
-                    }
-                }
-
-                Spacer(Modifier.height(12.dp))
-                if (working.relation == FormMealRelation.FIXED) {
-                    OutlinedButton({
-                        TimePickerDialog(context, { _, h, m -> working = working.copy(time = TimeOfDay(h, m)) },
-                            working.time.hour, working.time.minute, false).show()
-                    }, Modifier.fillMaxWidth()) {
-                        Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.dose_reminder_time, working.time.label(context)))
-                    }
-                } else {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                        MealSlot.entries.forEach { slot ->
-                            SelectChip(slot.title(context), working.mealSlot == slot, { working = working.copy(mealSlot = slot) })
-                        }
-                    }
-                    if (working.relation != FormMealRelation.WITH) {
-                        Spacer(Modifier.height(10.dp))
-                        Text(
-                            pluralStringResource(
-                                if (working.relation == FormMealRelation.BEFORE) R.plurals.dose_offset_before else R.plurals.dose_offset_after,
-                                working.offsetMinutes, working.offsetMinutes,
-                            ),
-                            color = DS.colors.ink2, fontSize = 12.sp,
-                        )
-                        Slider(
-                            working.offsetMinutes.toFloat(),
-                            { working = working.copy(offsetMinutes = it.toInt()) },
-                            valueRange = 0f..180f, steps = 35,
-                        )
-                    }
-                    Spacer(Modifier.height(6.dp))
-                    Text(
-                        stringResource(
-                            R.string.dose_meal_note,
-                            working.mealSlot.title(context), mealTimes.time(working.mealSlot).label(context),
-                        ),
-                        color = DS.colors.ink3, fontSize = 12.sp,
-                    )
-                }
-
-                if (canRemove) {
-                    Spacer(Modifier.height(14.dp))
-                    TextButton({ onRemove() }) { Icon(Icons.Default.RemoveCircle, null, tint = DS.colors.coral); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.dose_remove), color = DS.colors.coral) }
+            Spacer(Modifier.height(16.dp))
+            SectionLabel(stringResource(R.string.dose_section_timing))
+            Spacer(Modifier.height(6.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                FormMealRelation.entries.forEach { option ->
+                    SelectChip(stringResource(option.title), working.relation == option, { working = working.copy(relation = option) })
                 }
             }
-        },
-        confirmButton = { TextButton({ onSave(working) }) { Text(stringResource(R.string.action_save)) } },
-        dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } },
-    )
+
+            Spacer(Modifier.height(12.dp))
+            if (working.relation == FormMealRelation.FIXED) {
+                GhostButton(
+                    stringResource(R.string.dose_reminder_time, working.time.label(context)),
+                    onClick = {
+                        TimePickerDialog(context, { _, h, m -> working = working.copy(time = TimeOfDay(h, m)) },
+                            working.time.hour, working.time.minute, false).show()
+                    },
+                    Modifier.fillMaxWidth(), leading = Icons.Default.Schedule,
+                )
+            } else {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    MealSlot.entries.forEach { slot ->
+                        SelectChip(slot.title(context), working.mealSlot == slot, { working = working.copy(mealSlot = slot) })
+                    }
+                }
+                if (working.relation != FormMealRelation.WITH) {
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        pluralStringResource(
+                            if (working.relation == FormMealRelation.BEFORE) R.plurals.dose_offset_before else R.plurals.dose_offset_after,
+                            working.offsetMinutes, working.offsetMinutes,
+                        ),
+                        color = DS.colors.ink2, fontSize = 12.sp,
+                    )
+                    Slider(
+                        working.offsetMinutes.toFloat(),
+                        { working = working.copy(offsetMinutes = it.toInt()) },
+                        valueRange = 0f..180f, steps = 35,
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    stringResource(
+                        R.string.dose_meal_note,
+                        working.mealSlot.title(context), mealTimes.time(working.mealSlot).label(context),
+                    ),
+                    color = DS.colors.ink3, fontSize = 12.sp,
+                )
+            }
+
+            Spacer(Modifier.height(20.dp))
+            PrimaryButton(stringResource(R.string.action_save), { onSave(working) }, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
+            if (canRemove) {
+                Spacer(Modifier.height(10.dp))
+                DangerButton(stringResource(R.string.dose_remove), onRemove, Modifier.fillMaxWidth(), leading = Icons.Default.RemoveCircle)
+            }
+        }
+    }
 }
 
 @Composable private fun NumberPair(a: String, av: Int, setA: (Int) -> Unit, b: String, bv: Int, setB: (Int) -> Unit) {

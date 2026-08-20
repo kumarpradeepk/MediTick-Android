@@ -374,6 +374,12 @@
     <string name="form_save_changes">Lưu thay đổi</string>
     <string name="form_duplicate_title">Thuốc bị trùng</string>
     <string name="form_duplicate_body">Đã có một loại thuốc tên “%1$s” với hàm lượng này.</string>
+    <string name="form_success_scheduled">Đã lên lịch cho %1$s</string>
+    <string name="form_success_added_rx">Đã thêm %1$s vào đơn thuốc của bạn</string>
+    <string name="form_success_done">Xong — xem trong Hôm nay</string>
+    <string name="form_success_view_rx">Xem đơn thuốc của tôi</string>
+    <string name="form_success_add_another">Thêm thuốc khác</string>
+    <string name="form_success_add_more_pro">Thêm nhiều hơn với Pro</string>
     <string name="describe_label">Cứ nói tự nhiên</string>
     <string name="describe_question">Bạn đang uống gì?</string>
     <string name="describe_hint">Thử “Metformin 500mg every morning with food”.</string>

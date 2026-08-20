@@ -374,6 +374,12 @@
     <string name="form_save_changes">변경 사항 저장</string>
     <string name="form_duplicate_title">중복된 약</string>
     <string name="form_duplicate_body">같은 함량의 ‘%1$s’이(가) 이미 있어요.</string>
+    <string name="form_success_scheduled">%1$s 일정을 설정했어요</string>
+    <string name="form_success_added_rx">%1$s을(를) 처방전에 추가했어요</string>
+    <string name="form_success_done">완료 — ‘오늘’에서 확인하세요</string>
+    <string name="form_success_view_rx">내 처방전 보기</string>
+    <string name="form_success_add_another">다른 약 추가</string>
+    <string name="form_success_add_more_pro">Pro로 더 추가하기</string>
     <string name="describe_label">말하듯 적어 보세요</string>
     <string name="describe_question">무엇을 복용하세요?</string>
     <string name="describe_hint">예: ‘Metformin 500mg every morning with food’</string>

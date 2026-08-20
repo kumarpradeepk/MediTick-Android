@@ -26,7 +26,7 @@ data class MediTickColors(
     val mint: Color, val mint2: Color, val cyan: Color,
     val gradStart: Color, val gradEnd: Color, val onMint: Color, val glow: Color,
     val violet: Color, val amber: Color, val coral: Color,
-    val dockBg: Color, val ringTrack: Color, val isDark: Boolean,
+    val dockBg: Color, val ringTrack: Color, val cardShadow: Color, val isDark: Boolean,
 ) {
     val gradient get() = Brush.linearGradient(listOf(gradStart, gradEnd))
     val verticalGradient get() = Brush.verticalGradient(listOf(gradStart, gradEnd))
@@ -108,6 +108,9 @@ private fun palette(accent: AccentId, dark: Boolean): MediTickColors {
         violet = c(if (dark) 0xFFB9A6FF else 0xFF7C55E8), amber = c(if (dark) 0xFFFFC670 else 0xFFC8820E),
         coral = c(if (dark) 0xFFFF8577 else 0xFFE0574B),
         dockBg = c(if (dark) 0xED0E1713 else 0xF2FFFFFF), ringTrack = if (dark) Color.White.copy(alpha = .08f) else c(0x17102017),
+        // Invisible in Midnight, a soft green-gray lift in Daylight — same
+        // rule as the iOS card shadow.
+        cardShadow = if (dark) Color.Transparent else c(0x59102017),
         isDark = dark,
     )
 }

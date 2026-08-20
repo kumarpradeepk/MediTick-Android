@@ -374,6 +374,12 @@
     <string name="form_save_changes">保存修改</string>
     <string name="form_duplicate_title">药品重复</string>
     <string name="form_duplicate_body">已经有一种名为“%1$s”且规格相同的药品。</string>
+    <string name="form_success_scheduled">已安排%1$s</string>
+    <string name="form_success_added_rx">已将%1$s添加到您的处方</string>
+    <string name="form_success_done">完成 — 到“今天”查看</string>
+    <string name="form_success_view_rx">查看我的处方</string>
+    <string name="form_success_add_another">再添加一种药品</string>
+    <string name="form_success_add_more_pro">升级 Pro 添加更多</string>
     <string name="describe_label">用平常的话说</string>
     <string name="describe_question">你在服用什么？</string>
     <string name="describe_hint">试试“Metformin 500mg every morning with food”。</string>

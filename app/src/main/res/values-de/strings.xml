@@ -395,6 +395,12 @@
     <string name="form_save_changes">Änderungen speichern</string>
     <string name="form_duplicate_title">Medikament doppelt</string>
     <string name="form_duplicate_body">Ein Medikament namens „%1$s“ mit dieser Stärke gibt es bereits.</string>
+    <string name="form_success_scheduled">%1$s ist eingeplant</string>
+    <string name="form_success_added_rx">%1$s wurde deinem Rezept hinzugefügt</string>
+    <string name="form_success_done">Fertig — sieh es unter „Heute“</string>
+    <string name="form_success_view_rx">Mein Rezept ansehen</string>
+    <string name="form_success_add_another">Weiteres Medikament hinzufügen</string>
+    <string name="form_success_add_more_pro">Mit Pro mehr hinzufügen</string>
     <string name="describe_label">Sag es ganz normal</string>
     <string name="describe_question">Was nimmst du ein?</string>
     <string name="describe_hint">Versuch es mit „Metformin 500mg every morning with food“.</string>

@@ -416,6 +416,12 @@
     <string name="form_save_changes">Enregistrer</string>
     <string name="form_duplicate_title">Médicament en double</string>
     <string name="form_duplicate_body">Un médicament nommé « %1$s » avec ce dosage existe déjà.</string>
+    <string name="form_success_scheduled">%1$s est planifié</string>
+    <string name="form_success_added_rx">%1$s a été ajouté à votre ordonnance</string>
+    <string name="form_success_done">Terminé — voyez-le dans Aujourd\'hui</string>
+    <string name="form_success_view_rx">Voir mon ordonnance</string>
+    <string name="form_success_add_another">Ajouter un autre médicament</string>
+    <string name="form_success_add_more_pro">Ajoutez-en plus avec Pro</string>
     <string name="describe_label">Dites-le simplement</string>
     <string name="describe_question">Que prenez-vous ?</string>
     <string name="describe_hint">Essayez « Metformin 500mg every morning with food ».</string>

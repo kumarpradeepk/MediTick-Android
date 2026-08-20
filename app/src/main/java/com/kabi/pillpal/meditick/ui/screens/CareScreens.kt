@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -69,18 +70,18 @@ fun CareScreen(
         ) {
             item {
                 Spacer(Modifier.statusBarsPadding().height(1.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.appearFluidly(0), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.care_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.weight(1f))
-                    SelectChip(stringResource(R.string.care_add), true, { showAddMode = true })
+                    RoundIconButton(Icons.Default.Add, stringResource(R.string.care_add), { showAddMode = true }, tint = DS.colors.mint)
                 }
             }
             item {
                 Spacer(Modifier.height(14.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                Row(Modifier.appearFluidly(1), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                     TreatmentType.entries.forEach { value -> SelectChip(stringResource(value.title), typeFilter == value, { typeFilter = value }) }
                 }
                 Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                Row(Modifier.appearFluidly(2), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                     TreatmentStatus.entries.forEach { value -> SelectChip(stringResource(value.titleRes()), statusFilter == value, { statusFilter = value }) }
                 }
             }
@@ -132,15 +133,18 @@ fun CareScreen(
             }
         }
     }
-    if (showAddMode) ModalBottomSheet(onDismissRequest = { showAddMode = false }, containerColor = DS.colors.bg3) {
+    if (showAddMode) ModalBottomSheet(
+        onDismissRequest = { showAddMode = false }, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            Text(stringResource(R.string.care_what_adding), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Text(stringResource(R.string.care_what_adding), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink, modifier = Modifier.appearFluidly(0))
             Spacer(Modifier.height(15.dp))
-            ModeCard(Icons.Default.Description, DS.colors.violet, stringResource(R.string.care_mode_prescription), stringResource(R.string.care_mode_prescription_sub)) {
+            ModeCard(Icons.Default.Description, DS.colors.violet, stringResource(R.string.care_mode_prescription), stringResource(R.string.care_mode_prescription_sub), Modifier.appearFluidly(1)) {
                 showAddMode = false; showPrescription = true
             }
             Spacer(Modifier.height(10.dp))
-            ModeCard(Icons.Default.Medication, DS.colors.mint, stringResource(R.string.care_mode_single), stringResource(R.string.care_mode_single_sub)) {
+            ModeCard(Icons.Default.Medication, DS.colors.mint, stringResource(R.string.care_mode_single), stringResource(R.string.care_mode_single_sub), Modifier.appearFluidly(2)) {
                 showAddMode = false; onAddMedication(null)
             }
         }
@@ -151,8 +155,8 @@ fun CareScreen(
 }
 
 @Composable
-private fun ModeCard(icon: androidx.compose.ui.graphics.vector.ImageVector, tint: androidx.compose.ui.graphics.Color, title: String, subtitle: String, onClick: () -> Unit) {
-    GlassCard(Modifier.fillMaxWidth(), radius = 21.dp, onClick = onClick, contentPadding = PaddingValues(16.dp)) {
+private fun ModeCard(icon: androidx.compose.ui.graphics.vector.ImageVector, tint: androidx.compose.ui.graphics.Color, title: String, subtitle: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    GlassCard(modifier.fillMaxWidth(), radius = 21.dp, onClick = onClick, contentPadding = PaddingValues(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconTile(icon, tint, 46.dp); Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) { Text(title, color = DS.colors.ink, fontWeight = FontWeight.Bold); Text(subtitle, color = DS.colors.ink3, fontSize = 12.sp) }
@@ -214,7 +218,7 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
                 Spacer(Modifier.statusBarsPadding().height(1.dp))
                 DetailTopBar(med.name, onBack, onEdit)
                 Spacer(Modifier.height(15.dp))
-                GradientCard(Modifier.fillMaxWidth()) {
+                GradientCard(Modifier.fillMaxWidth().appearFluidly(0)) {
                     Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
                         MedicationIcon(med, 66.dp); Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
@@ -260,12 +264,13 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
             } }
             item {
                 Spacer(Modifier.height(18.dp))
-                OutlinedButton({ if (med.isArchived) repository.archiveMedication(med.id, false) else confirmArchive = true }, Modifier.fillMaxWidth()) {
-                    Icon(if (med.isArchived) Icons.Default.Unarchive else Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text(stringResource(if (med.isArchived) R.string.detail_restore_medication else R.string.detail_archive_medication))
-                }
-                TextButton({ confirmDelete = true }, Modifier.fillMaxWidth(), colors = ButtonDefaults.textButtonColors(contentColor = DS.colors.coral)) {
-                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.detail_delete_medication))
-                }
+                GhostButton(
+                    stringResource(if (med.isArchived) R.string.detail_restore_medication else R.string.detail_archive_medication),
+                    onClick = { if (med.isArchived) repository.archiveMedication(med.id, false) else confirmArchive = true },
+                    Modifier.fillMaxWidth(), leading = if (med.isArchived) Icons.Default.Unarchive else Icons.Default.Archive,
+                )
+                Spacer(Modifier.height(10.dp))
+                DangerButton(stringResource(R.string.detail_delete_medication), { confirmDelete = true }, Modifier.fillMaxWidth(), leading = Icons.Default.Delete)
                 Spacer(Modifier.navigationBarsPadding().height(10.dp))
             }
         }
@@ -327,7 +332,7 @@ fun PrescriptionDetailScreen(
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)) {
             item { Spacer(Modifier.statusBarsPadding().height(1.dp)); DetailTopBar(rx.name, onBack) { edit = true }; Spacer(Modifier.height(15.dp)) }
             item {
-                GradientCard(Modifier.fillMaxWidth()) {
+                GradientCard(Modifier.fillMaxWidth().appearFluidly(0)) {
                     Column(Modifier.padding(21.dp)) {
                         StatusPill(stringResource(R.string.status_treatment, stringResource(effectiveStatus.titleRes())), when (effectiveStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 }); Spacer(Modifier.height(18.dp))
                         Text(rx.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
@@ -366,15 +371,15 @@ fun PrescriptionDetailScreen(
                 Spacer(Modifier.height(22.dp))
                 when (effectiveStatus) {
                     TreatmentStatus.active -> {
-                        OutlinedButton({ pendingStatus = TreatmentStatus.completed }, Modifier.fillMaxWidth()) { Icon(Icons.Default.CheckCircle, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_mark_complete)) }
-                        OutlinedButton({ pendingStatus = TreatmentStatus.archived }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Archive, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_archive)) }
+                        GhostButton(stringResource(R.string.rx_mark_complete), { pendingStatus = TreatmentStatus.completed }, Modifier.fillMaxWidth(), leading = Icons.Default.CheckCircle)
+                        Spacer(Modifier.height(10.dp))
+                        GhostButton(stringResource(R.string.rx_archive), { pendingStatus = TreatmentStatus.archived }, Modifier.fillMaxWidth(), leading = Icons.Default.Archive)
                     }
-                    TreatmentStatus.completed -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Refresh, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_reactivate)) }
-                    TreatmentStatus.archived -> OutlinedButton({ pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Restore, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_restore)) }
+                    TreatmentStatus.completed -> GhostButton(stringResource(R.string.rx_reactivate), { pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth(), leading = Icons.Default.Refresh)
+                    TreatmentStatus.archived -> GhostButton(stringResource(R.string.rx_restore), { pendingStatus = TreatmentStatus.active }, Modifier.fillMaxWidth(), leading = Icons.Default.Restore)
                 }
-                TextButton({ delete = true }, Modifier.fillMaxWidth(), colors = ButtonDefaults.textButtonColors(contentColor = DS.colors.coral)) {
-                    Icon(Icons.Default.Delete, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.rx_delete))
-                }
+                Spacer(Modifier.height(10.dp))
+                DangerButton(stringResource(R.string.rx_delete), { delete = true }, Modifier.fillMaxWidth(), leading = Icons.Default.Delete)
                 Spacer(Modifier.navigationBarsPadding().height(10.dp))
             }
         }
@@ -406,19 +411,35 @@ fun PrescriptionDetailScreen(
         text = { Text(stringResource(R.string.rx_confirm_delete_body)) },
         confirmButton = { TextButton({ repository.deletePrescription(rx.id); onBack() }) { Text(stringResource(R.string.action_delete), color = DS.colors.coral) } },
         dismissButton = { TextButton({ delete = false }) { Text(stringResource(R.string.action_cancel)) } })
-    if (addMenu) ModalBottomSheet(onDismissRequest = { addMenu = false }, containerColor = DS.colors.bg3) {
+    if (addMenu) ModalBottomSheet(
+        onDismissRequest = { addMenu = false }, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
             Text(stringResource(R.string.rx_add_medication), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
-            SettingsRow(Icons.Default.Add, DS.colors.mint, stringResource(R.string.rx_add_new_medication), stringResource(R.string.rx_add_new_medication_sub), onClick = { addMenu = false; onAddMedication() })
-            SettingsRow(Icons.Default.Link, DS.colors.cyan, stringResource(R.string.rx_add_existing), stringResource(R.string.rx_add_existing_sub), onClick = { addMenu = false; chooseExisting = true })
+            Spacer(Modifier.height(10.dp))
+            GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
+                SettingsRow(Icons.Default.Add, DS.colors.mint, stringResource(R.string.rx_add_new_medication), stringResource(R.string.rx_add_new_medication_sub), onClick = { addMenu = false; onAddMedication() })
+                RowDivider()
+                SettingsRow(Icons.Default.Link, DS.colors.cyan, stringResource(R.string.rx_add_existing), stringResource(R.string.rx_add_existing_sub), onClick = { addMenu = false; chooseExisting = true })
+            }
         }
     }
-    if (chooseExisting) ModalBottomSheet(onDismissRequest = { chooseExisting = false }, containerColor = DS.colors.bg3) {
+    if (chooseExisting) ModalBottomSheet(
+        onDismissRequest = { chooseExisting = false }, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
         val standalone = repository.medications.filter { it.prescriptionID == null }
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
             Text(stringResource(R.string.rx_add_existing), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Spacer(Modifier.height(10.dp))
             if (standalone.isEmpty()) Text(stringResource(R.string.rx_no_standalone), color = DS.colors.ink3, modifier = Modifier.padding(vertical = 20.dp))
-            standalone.forEach { med -> SettingsRow(Icons.Default.Medication, DS.colors.mint, med.name, med.strengthLabel, onClick = { repository.linkMedication(med.id, rx.id); chooseExisting = false }) }
+            else GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
+                standalone.forEachIndexed { index, med ->
+                    if (index > 0) RowDivider()
+                    SettingsRow(Icons.Default.Medication, DS.colors.mint, med.name, med.strengthLabel, onClick = { repository.linkMedication(med.id, rx.id); chooseExisting = false })
+                }
+            }
         }
     }
     if (showLogs) LogsDialog(stringResource(R.string.logs_title, rx.name), repository.logsForPrescription(rx.id), repository, { showLogs = false })
@@ -426,11 +447,13 @@ fun PrescriptionDetailScreen(
 
 @Composable
 private fun DetailTopBar(title: String, onBack: () -> Unit, onEdit: () -> Unit) {
-    Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onBack) { Icon(Icons.Default.ArrowBack, stringResource(R.string.action_back), tint = DS.colors.ink) }
-        Text(title, Modifier.weight(1f), color = DS.colors.ink, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        IconButton(onEdit) { Icon(Icons.Default.Edit, stringResource(R.string.action_edit), tint = DS.colors.mint) }
-    }
+    ScreenTopBar(
+        title = title,
+        leadingIcon = Icons.Default.ArrowBack, leadingDescription = stringResource(R.string.action_back), onLeading = onBack,
+        trailingIcon = Icons.Default.Edit, trailingDescription = stringResource(R.string.action_edit), onTrailing = onEdit,
+        trailingTint = DS.colors.mint,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 @Composable

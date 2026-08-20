@@ -395,6 +395,12 @@
     <string name="form_save_changes">Gem ændringer</string>
     <string name="form_duplicate_title">Lægemiddel findes allerede</string>
     <string name="form_duplicate_body">Et lægemiddel ved navn “%1$s” med denne styrke findes allerede.</string>
+    <string name="form_success_scheduled">%1$s er planlagt</string>
+    <string name="form_success_added_rx">%1$s blev føjet til din recept</string>
+    <string name="form_success_done">Færdig — se den under I dag</string>
+    <string name="form_success_view_rx">Vis min recept</string>
+    <string name="form_success_add_another">Tilføj endnu et lægemiddel</string>
+    <string name="form_success_add_more_pro">Tilføj flere med Pro</string>
     <string name="describe_label">Sig det bare ligeud</string>
     <string name="describe_question">Hvad tager du?</string>
     <string name="describe_hint">Prøv “Metformin 500mg every morning with food”.</string>

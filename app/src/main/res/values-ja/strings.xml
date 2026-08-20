@@ -374,6 +374,12 @@
     <string name="form_save_changes">変更を保存</string>
     <string name="form_duplicate_title">同じお薬があります</string>
     <string name="form_duplicate_body">同じ含有量の「%1$s」はすでに登録されています。</string>
+    <string name="form_success_scheduled">%1$sをスケジュールしました</string>
+    <string name="form_success_added_rx">%1$sを処方箋に追加しました</string>
+    <string name="form_success_done">完了 — 「今日」で確認</string>
+    <string name="form_success_view_rx">処方箋を見る</string>
+    <string name="form_success_add_another">別の薬を追加</string>
+    <string name="form_success_add_more_pro">Proでさらに追加</string>
     <string name="describe_label">話すように入力</string>
     <string name="describe_question">何を飲んでいますか？</string>
     <string name="describe_hint">例：「Metformin 500mg every morning with food」</string>
