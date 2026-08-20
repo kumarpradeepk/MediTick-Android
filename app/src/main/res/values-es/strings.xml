@@ -416,6 +416,12 @@
     <string name="form_save_changes">Guardar cambios</string>
     <string name="form_duplicate_title">Medicamento duplicado</string>
     <string name="form_duplicate_body">Ya existe un medicamento llamado «%1$s» con esta concentración.</string>
+    <string name="form_success_scheduled">%1$s está programado</string>
+    <string name="form_success_added_rx">%1$s se añadió a tu receta</string>
+    <string name="form_success_done">Listo — míralo en Hoy</string>
+    <string name="form_success_view_rx">Ver mi receta</string>
+    <string name="form_success_add_another">Añadir otro medicamento</string>
+    <string name="form_success_add_more_pro">Añade más con Pro</string>
     <string name="describe_label">Dilo con naturalidad</string>
     <string name="describe_question">¿Qué tomas?</string>
     <string name="describe_hint">Prueba con «Metformin 500mg every morning with food».</string>

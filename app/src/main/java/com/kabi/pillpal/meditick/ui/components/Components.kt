@@ -2,6 +2,7 @@
 
 package com.kabi.pillpal.meditick.ui.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -14,10 +15,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -59,6 +63,10 @@ fun ScreenBackground(content: @Composable BoxScope.() -> Unit) {
     Box(Modifier.fillMaxSize()) { ThemedBackground(); content() }
 }
 
+/** Soft daylight lift under cards; invisible in Midnight (alpha-zero token). */
+private fun Modifier.cardShadow(shadow: Color, shape: androidx.compose.ui.graphics.Shape, elevation: Dp = 9.dp): Modifier =
+    if (shadow == Color.Transparent) this else shadow(elevation, shape, ambientColor = shadow, spotColor = shadow)
+
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier, radius: Dp = 24.dp, onClick: (() -> Unit)? = null,
@@ -66,9 +74,19 @@ fun GlassCard(
 ) {
     val c = DS.colors
     val shape = RoundedCornerShape(radius)
-    Surface(
-        modifier = modifier.then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
-        shape = shape, color = c.glass, border = androidx.compose.foundation.BorderStroke(1.dp, c.line),
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val haptics = rememberHaptics()
+    val base = modifier
+        .then(if (onClick != null) Modifier.pressScale(interaction, 0.975f) else Modifier)
+        .cardShadow(c.cardShadow, shape)
+    if (onClick != null) Surface(
+        onClick = { haptics.tap(); onClick() }, interactionSource = interaction,
+        modifier = base, shape = shape, color = c.glass,
+        border = androidx.compose.foundation.BorderStroke(1.dp, c.line),
+    ) { Column(Modifier.padding(contentPadding).animateContentSize(), content = content) }
+    else Surface(
+        modifier = base, shape = shape, color = c.glass,
+        border = androidx.compose.foundation.BorderStroke(1.dp, c.line),
     ) { Column(Modifier.padding(contentPadding).animateContentSize(), content = content) }
 }
 
@@ -79,10 +97,20 @@ fun GradientCard(
 ) {
     val c = DS.colors
     val shape = RoundedCornerShape(radius)
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val haptics = rememberHaptics()
     Box(
-        modifier.clip(shape).background(
-            Brush.linearGradient(listOf(c.gradStart.copy(.17f), c.gradEnd.copy(.11f), c.violet.copy(.14f))),
-        ).border(1.dp, c.line2, shape).then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
+        modifier
+            .then(if (onClick != null) Modifier.pressScale(interaction, 0.975f) else Modifier)
+            .cardShadow(c.cardShadow, shape)
+            .clip(shape)
+            .background(
+                Brush.linearGradient(listOf(c.gradStart.copy(.17f), c.gradEnd.copy(.11f), c.violet.copy(.14f))),
+            ).border(1.dp, c.line2, shape)
+            .then(
+                if (onClick != null) Modifier.clickable(interaction, ripple()) { haptics.tap(); onClick() }
+                else Modifier,
+            ),
         content = content,
     )
 }
@@ -93,20 +121,27 @@ fun PrimaryButton(
     leading: ImageVector? = null,
 ) {
     val c = DS.colors
-    Button(
-        onClick = onClick, enabled = enabled,
-        modifier = modifier.height(56.dp), shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = c.onMint,
-            disabledContainerColor = c.glass3, disabledContentColor = c.ink3),
-        contentPadding = PaddingValues(0.dp),
+    // Capsule with a glow bloom, like the iOS PrimaryButtonStyle.
+    val shape = RoundedCornerShape(50)
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val haptics = rememberHaptics()
+    val alpha by androidx.compose.animation.core.animateFloatAsState(if (enabled) 1f else .4f, label = "buttonAlpha")
+    Row(
+        modifier.height(56.dp)
+            .pressScale(interaction)
+            .graphicsLayer { this.alpha = alpha }
+            .then(
+                if (enabled) Modifier.shadow(12.dp, shape, ambientColor = c.glow.copy(.55f), spotColor = c.glow.copy(.55f))
+                else Modifier,
+            )
+            .clip(shape)
+            .background(if (enabled) c.gradient else Brush.linearGradient(listOf(c.glass3, c.glass3)))
+            .clickable(interaction, ripple(color = Color.White), enabled = enabled) { haptics.tap(); onClick() },
+        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            Modifier.fillMaxSize().then(if (enabled) Modifier.background(c.gradient) else Modifier),
-            horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
-        ) {
-            leading?.let { Icon(it, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)) }
-            Text(text, style = MaterialTheme.typography.labelLarge.copy(fontSize = 16.sp, fontWeight = FontWeight.ExtraBold))
-        }
+        val content = if (enabled) c.onMint else c.ink3
+        leading?.let { Icon(it, null, Modifier.size(18.dp), tint = content); Spacer(Modifier.width(8.dp)) }
+        Text(text, color = content, style = MaterialTheme.typography.labelLarge.copy(fontSize = 16.sp, fontWeight = FontWeight.ExtraBold))
     }
 }
 
@@ -119,13 +154,20 @@ fun SectionLabel(text: String, modifier: Modifier = Modifier) {
 @Composable
 fun SelectChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val c = DS.colors
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val haptics = rememberHaptics()
+    // Selection settles with a color cross-fade instead of snapping.
+    val fill by animateColorAsState(if (selected) c.mint.copy(.15f) else c.glass2, label = "chipFill")
+    val edge by animateColorAsState(if (selected) c.mint.copy(.5f) else c.line, label = "chipEdge")
+    val label by animateColorAsState(if (selected) c.mint else c.ink2, label = "chipLabel")
     Surface(
-        modifier = modifier.clickable(onClick = onClick), shape = RoundedCornerShape(14.dp),
-        color = if (selected) c.mint.copy(.15f) else c.glass2,
-        border = androidx.compose.foundation.BorderStroke(1.dp, if (selected) c.mint.copy(.5f) else c.line),
+        onClick = { haptics.tick(); onClick() }, interactionSource = interaction,
+        modifier = modifier.pressScale(interaction, 0.94f), shape = RoundedCornerShape(14.dp),
+        color = fill,
+        border = androidx.compose.foundation.BorderStroke(1.dp, edge),
     ) {
         Text(text, Modifier.padding(horizontal = 13.dp, vertical = 9.dp),
-            color = if (selected) c.mint else c.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            color = label, fontWeight = FontWeight.Bold, fontSize = 12.sp)
     }
 }
 
@@ -171,12 +213,28 @@ fun ProgressRing(
     center: @Composable BoxScope.() -> Unit = {},
 ) {
     val c = DS.colors
+    // Sweep to the new value instead of jumping — the ring "fills".
+    val animated by androidx.compose.animation.core.animateFloatAsState(
+        progress.coerceIn(0f, 1f),
+        androidx.compose.animation.core.spring(dampingRatio = 0.85f, stiffness = 90f),
+        label = "ringProgress",
+    )
     Box(modifier, contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val stroke = lineWidth.toPx()
             val inset = stroke / 2
-            drawArc(c.ringTrack, -90f, 360f, false, Offset(inset, inset), Size(size.width - stroke, size.height - stroke), style = Stroke(stroke, cap = StrokeCap.Round))
-            drawArc(c.gradStart, -90f, 360f * progress.coerceIn(0f, 1f), false, Offset(inset, inset), Size(size.width - stroke, size.height - stroke), style = Stroke(stroke, cap = StrokeCap.Round))
+            val arcSize = Size(size.width - stroke, size.height - stroke)
+            drawArc(c.ringTrack, -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            if (animated > 0f) {
+                // Soft under-glow, then the gradient arc on top.
+                drawArc(c.glow.copy(.28f), -90f, 360f * animated, false, Offset(inset, inset), arcSize,
+                    style = Stroke(stroke * 1.55f, cap = StrokeCap.Round))
+                drawArc(
+                    Brush.linearGradient(listOf(c.gradStart, c.gradEnd)),
+                    -90f, 360f * animated, false, Offset(inset, inset), arcSize,
+                    style = Stroke(stroke, cap = StrokeCap.Round),
+                )
+            }
         }
         center()
     }

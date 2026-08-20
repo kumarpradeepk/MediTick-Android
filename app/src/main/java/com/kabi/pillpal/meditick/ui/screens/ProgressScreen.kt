@@ -74,22 +74,24 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
 
     ScreenBackground {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.progress_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink) }
+            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.progress_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.appearFluidly(0)) }
             if (data.medications.isEmpty()) item {
                 Spacer(Modifier.height(55.dp)); FriendlyEmptyState(Icons.Default.BarChart, stringResource(R.string.progress_empty_title),
                     stringResource(R.string.progress_empty_body))
             } else {
                 item {
-                    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(DS.colors.glass2).padding(4.dp)) {
+                    Row(Modifier.fillMaxWidth().appearFluidly(1).clip(RoundedCornerShape(16.dp)).background(DS.colors.glass2).padding(4.dp)) {
                         RangeChoice(stringResource(R.string.progress_range_week), !allTime, Modifier.weight(1f)) { allTime = false }
                         RangeChoice(stringResource(R.string.progress_range_all), allTime, Modifier.weight(1f)) { if (isPro) allTime = true else onRequirePro() }
                     }
                 }
                 item {
-                    ProgressHero(stats, stringResource(if (allTime) R.string.progress_range_label_all else R.string.progress_range_label_week)) { detail = "adherence" }
+                    Box(Modifier.appearFluidly(2)) {
+                        ProgressHero(stats, stringResource(if (allTime) R.string.progress_range_label_all else R.string.progress_range_label_week)) { detail = "adherence" }
+                    }
                 }
                 item {
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(Modifier.appearFluidly(3), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         MetricTile(
                             Icons.Default.Timer, DS.colors.cyan,
                             if (hasTakenLogs) formatPercent((onTime * 100).toInt()) else stringResource(R.string.value_none),
@@ -128,8 +130,16 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
 
 @Composable
 private fun RangeChoice(text: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
-    Box(modifier.height(38.dp).clip(RoundedCornerShape(13.dp)).background(if (selected) DS.colors.bg3 else Color.Transparent).clickable(onClick = onClick), contentAlignment = Alignment.Center) {
-        Text(text, color = if (selected) DS.colors.ink else DS.colors.ink3, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+    val haptics = rememberHaptics()
+    // The active segment fades between states instead of snapping.
+    val fill by androidx.compose.animation.animateColorAsState(if (selected) DS.colors.bg3 else Color.Transparent, androidx.compose.animation.core.tween(200), label = "rangeFill")
+    val label by androidx.compose.animation.animateColorAsState(if (selected) DS.colors.ink else DS.colors.ink3, androidx.compose.animation.core.tween(200), label = "rangeLabel")
+    Box(
+        modifier.height(38.dp).clip(RoundedCornerShape(13.dp)).background(fill)
+            .clickable { if (!selected) haptics.tick(); onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text, color = label, fontWeight = FontWeight.Bold, fontSize = 12.sp)
     }
 }
 

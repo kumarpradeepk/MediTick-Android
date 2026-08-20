@@ -461,6 +461,13 @@
     <string name="form_duplicate_title">Duplicate medication</string>
     <!-- %1$s is the existing medication's name. -->
     <string name="form_duplicate_body">A medication named \'%1$s\' with this strength already exists.</string>
+    <!-- The celebration screen after saving a new medication. %1$s is its name. -->
+    <string name="form_success_scheduled">%1$s is scheduled</string>
+    <string name="form_success_added_rx">%1$s was added to your prescription</string>
+    <string name="form_success_done">Done — see it on Today</string>
+    <string name="form_success_view_rx">View my prescription</string>
+    <string name="form_success_add_another">Add another medication</string>
+    <string name="form_success_add_more_pro">Add more with Pro</string>
 
     <!-- ===================== Medication form: describe ================= -->
     <string name="describe_label">Say it naturally</string>

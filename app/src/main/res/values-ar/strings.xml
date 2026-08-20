@@ -479,6 +479,12 @@
     <string name="form_save_changes">حفظ التغييرات</string>
     <string name="form_duplicate_title">دواء مكرر</string>
     <string name="form_duplicate_body">يوجد بالفعل دواء باسم «%1$s» بهذا التركيز.</string>
+    <string name="form_success_scheduled">تمت جدولة %1$s</string>
+    <string name="form_success_added_rx">تمت إضافة %1$s إلى وصفتك الطبية</string>
+    <string name="form_success_done">تم — شاهده في «اليوم»</string>
+    <string name="form_success_view_rx">عرض وصفتي الطبية</string>
+    <string name="form_success_add_another">إضافة دواء آخر</string>
+    <string name="form_success_add_more_pro">أضف المزيد مع Pro</string>
     <string name="describe_label">قُلها ببساطة</string>
     <string name="describe_question">ماذا تتناول؟</string>
     <string name="describe_hint">جرّب «Metformin 500mg every morning with food».</string>

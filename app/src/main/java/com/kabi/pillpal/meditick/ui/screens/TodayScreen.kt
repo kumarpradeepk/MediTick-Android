@@ -2,8 +2,13 @@
 
 package com.kabi.pillpal.meditick.ui.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -75,16 +80,17 @@ fun TodayScreen(repository: AppRepository, onAdd: () -> Unit, onMedication: (Str
                 Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Header(now, onAdd) }
-                item { DayStrip(repository, selectedDay) { selectedDay = it } }
-                item { HeroCard(stats, doses.firstOrNull { it.state == DoseState.DUE || it.state == DoseState.UPCOMING }, isToday, isFuture) { selectedDose = it } }
-                if (isToday) item { MealBanner(repository.mealTimes) }
+                item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Header(now, onAdd, Modifier.appearFluidly(0)) }
+                item { DayStrip(repository, selectedDay, Modifier.appearFluidly(1)) { selectedDay = it } }
+                item { HeroCard(stats, doses.firstOrNull { it.state == DoseState.DUE || it.state == DoseState.UPCOMING }, isToday, isFuture, Modifier.appearFluidly(2)) { selectedDose = it } }
+                if (isToday) item { MealBanner(repository.mealTimes, Modifier.appearFluidly(3)) }
                 doses.groupBy { it.time }.toSortedMap().forEach { (time, group) ->
                     item(key = "header-$time") {
+                        val haptics = rememberHaptics()
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             TimelineHeader(partFor(time), time, isToday && kotlin.math.abs(time - now) < 60 * 60_000L, now, Modifier.weight(1f))
                             val pending = group.filter { it.state !in setOf(DoseState.TAKEN, DoseState.SKIPPED) }
-                            if (!isFuture && pending.isNotEmpty()) TextButton({ repository.logDoses(pending, DoseStatus.taken) }) { Text(stringResource(R.string.today_take_all)) }
+                            if (!isFuture && pending.isNotEmpty()) TextButton({ haptics.success(); repository.logDoses(pending, DoseStatus.taken) }) { Text(stringResource(R.string.today_take_all), fontWeight = FontWeight.Bold) }
                         }
                     }
                     item(key = "card-$time") {
@@ -132,7 +138,7 @@ fun TodayScreen(repository: AppRepository, onAdd: () -> Unit, onMedication: (Str
 }
 
 @Composable
-private fun Header(now: Long, onAdd: () -> Unit) {
+private fun Header(now: Long, onAdd: () -> Unit, modifier: Modifier = Modifier) {
     val cal = Calendar.getInstance().apply { timeInMillis = now }
     val greeting = stringResource(
         when (cal.get(Calendar.HOUR_OF_DAY)) {
@@ -141,32 +147,41 @@ private fun Header(now: Long, onAdd: () -> Unit) {
             else -> R.string.today_greeting_evening
         },
     )
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             SectionLabel(formatFullWeekdayDate(now))
             Text(greeting, style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink)
         }
-        IconButton(onAdd) { Icon(Icons.Default.AddCircle, stringResource(R.string.today_add_new), tint = DS.colors.mint, modifier = Modifier.size(30.dp)) }
+        RoundIconButton(Icons.Default.Add, stringResource(R.string.today_add_new), onAdd, tint = DS.colors.mint)
     }
 }
 
 @Composable
-private fun DayStrip(repository: AppRepository, selectedDay: Long, onSelect: (Long) -> Unit) {
+private fun DayStrip(repository: AppRepository, selectedDay: Long, modifier: Modifier = Modifier, onSelect: (Long) -> Unit) {
     val today = DoseEngine.startOfDay(System.currentTimeMillis())
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    val haptics = rememberHaptics()
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         (-3..3).forEach { offset ->
             val day = DoseEngine.addDays(today, offset)
             val selected = day == selectedDay
             val dayStats = DoseEngine.stats(repository.doses(day))
+            // The selection pill and text colors settle in, no snapping.
+            val pill by animateColorAsState(if (selected) DS.colors.mint.copy(.14f) else Color.Transparent, tween(200), label = "dayPill")
+            val initialTint by animateColorAsState(if (selected) DS.colors.mint else DS.colors.ink3, tween(200), label = "dayInitial")
+            val numberTint by animateColorAsState(if (selected) DS.colors.ink else DS.colors.ink2, tween(200), label = "dayNumber")
+            val interaction = remember { MutableInteractionSource() }
             Column(
-                Modifier.width(43.dp).clip(RoundedCornerShape(16.dp))
-                    .background(if (selected) DS.colors.mint.copy(.14f) else Color.Transparent)
-                    .clickable { onSelect(day) }.padding(vertical = 9.dp),
+                Modifier.width(43.dp)
+                    .pressScale(interaction, 0.9f)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(pill)
+                    .clickable(interaction, ripple()) { haptics.tick(); onSelect(day) }
+                    .padding(vertical = 9.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(weekdayInitial(day), color = if (selected) DS.colors.mint else DS.colors.ink3,
+                Text(weekdayInitial(day), color = initialTint,
                     fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                Text(SimpleDateFormat("d", Locale.getDefault()).format(Date(day)), color = if (selected) DS.colors.ink else DS.colors.ink2,
+                Text(SimpleDateFormat("d", Locale.getDefault()).format(Date(day)), color = numberTint,
                     fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(5.dp))
                 val dot = when {
@@ -183,9 +198,9 @@ private fun DayStrip(repository: AppRepository, selectedDay: Long, onSelect: (Lo
 }
 
 @Composable
-private fun HeroCard(stats: DoseEngine.Stats, next: ScheduledDose?, isToday: Boolean, isFuture: Boolean, onTake: (ScheduledDose) -> Unit) {
+private fun HeroCard(stats: DoseEngine.Stats, next: ScheduledDose?, isToday: Boolean, isFuture: Boolean, modifier: Modifier = Modifier, onTake: (ScheduledDose) -> Unit) {
     val context = LocalContext.current
-    GradientCard(Modifier.fillMaxWidth()) {
+    GradientCard(modifier.fillMaxWidth()) {
         Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
             ProgressRing(stats.completionRatio.toFloat(), Modifier.size(104.dp), 12.dp) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -223,10 +238,10 @@ private fun HeroCard(stats: DoseEngine.Stats, next: ScheduledDose?, isToday: Boo
 }
 
 @Composable
-private fun MealBanner(mealTimes: MealTimes) {
+private fun MealBanner(mealTimes: MealTimes, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(DS.colors.glass)
+        modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(DS.colors.glass)
             .padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(Icons.Default.Restaurant, null, tint = DS.colors.amber)
@@ -297,49 +312,50 @@ private fun DoseStateMark(state: DoseState, isFuture: Boolean) {
 private fun DoseActionSheet(repository: AppRepository, dose: ScheduledDose, onDismiss: () -> Unit) {
     val resolved = repository.doses(dose.time).firstOrNull { it.id == dose.id } ?: dose
     val context = LocalContext.current
+    val haptics = rememberHaptics()
     var actedAt by remember(resolved.id) { mutableLongStateOf(resolved.log?.actedAt ?: initialDoseActedAt(resolved.time)) }
     var note by remember(resolved.id) { mutableStateOf("") }
-    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = DS.colors.bg3) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            MedicationIcon(resolved.medication, 62.dp); Spacer(Modifier.height(12.dp))
-            Text(resolved.medication.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
-            Text(stringResource(R.string.today_dose_line, resolved.timeLabel(context), resolved.medication.doseLabel(context)), color = DS.colors.ink2)
+            Box(Modifier.appearFluidly(0)) { MedicationIcon(resolved.medication, 62.dp) }
+            Spacer(Modifier.height(12.dp))
+            Text(resolved.medication.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink, modifier = Modifier.appearFluidly(1))
+            Text(stringResource(R.string.today_dose_line, resolved.timeLabel(context), resolved.medication.doseLabel(context)), color = DS.colors.ink2, modifier = Modifier.appearFluidly(1))
             Spacer(Modifier.height(22.dp))
             if (resolved.state == DoseState.TAKEN || resolved.state == DoseState.SKIPPED) {
                 PrimaryButton(
                     stringResource(if (resolved.state == DoseState.TAKEN) R.string.dose_undo_taken else R.string.dose_undo_skipped),
-                    { repository.removeLog(resolved); onDismiss() }, Modifier.fillMaxWidth(), leading = Icons.Default.Undo,
+                    { repository.removeLog(resolved); onDismiss() }, Modifier.fillMaxWidth().appearFluidly(2), leading = Icons.Default.Undo,
                 )
             } else {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton({
+                Row(Modifier.fillMaxWidth().appearFluidly(2), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    GhostButton(formatShortDate(actedAt), onClick = {
                         val calendar = Calendar.getInstance().apply { timeInMillis = actedAt }
                         android.app.DatePickerDialog(context, { _, year, month, dayOfMonth ->
                             actedAt = Calendar.getInstance().apply {
                                 timeInMillis = actedAt; set(Calendar.YEAR, year); set(Calendar.MONTH, month); set(Calendar.DAY_OF_MONTH, dayOfMonth)
                             }.timeInMillis.coerceAtMost(System.currentTimeMillis())
                         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-                    }, Modifier.weight(1f)) { Icon(Icons.Default.CalendarMonth, null); Spacer(Modifier.width(5.dp)); Text(formatShortDate(actedAt)) }
-                    OutlinedButton({
+                    }, Modifier.weight(1f), leading = Icons.Default.CalendarMonth)
+                    GhostButton(formatTime(context, actedAt), onClick = {
                         val calendar = Calendar.getInstance().apply { timeInMillis = actedAt }
                         android.app.TimePickerDialog(context, { _, h, m ->
                             actedAt = Calendar.getInstance().apply {
                                 timeInMillis = actedAt; set(Calendar.HOUR_OF_DAY, h); set(Calendar.MINUTE, m); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
                             }.timeInMillis.coerceAtMost(System.currentTimeMillis())
                         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-                    }, Modifier.weight(1f)) { Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(5.dp)); Text(formatTime(context, actedAt)) }
+                    }, Modifier.weight(1f), leading = Icons.Default.Schedule)
                 }
-                Spacer(Modifier.height(8.dp)); OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth())
+                Spacer(Modifier.height(8.dp)); OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth().appearFluidly(3))
                 Spacer(Modifier.height(12.dp))
-                PrimaryButton(stringResource(R.string.dose_mark_as_taken), { repository.logDose(resolved, DoseStatus.taken, actedAt, note); onDismiss() }, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
+                PrimaryButton(stringResource(R.string.dose_mark_as_taken), { haptics.success(); repository.logDose(resolved, DoseStatus.taken, actedAt, note); onDismiss() }, Modifier.fillMaxWidth().appearFluidly(4), leading = Icons.Default.Check)
                 Spacer(Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton({ NotificationScheduler.scheduleSnooze(repository.appContext, resolved.medication.id, resolved.time, 15); onDismiss() }, Modifier.weight(1f)) {
-                        Icon(Icons.Default.Snooze, null); Spacer(Modifier.width(5.dp)); Text(stringResource(R.string.action_snooze))
-                    }
-                    OutlinedButton({ repository.logDose(resolved, DoseStatus.skipped, actedAt, note); onDismiss() }, Modifier.weight(1f)) {
-                        Icon(Icons.Default.RemoveCircleOutline, null); Spacer(Modifier.width(5.dp)); Text(stringResource(R.string.action_skip))
-                    }
+                Row(Modifier.appearFluidly(5), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    GhostButton(stringResource(R.string.action_snooze), onClick = { NotificationScheduler.scheduleSnooze(repository.appContext, resolved.medication.id, resolved.time, 15); onDismiss() }, Modifier.weight(1f), leading = Icons.Default.Snooze)
+                    GhostButton(stringResource(R.string.action_skip), onClick = { repository.logDose(resolved, DoseStatus.skipped, actedAt, note); onDismiss() }, Modifier.weight(1f), leading = Icons.Default.RemoveCircleOutline, tint = DS.colors.amber, borderTint = DS.colors.amber.copy(.3f), fillTint = DS.colors.amber.copy(.1f))
                 }
             }
         }
@@ -352,18 +368,22 @@ internal fun initialDoseActedAt(scheduledAt: Long, now: Long = System.currentTim
 @Composable
 fun AsNeededSheet(repository: AppRepository, medication: Medication, onDismiss: () -> Unit) {
     val context = LocalContext.current
+    val haptics = rememberHaptics()
     var amount by remember { mutableStateOf(medication.schedule.amountPerDose.toString()) }
     var note by remember { mutableStateOf("") }
-    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = DS.colors.bg3) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            SectionLabel(stringResource(R.string.dose_as_needed_title))
-            Text(medication.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
+            SectionLabel(stringResource(R.string.dose_as_needed_title), Modifier.appearFluidly(0))
+            Text(medication.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink, modifier = Modifier.appearFluidly(1))
             Spacer(Modifier.height(18.dp))
-            OutlinedTextField(amount, { amount = it.filter { ch -> ch.isDigit() || ch == '.' } }, label = { Text(stringResource(R.string.dose_amount_label, medication.form.unitName(context, 2.0))) }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(amount, { amount = it.filter { ch -> ch.isDigit() || ch == '.' } }, label = { Text(stringResource(R.string.dose_amount_label, medication.form.unitName(context, 2.0))) }, modifier = Modifier.fillMaxWidth().appearFluidly(2))
             Spacer(Modifier.height(10.dp))
-            OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth().appearFluidly(3))
             Spacer(Modifier.height(18.dp))
-            PrimaryButton(stringResource(R.string.action_log_dose), { repository.logAsNeeded(medication, amount.toDoubleOrNull() ?: 1.0, note); onDismiss() }, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
+            PrimaryButton(stringResource(R.string.action_log_dose), { haptics.success(); repository.logAsNeeded(medication, amount.toDoubleOrNull() ?: 1.0, note); onDismiss() }, Modifier.fillMaxWidth().appearFluidly(4), leading = Icons.Default.Check)
         }
     }
 }

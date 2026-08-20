@@ -21,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -80,17 +81,27 @@ fun SettingsScreen(
     }
     ScreenBackground {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp)) {
-            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.padding(bottom = 18.dp)) }
+            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.padding(bottom = 18.dp).appearFluidly(0)) }
             item {
                 if (billing.isPro) {
-                    GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(18.dp)) {
+                    GlassCard(Modifier.fillMaxWidth().appearFluidly(1), contentPadding = PaddingValues(18.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconTile(Icons.Default.Check, DS.colors.mint, 44.dp); Spacer(Modifier.width(14.dp))
                             Column { Text(stringResource(R.string.settings_pro_active), color = DS.colors.ink, fontWeight = FontWeight.ExtraBold); Text(stringResource(R.string.settings_pro_thanks), color = DS.colors.ink3, fontSize = 12.sp) }
                         }
                     }
                 } else {
-                    Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(DS.colors.gradient).clickable(onClick = onShowPaywall).padding(18.dp)) {
+                    // The upgrade banner glows and gives, like the iOS one.
+                    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                    val haptics = rememberHaptics()
+                    Box(
+                        Modifier.fillMaxWidth().appearFluidly(1)
+                            .pressScale(interaction, 0.975f)
+                            .shadow(14.dp, RoundedCornerShape(24.dp), ambientColor = DS.colors.glow.copy(.5f), spotColor = DS.colors.glow.copy(.5f))
+                            .clip(RoundedCornerShape(24.dp)).background(DS.colors.gradient)
+                            .clickable(interaction, ripple(color = androidx.compose.ui.graphics.Color.White)) { haptics.tap(); onShowPaywall() }
+                            .padding(18.dp),
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconTile(Icons.Default.AutoAwesome, DS.colors.gradEnd, 44.dp); Spacer(Modifier.width(14.dp))
                             Column(Modifier.weight(1f)) {

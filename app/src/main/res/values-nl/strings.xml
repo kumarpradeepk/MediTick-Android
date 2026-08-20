@@ -395,6 +395,12 @@
     <string name="form_save_changes">Wijzigingen opslaan</string>
     <string name="form_duplicate_title">Dubbel medicijn</string>
     <string name="form_duplicate_body">Er bestaat al een medicijn met de naam ‘%1$s’ en deze sterkte.</string>
+    <string name="form_success_scheduled">%1$s is ingepland</string>
+    <string name="form_success_added_rx">%1$s is toegevoegd aan je recept</string>
+    <string name="form_success_done">Klaar — bekijk het bij Vandaag</string>
+    <string name="form_success_view_rx">Mijn recept bekijken</string>
+    <string name="form_success_add_another">Nog een medicijn toevoegen</string>
+    <string name="form_success_add_more_pro">Voeg meer toe met Pro</string>
     <string name="describe_label">Zeg het gewoon</string>
     <string name="describe_question">Wat neem je in?</string>
     <string name="describe_hint">Probeer ‘Metformin 500mg every morning with food’.</string>

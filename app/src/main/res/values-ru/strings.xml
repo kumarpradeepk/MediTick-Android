@@ -437,6 +437,12 @@
     <string name="form_save_changes">Сохранить изменения</string>
     <string name="form_duplicate_title">Такой препарат уже есть</string>
     <string name="form_duplicate_body">Препарат «%1$s» с такой дозировкой уже существует.</string>
+    <string name="form_success_scheduled">%1$s запланировано</string>
+    <string name="form_success_added_rx">%1$s добавлен в ваш рецепт</string>
+    <string name="form_success_done">Готово — смотрите в «Сегодня»</string>
+    <string name="form_success_view_rx">Посмотреть мой рецепт</string>
+    <string name="form_success_add_another">Добавить ещё препарат</string>
+    <string name="form_success_add_more_pro">Добавьте больше с Pro</string>
     <string name="describe_label">Скажите своими словами</string>
     <string name="describe_question">Что вы принимаете?</string>
     <string name="describe_hint">Попробуйте «Metformin 500mg every morning with food».</string>
