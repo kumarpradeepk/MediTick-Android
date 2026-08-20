@@ -25,6 +25,94 @@ class DoseEngineTest {
         assertEquals(listOf(8, 21), firing.map { TimeOfDay.fromEpoch(it.time).hour })
     }
 
+    @Test fun perDoseSpecsCarryTheirOwnAmountAndMealRelation() {
+        val meals = MealTimes(dinner = TimeOfDay(19, 0))
+        val schedule = DoseSchedule(startDate = day).withDoses(
+            listOf(
+                DoseSpec(amount = 1.0, time = TimeOfDay(8, 0)),
+                DoseSpec(
+                    amount = 2.0, time = TimeOfDay(9, 0),
+                    anchor = MealAnchor(slot = MealSlot.dinner, relation = MealRelation.before, offsetMinutes = 30),
+                ),
+            ),
+            meals,
+        )
+
+        val firing = DoseEngine.firingTimes(schedule, day, meals)
+        assertEquals(2, firing.size)
+        assertEquals(1.0, firing[0].amount, 0.0)
+        assertEquals(8, TimeOfDay.fromEpoch(firing[0].time).hour)
+        // 30 minutes before a 19:00 dinner.
+        assertEquals(2.0, firing[1].amount, 0.0)
+        assertEquals(18, TimeOfDay.fromEpoch(firing[1].time).hour)
+        assertEquals(30, TimeOfDay.fromEpoch(firing[1].time).minute)
+        // Three units a day in total, not two.
+        assertEquals(3.0, schedule.unitsPerActiveDay, 0.0)
+    }
+
+    @Test fun legacySchedulesStillResolveWithoutDoseSpecs() {
+        val schedule = DoseSchedule(
+            kind = ScheduleKind.fixedTimes,
+            times = listOf(TimeOfDay(7, 0), TimeOfDay(22, 0)),
+            amountPerDose = 2.0,
+        )
+        val resolved = schedule.resolvedDoses
+        assertEquals(2, resolved.size)
+        assertTrue(resolved.all { it.amount == 2.0 && it.anchor == null })
+    }
+
+    @Test fun skippingResolvesTheDayWithoutRaisingAdherence() {
+        val yesterday = DoseEngine.addDays(day, -1)
+        val medication = Medication(
+            name = "Test",
+            schedule = DoseSchedule(
+                kind = ScheduleKind.fixedTimes,
+                times = listOf(TimeOfDay(8, 0), TimeOfDay(20, 0)),
+                startDate = DoseEngine.addDays(day, -3),
+            ),
+        )
+        val logs = listOf(
+            DoseLog(medicationID = medication.id, scheduledAt = DoseEngine.atTime(yesterday, TimeOfDay(8, 0)), status = DoseStatus.taken),
+            DoseLog(medicationID = medication.id, scheduledAt = DoseEngine.atTime(yesterday, TimeOfDay(20, 0)), status = DoseStatus.skipped),
+        )
+
+        val doses = DoseEngine.doses(yesterday, listOf(medication), MealTimes(), logs, day)
+        val stats = DoseEngine.stats(doses)
+        assertEquals(1, stats.taken)
+        assertEquals(1, stats.skipped)
+        assertEquals(0, stats.missed)
+        // Skipped stays in the denominator: 1 of 2 scheduled doses was taken.
+        assertEquals(0.5, stats.ratio, 0.0001)
+        // But the day still resolved, so it reads as complete on the calendar.
+        assertEquals(DoseEngine.DayAdherence.COMPLETE, DoseEngine.dayAdherence(doses))
+    }
+
+    @Test fun timingSummaryClassifiesAgainstTheGraceWindow() {
+        val scheduled = DoseEngine.atTime(day, TimeOfDay(8, 0))
+        val id = "med"
+        val logs = listOf(
+            DoseLog(medicationID = id, scheduledAt = scheduled, status = DoseStatus.taken, actedAt = scheduled + 10 * 60_000L),
+            DoseLog(medicationID = id, scheduledAt = scheduled, status = DoseStatus.taken, actedAt = scheduled - 90 * 60_000L),
+            DoseLog(medicationID = id, scheduledAt = scheduled, status = DoseStatus.taken, actedAt = scheduled + 90 * 60_000L),
+            DoseLog(medicationID = id, scheduledAt = scheduled, status = DoseStatus.skipped),
+        )
+        val summary = DoseEngine.timingSummary(logs, day, 30)
+        assertEquals(1, summary.onTime)
+        assertEquals(1, summary.early)
+        assertEquals(1, summary.late)
+        assertEquals(1, summary.skipped)
+        assertEquals(3, summary.takenTotal)
+    }
+
+    @Test fun dayIntervalStretchesTheStockForecast() {
+        val medication = Medication(
+            schedule = DoseSchedule(kind = ScheduleKind.fixedTimes, times = listOf(TimeOfDay(8, 0)), dayInterval = 2),
+            inventoryEnabled = true, stock = 10.0,
+        )
+        // One dose every other day → 10 doses cover 20 days.
+        assertEquals(20, medication.daysOfStockRemaining)
+    }
+
     @Test fun mealAnchorsMoveWithMeals() {
         val schedule = DoseSchedule(
             kind = ScheduleKind.mealBased,
@@ -76,7 +164,10 @@ class DoseEngineTest {
         assertFalse(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 1)))
         assertFalse(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 2)))
         assertTrue(DoseEngine.isActive(schedule, DoseEngine.addDays(day, 3)))
-        assertEquals("Every 3 days", schedule.frequencySummary())
+        // The wording of the summary is now a localized resource, so it needs a
+        // Context and belongs to an instrumented test; the cadence itself — the
+        // engine behaviour — is what the assertions above pin down.
+        assertEquals(3, schedule.dayInterval)
     }
 
     @Test fun treatmentCompletionAndArchiveKeepSeparateChildProvenance() {

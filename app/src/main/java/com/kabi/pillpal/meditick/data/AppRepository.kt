@@ -151,8 +151,10 @@ class AppRepository private constructor(private val context: Context) {
                 it.id == existing || (!it.isAsNeeded && ScheduledDose.occurrenceKey(it.medicationID, it.scheduledAt) == dose.id)
             }
             val log = DoseLog(
+                // The occurrence's own amount — per-dose amounts mean two doses
+                // of one medication on the same day can differ.
                 medicationID = dose.medication.id, scheduledAt = dose.time, status = status,
-                actedAt = actedAt, amount = dose.medication.schedule.amountPerDose, note = note,
+                actedAt = actedAt, amount = dose.amount, note = note,
             )
             nextLogs += log
             val stockAdjustment = inventoryAdjustment(previous, status, log.amount)

@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ja translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">今日の進捗と次の服用</string>
+    <string name="channel_dose_name">服用リマインダー</string>
+    <string name="channel_dose_description">予定した服用時刻のお知らせ</string>
+    <string name="channel_follow_up_name">フォロー通知</string>
+    <string name="channel_follow_up_description">服用がまだ記録されていないときのそっとしたお知らせ</string>
+    <string name="channel_refill_name">補充のお知らせ</string>
+    <string name="channel_refill_description">管理中の残量が少なくなったときのお知らせ</string>
+    <string name="notif_hidden_medication">お薬</string>
+    <string name="notif_title_still_waiting">未服用：%1$s</string>
+    <string name="notif_title_running_low">残りわずか：%1$s</string>
+    <string name="notif_title_time_for">%1$sの時間です</string>
+    <string name="notif_body_nudge">この服用はまだ記録されていません。タップするだけで完了します。</string>
+    <string name="notif_body_snooze">スヌーズした服用の時間です。</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="other">残り約%1$d日分です。補充の準備をしましょう。</item>
+    </plurals>
+    <string name="notif_body_refill_generic">残量が補充ラインを下回っています。</string>
+    <string name="notif_body_hidden">MediTickを開いて、この服用を確認・記録してください。</string>
+    <string name="action_take">服用</string>
+    <string name="action_skip">スキップ</string>
+    <string name="action_snooze_minutes">%1$d分後に再通知</string>
+    <string name="widget_doses_ticked">%2$d回中%1$d回を記録</string>
+    <string name="widget_header">MEDITICK · 今日</string>
+    <string name="widget_no_doses_today">今日の服用はありません</string>
+    <string name="widget_all_done_today">今日はすべて完了</string>
+    <string name="widget_all_caught_up">すべて記録できています</string>
+    <string name="billing_products_missing">Google Play Consoleで「monthly」「yearly」「lifetime」の商品を設定してください。</string>
+    <string name="billing_plan_lifetime">買い切り</string>
+    <string name="billing_plan_yearly">年額</string>
+    <string name="billing_plan_monthly">月額</string>
+    <string name="billing_tag_one_time">一度だけのお支払い</string>
+    <string name="billing_tag_best_value">いちばんお得</string>
+    <string name="billing_tag_flexible">いつでも解約可能</string>
+    <string name="billing_checking_purchases">購入情報を確認しています…</string>
+    <string name="billing_restored">購入を復元しました。おかえりなさい。</string>
+    <string name="billing_none_found">有効な購入は見つかりませんでした。</string>
+    <string name="billing_pro_unlocked">MediTick Proへようこそ。すべての機能が使えます。</string>
+    <string name="meal_breakfast">朝食</string>
+    <string name="meal_lunch">昼食</string>
+    <string name="meal_dinner">夕食</string>
+    <string name="meal_bedtime">就寝前</string>
+    <string name="meal_breakfast_inline">朝食</string>
+    <string name="meal_lunch_inline">昼食</string>
+    <string name="meal_dinner_inline">夕食</string>
+    <string name="meal_bedtime_inline">就寝</string>
+    <string name="anchor_at_bedtime">就寝前に</string>
+    <string name="anchor_with">%1$sと一緒に</string>
+    <string name="anchor_before">%1$s前</string>
+    <string name="anchor_after">%1$s後</string>
+    <string name="anchor_before_offset">%1$d分前・%2$s</string>
+    <string name="anchor_after_offset">%1$d分後・%2$s</string>
+    <string name="anchor_fixed_time">時刻を指定</string>
+    <string name="form_pill">錠剤</string>
+    <string name="form_capsule">カプセル</string>
+    <string name="form_tablet">錠剤</string>
+    <string name="form_liquid">液剤</string>
+    <string name="form_drops">点滴薬</string>
+    <string name="form_injection">注射</string>
+    <string name="form_patch">パッチ</string>
+    <string name="form_cream">クリーム</string>
+    <string name="form_inhaler">吸入器</string>
+    <string name="form_powder">粉薬</string>
+    <string name="form_gummy">グミ</string>
+    <string name="form_spray">スプレー</string>
+    <string name="form_other">その他</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="other">錠</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="other">カプセル</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="other">錠</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="other">mL</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">滴</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="other">回分</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="other">枚</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="other">回</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="other">吸入</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">杯</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="other">粒</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="other">噴霧</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="other">回分</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s%2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="other">1日%1$d回</item>
+    </plurals>
+    <string name="schedule_no_times_set">時刻未設定</string>
+    <string name="schedule_interval">%1$d時間ごと、%2$s〜%3$s</string>
+    <string name="schedule_as_needed">必要なとき</string>
+    <string name="schedule_when_needed">必要なときに</string>
+    <string name="schedule_every_day">毎日</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="other">%1$d日ごと</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d日服用、%2$d日休薬"</string>
+    <string name="inventory_not_tracked">管理していません</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_done">完了</string>
+    <string name="action_save">保存</string>
+    <string name="action_ok">OK</string>
+    <string name="action_add">追加</string>
+    <string name="action_delete">削除</string>
+    <string name="action_edit">編集</string>
+    <string name="action_close">閉じる</string>
+    <string name="action_back">戻る</string>
+    <string name="action_continue">続ける</string>
+    <string name="action_try_again">再試行</string>
+    <string name="action_get_started">はじめる</string>
+    <string name="action_snooze">スヌーズ</string>
+    <string name="action_log_dose">服用を記録</string>
+    <string name="action_take_now">いま服用</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">今日</string>
+    <string name="tab_treatments">治療</string>
+    <string name="tab_progress">進捗</string>
+    <string name="tab_settings">設定</string>
+    <string name="onboarding_badge">"  プライベート · アカウント不要 · 無料  "</string>
+    <string name="onboarding_headline">もう飲み忘れない。</string>
+    <string name="onboarding_subhead">やさしいリマインダー、スマートなスケジュール、そしてケアするたびに満ちていく毎日のリング。</string>
+    <string name="onboarding_feature_sentence">文章を入力するだけでスケジュールに</string>
+    <string name="onboarding_feature_meals">食事に合わせて動くリマインダー</string>
+    <string name="onboarding_feature_private">健康データはスマートフォンの外に出ません</string>
+    <string name="onboarding_setup_label">30秒でセットアップ</string>
+    <string name="onboarding_question">MediTickで何をしたいですか？</string>
+    <string name="onboarding_choose_all">当てはまるものをすべて選んでください。あとから変更できます。</string>
+    <string name="onboarding_purpose_doses">毎回の服用を忘れない</string>
+    <string name="onboarding_purpose_doses_sub">静かで頼れるリマインダー</string>
+    <string name="onboarding_purpose_meals">食事に合わせる</string>
+    <string name="onboarding_purpose_meals_sub">食前・食中・食後に</string>
+    <string name="onboarding_purpose_streak">連続記録を伸ばす</string>
+    <string name="onboarding_purpose_streak_sub">気負わずに進み具合を確認</string>
+    <string name="onboarding_purpose_refills">残量を把握する</string>
+    <string name="onboarding_purpose_refills_sub">切らす前に気づける</string>
+    <string name="onboarding_no_signup">登録もメールも不要。健康データはこの端末に残ります。</string>
+    <string name="onboarding_build_routine">習慣をつくる</string>
+    <string name="today_empty_title">習慣をつくりましょう</string>
+    <string name="today_empty_body">声に出すようにお薬を書くだけで、MediTickがスケジュール・リマインダー・デイリーリングに変えます。</string>
+    <string name="today_add_first">最初のお薬を追加</string>
+    <string name="today_takes_30_seconds">約30秒で完了します。</string>
+    <string name="today_greeting_morning">おはようございます</string>
+    <string name="today_greeting_afternoon">こんにちは</string>
+    <string name="today_greeting_evening">こんばんは</string>
+    <string name="today_add_new">追加</string>
+    <string name="today_take_all">まとめて記録</string>
+    <string name="today_when_you_need_it">必要なときに</string>
+    <string name="today_no_doses_logged">今日はまだ記録がありません</string>
+    <plurals name="today_taken_today">
+        <item quantity="other">今日%1$d回服用</item>
+    </plurals>
+    <string name="today_ring_label">今日</string>
+    <string name="today_daily_plan">今日の予定</string>
+    <string name="today_left_next_up">残り%1$d件 · 次は</string>
+    <string name="today_quiet_day">静かな一日</string>
+    <plurals name="today_doses_missed">
+        <item quantity="other">%1$d回飲み忘れ</item>
+    </plurals>
+    <string name="today_all_done">すべて完了</string>
+    <string name="today_day_complete">今日は終了</string>
+    <string name="today_tap_missed">下の飲み忘れをタップして記録できます</string>
+    <string name="today_doses_ticked">%2$d回中%1$d回を記録</string>
+    <string name="today_meals_in_sync">食事の時間と連動中</string>
+    <string name="today_meal_summary">朝食 %1$s · 夕食 %2$s</string>
+    <string name="today_now">今・%1$s</string>
+    <string name="today_dose_line">%1$s・%2$s</string>
+    <string name="daypart_morning">朝</string>
+    <string name="daypart_midday">昼</string>
+    <string name="daypart_evening">夜</string>
+    <string name="daypart_bedtime">就寝前</string>
+    <string name="dose_note_optional">メモ（任意）</string>
+    <string name="dose_mark_as_taken">服用済みにする</string>
+    <string name="dose_undo_taken">服用を取り消す</string>
+    <string name="dose_undo_skipped">スキップを取り消す</string>
+    <string name="dose_as_needed_title">頓服</string>
+    <string name="dose_amount_label">量（%1$s）</string>
+    <string name="dose_log_title">服用を記録</string>
+    <string name="dose_logged_time">記録時刻 %1$s</string>
+    <string name="state_taken">服用済み</string>
+    <string name="state_skipped">スキップ</string>
+    <string name="state_missed">飲み忘れ</string>
+    <string name="state_upcoming">予定</string>
+    <string name="state_due">服用時刻</string>
+    <string name="state_on_time">時間どおり</string>
+    <string name="state_early">早め</string>
+    <string name="state_late">遅め</string>
+    <string name="progress_title">進捗</string>
+    <string name="progress_empty_title">記録はここから始まります</string>
+    <string name="progress_empty_body">お薬を追加して最初の服用を記録すると、連続記録・服薬率・傾向がここに育っていきます。</string>
+    <string name="progress_range_week">7日間</string>
+    <string name="progress_range_all">全期間</string>
+    <string name="progress_range_label_all">全期間</string>
+    <string name="progress_range_label_week">過去7日間</string>
+    <string name="progress_ring_label">服薬率</string>
+    <string name="progress_metric_on_time">時間どおり</string>
+    <string name="progress_metric_window">±%1$d分</string>
+    <string name="progress_metric_streak">連続日数</string>
+    <string name="progress_metric_best">最高%1$d日</string>
+    <string name="progress_insight_label">気づき</string>
+    <string name="progress_insight_refill">そろそろ補充が必要です。%1$sが通知ラインを下回っています。</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="other">この期間に%1$d回の飲み忘れがありました。忙しい日はフォロー通知が助けになります。</item>
+    </plurals>
+    <string name="progress_insight_skipped">スキップも記録のうちで、失敗ではありません。記録を続ければ傾向が役に立ちます。</string>
+    <string name="progress_insight_calm">落ち着いた安定した1週間です。小さなチェックの積み重ねが習慣を支えています。</string>
+    <string name="progress_patterns_label">傾向</string>
+    <string name="progress_pattern_hardest">%1$sがいちばん難しい時間帯です</string>
+    <string name="progress_pattern_detail">飲み忘れ%2$d回のうち%1$d回が%3$sに起きています。</string>
+    <string name="progress_calendar_all_days">全期間カレンダー</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">記録・%1$s</string>
+    <string name="progress_previous_month">前の月</string>
+    <string name="progress_next_month">次の月</string>
+    <string name="progress_nothing_scheduled">この日は予定がありません。</string>
+    <string name="progress_as_needed_log">頓服 · %1$s</string>
+    <string name="progress_generic_medication">お薬</string>
+    <string name="progress_delete_log">記録を削除</string>
+    <string name="progress_detail_timing_title">時間どおりの詳細</string>
+    <string name="progress_detail_streak_title">連続記録の詳細</string>
+    <string name="progress_detail_adherence_title">服薬率の詳細</string>
+    <string name="progress_detail_no_taken">この期間にはまだ服用の記録がありません。</string>
+    <string name="progress_detail_on_time_rate">服用したうち%1$sが±%2$d分以内でした。</string>
+    <string name="progress_detail_breakdown">早め%1$d回 · 時間どおり%2$d回 · 遅れ%3$d回 · スキップ%4$d回</string>
+    <string name="progress_detail_choose_window">この指標で使う許容時間を選んでください:</string>
+    <string name="progress_detail_streak_line">現在%1$d日連続 · 最高%2$d日連続</string>
+    <string name="progress_detail_streak_body">連続記録になる日は、服用予定が1件以上あり、予定どおりすべて服用し、スキップも飲み忘れもなかった日です。</string>
+    <string name="progress_detail_adherence_rate">服薬率%1$s</string>
+    <string name="progress_detail_counts">予定%1$d · 服用%2$d · スキップ%3$d · 飲み忘れ%4$d · 未確定%5$d</string>
+    <string name="progress_detail_adherence_body">服薬率は、結果が確定した服用のうち実際に服用した割合です。これからの予定は割合を下げません。</string>
+    <string name="progress_detail_needs_attention">確認したい記録</string>
+    <string name="progress_detail_no_attention">この期間にスキップや飲み忘れはありません。</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">ケア</string>
+    <string name="care_add">+ 追加</string>
+    <string name="care_filter_all">すべて</string>
+    <string name="care_filter_medications">お薬</string>
+    <string name="care_filter_prescriptions">処方</string>
+    <string name="status_active">実施中</string>
+    <string name="status_completed">完了</string>
+    <string name="status_archived">アーカイブ済み</string>
+    <string name="status_treatment">%1$sの治療</string>
+    <string name="care_empty_title">お薬箱は空です</string>
+    <string name="care_empty_body">処方または単体のお薬を追加すると、毎日の予定が自動で作られます。</string>
+    <string name="care_section_prescriptions">自分の処方</string>
+    <string name="care_section_medications">お薬</string>
+    <string name="care_section_standalone">単体のお薬</string>
+    <string name="care_archived_count">アーカイブ済み（%1$d）</string>
+    <string name="care_what_adding">何を追加しますか？</string>
+    <string name="care_mode_prescription">処方</string>
+    <string name="care_mode_prescription_sub">1つ以上のお薬をまとめた治療プラン</string>
+    <string name="care_mode_single">単体のお薬</string>
+    <string name="care_mode_single_sub">今日の予定にそのまま追加</string>
+    <plurals name="care_medication_count">
+        <item quantity="other">%1$d件のお薬</item>
+    </plurals>
+    <string name="care_stock_left">残り%1$s</string>
+    <string name="detail_next_dose">次の服用</string>
+    <string name="detail_as_needed">必要なとき</string>
+    <string name="detail_schedule">スケジュール</string>
+    <string name="detail_amount_per_dose">1回の服用量</string>
+    <string name="detail_supply">残量</string>
+    <string name="detail_supply_remaining">残り%1$s</string>
+    <string name="detail_supply_alert">%1$sで通知</string>
+    <string name="detail_supply_alert_days">%1$sで通知 · 残り約%2$d日分</string>
+    <string name="detail_supply_untracked">残量を管理していません</string>
+    <string name="detail_supply_enable">このお薬を編集して残量管理をオンにできます</string>
+    <string name="detail_refill">+ 補充</string>
+    <string name="detail_recent_history">最近の記録</string>
+    <string name="detail_history_as_needed">頓服</string>
+    <string name="detail_view_medication_logs">お薬の記録を見る</string>
+    <string name="detail_view_medication_logs_sub">服用とスキップのすべての履歴</string>
+    <string name="detail_restore_medication">お薬を元に戻す</string>
+    <string name="detail_archive_medication">お薬をアーカイブ</string>
+    <string name="detail_delete_medication">お薬を削除</string>
+    <string name="confirm_delete_medication_title">%1$sを削除しますか？</string>
+    <string name="confirm_delete_medication_body">服用の履歴も削除されます。この操作は取り消せません。</string>
+    <string name="confirm_archive_medication_title">%1$sをアーカイブしますか？</string>
+    <string name="confirm_archive_medication_body">今後のリマインダーは止まります。アーカイブからあとで戻せます。</string>
+    <string name="refill_title">残量を補充</string>
+    <string name="refill_units_label">追加する数</string>
+    <string name="logs_title">%1$sの記録</string>
+    <string name="rx_prescribed_by">処方：%1$s</string>
+    <string name="rx_period_ongoing">%1$s · 継続中</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">お薬を追加</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">新規または既存のお薬</string>
+    <string name="rx_progress_and_logs">進捗と記録</string>
+    <string name="rx_no_decided">確定した服用はまだありません</string>
+    <string name="rx_adherence">服薬率%1$s</string>
+    <string name="rx_counts">服用%1$d · スキップ%2$d · 飲み忘れ%3$d</string>
+    <string name="rx_on_time">時間どおり%1$s</string>
+    <string name="rx_no_taken">服用の記録はまだありません</string>
+    <string name="rx_within_window">±%1$d分以内</string>
+    <string name="rx_view_logs">処方の記録を見る</string>
+    <string name="rx_view_logs_sub">服用・スキップ・頓服の履歴</string>
+    <string name="rx_notes">メモ</string>
+    <string name="rx_mark_complete">完了にする</string>
+    <string name="rx_archive">処方をアーカイブ</string>
+    <string name="rx_reactivate">処方を再開</string>
+    <string name="rx_restore">処方を元に戻す</string>
+    <string name="rx_delete">処方を削除</string>
+    <string name="rx_confirm_complete_title">完了にしますか？</string>
+    <string name="rx_confirm_complete_body">紐づいたお薬の今後のリマインダーが止まります。</string>
+    <string name="rx_confirm_archive_title">処方をアーカイブしますか？</string>
+    <string name="rx_confirm_archive_body">処方と紐づいたお薬がアーカイブに移ります。あとで戻せます。</string>
+    <string name="rx_confirm_reactivate_title">処方を再開しますか？</string>
+    <string name="rx_confirm_reactivate_body">治療が継続中に戻り、リマインダーも再開します。個別に完了したお薬は完了のままです。</string>
+    <string name="rx_confirm_restore_title">処方を元に戻しますか？</string>
+    <string name="rx_confirm_restore_body">この処方が変更したお薬だけが戻ります。ご自身でアーカイブしたお薬はそのままです。</string>
+    <string name="rx_action_complete">完了</string>
+    <string name="rx_action_archive">アーカイブ</string>
+    <string name="rx_action_reactivate">再開</string>
+    <string name="rx_action_restore">復元</string>
+    <string name="rx_confirm_delete_title">この処方を削除しますか？</string>
+    <string name="rx_confirm_delete_body">紐づいたお薬は単独のお薬として残ります。</string>
+    <string name="rx_add_new_medication">新しいお薬</string>
+    <string name="rx_add_new_medication_sub">新しいリマインダーを作って紐づける</string>
+    <string name="rx_add_existing">既存のお薬</string>
+    <string name="rx_add_existing_sub">単独のお薬を紐づける</string>
+    <string name="rx_no_standalone">紐づけられる単独のお薬がありません。</string>
+    <string name="rx_editor_new">新しい処方</string>
+    <string name="rx_editor_edit">処方を編集</string>
+    <string name="rx_field_plan_name">プラン名</string>
+    <string name="rx_field_condition">診断名</string>
+    <string name="rx_field_prescriber">処方した医師</string>
+    <string name="rx_field_facility">医療機関・クリニック</string>
+    <string name="rx_field_contact">連絡先</string>
+    <string name="rx_field_notes">メモ</string>
+    <string name="rx_start">開始 · %1$s</string>
+    <string name="rx_end">終了 · %1$s</string>
+    <string name="rx_ongoing">継続して服用</string>
+    <plurals name="rx_update_linked">
+        <item quantity="other">%1$d件のお薬を更新</item>
+    </plurals>
+    <string name="rx_apply_dates">この期間を紐づいたスケジュールにも適用</string>
+    <string name="logs_empty">まだ服用の記録がありません。</string>
+    <string name="log_row">%1$s・%2$s</string>
+    <string name="form_add_title">お薬を追加</string>
+    <string name="form_edit_title">お薬を編集</string>
+    <string name="form_step">ステップ %1$d / 3</string>
+    <string name="form_add_to_routine">習慣に追加</string>
+    <string name="form_save_changes">変更を保存</string>
+    <string name="form_duplicate_title">同じお薬があります</string>
+    <string name="form_duplicate_body">同じ含有量の「%1$s」はすでに登録されています。</string>
+    <string name="describe_label">話すように入力</string>
+    <string name="describe_question">何を飲んでいますか？</string>
+    <string name="describe_hint">例：「Metformin 500mg every morning with food」</string>
+    <string name="describe_placeholder">お薬・含有量・飲むタイミング…</string>
+    <string name="describe_examples">入力例</string>
+    <string name="describe_understood">MediTickの読み取り結果</string>
+    <string name="basics_label">基本情報</string>
+    <string name="basics_headline">わかりやすい名前に</string>
+    <string name="basics_field_name">お薬の名前</string>
+    <string name="basics_no_prescription">なし（単独）</string>
+    <string name="basics_field_strength">含有量</string>
+    <string name="basics_section_form">剤形</string>
+    <string name="basics_field_instructions">服用の注意（任意）</string>
+    <string name="basics_track_supply">残量を管理</string>
+    <string name="basics_track_supply_sub">切らす前に補充</string>
+    <string name="basics_field_stock">在庫</string>
+    <string name="basics_field_alert">通知する残量</string>
+    <string name="rhythm_label">あなたのリズム</string>
+    <string name="rhythm_headline">いつ飲みますか？</string>
+    <string name="rhythm_every_day">毎日</string>
+    <string name="rhythm_every_day_sub">毎日同じ時刻に</string>
+    <string name="rhythm_specific">曜日指定</string>
+    <string name="rhythm_specific_sub">曜日を選ぶ</string>
+    <string name="rhythm_every_other">1日おき</string>
+    <string name="rhythm_every_other_sub">1日おきに服用</string>
+    <string name="rhythm_interval">間隔</string>
+    <string name="rhythm_interval_sub">N日ごと</string>
+    <string name="rhythm_cyclic">サイクル</string>
+    <string name="rhythm_cyclic_sub">服用日と休薬日を繰り返す</string>
+    <string name="rhythm_as_needed">必要なとき</string>
+    <string name="rhythm_as_needed_sub">決まったスケジュールなし</string>
+    <string name="rhythm_section_days">曜日</string>
+    <string name="rhythm_days_on">服用日数</string>
+    <string name="rhythm_days_off">休薬日数</string>
+    <string name="rhythm_repeat_every">何日ごとに繰り返すか</string>
+    <string name="rhythm_section_doses">服用</string>
+    <string name="rhythm_add_dose">服用を追加</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">食事に連動したリマインダー</string>
+    <string name="rhythm_meal_auto">食事の時間を変えるとリマインダーも自動で変わります</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">リマインダーの時刻と連動中</string>
+    <string name="rhythm_amount_per_dose">1回の服用量</string>
+    <string name="rhythm_start_date">開始日 · %1$s</string>
+    <string name="rhythm_ongoing">継続して服用</string>
+    <string name="rhythm_no_end_date">終了日なし</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="other">%1$d日間の服用</item>
+    </plurals>
+    <string name="dose_add_hint">時刻を指定するか、よく使う時間帯から選べます。</string>
+    <string name="dose_custom_time">時刻を指定</string>
+    <string name="dose_edit_title">服用を編集</string>
+    <string name="dose_section_amount">数量</string>
+    <string name="dose_decrease">量を減らす</string>
+    <string name="dose_increase">量を増やす</string>
+    <string name="dose_section_timing">タイミング</string>
+    <string name="dose_relation_fixed">固定</string>
+    <string name="dose_relation_before">食前</string>
+    <string name="dose_relation_with">食中</string>
+    <string name="dose_relation_after">食後</string>
+    <string name="dose_reminder_time">リマインダー %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="other">食事の%1$d分前</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="other">食事の%1$d分後</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s %2$s · 食事の時間を変えるとリマインダーも自動で変わります</string>
+    <string name="dose_remove">この服用を削除</string>
+    <string name="settings_title">設定</string>
+    <string name="settings_pro_active">Proが有効です</string>
+    <string name="settings_pro_thanks">ご支援ありがとうございます</string>
+    <string name="settings_unlock_pro">MediTick Proのロックを解除</string>
+    <string name="settings_unlock_pro_sub">食事連動・フォロー通知・全履歴・お薬の登録数無制限</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">環境設定</string>
+    <string name="settings_group_notifications">通知</string>
+    <string name="settings_group_data">データ</string>
+    <string name="settings_group_community">コミュニティ</string>
+    <string name="settings_group_about">アプリについて</string>
+    <string name="settings_redeem">コードを利用</string>
+    <string name="settings_redeem_sub">Playのプロモコードでproを解除</string>
+    <string name="settings_join_community">MediTickコミュニティに参加</string>
+    <string name="settings_join_community_sub">習慣の共有、質問、今後の予定</string>
+    <string name="settings_appearance">外観</string>
+    <string name="settings_appearance_summary">%1$s · %2$sのアクセント</string>
+    <string name="settings_appearance_mode">モード</string>
+    <string name="settings_appearance_accent">アクセント</string>
+    <string name="appearance_auto">自動</string>
+    <string name="appearance_daylight">デイライト</string>
+    <string name="appearance_midnight">ミッドナイト</string>
+    <string name="accent_aurora">オーロラ</string>
+    <string name="accent_ocean">オーシャン</string>
+    <string name="accent_orchid">オーキッド</string>
+    <string name="accent_ember">エンバー</string>
+    <string name="settings_meal_times">食事の時間</string>
+    <string name="settings_meal_times_sub">朝食・昼食・夕食・就寝前</string>
+    <string name="settings_widgets">ウィジェット</string>
+    <string name="settings_widgets_sub">ホーム画面と対応するロック画面のオプション</string>
+    <string name="settings_dose_presets">服用時間のプリセット</string>
+    <string name="settings_dose_presets_sub">朝 · 昼 · 夕 · 就寝前</string>
+    <string name="settings_dose_presets_restore">初期の時刻に戻す</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_system">システムに合わせる</string>
+    <string name="settings_system_language">システムの言語設定</string>
+    <string name="settings_system_language_sub">Androidのアプリごとの言語設定を開く</string>
+    <string name="settings_haptics">触覚フィードバック</string>
+    <string name="settings_haptics_sub">操作時にかすかな振動</string>
+    <string name="settings_notif_permission">通知の許可</string>
+    <string name="settings_notif_permission_sub">タップしてリマインダーを許可</string>
+    <string name="settings_notif_status">通知の状態</string>
+    <string name="settings_notif_status_sub">Androidの通知設定を開く</string>
+    <string name="settings_dose_reminders">服用リマインダー</string>
+    <string name="settings_dose_reminders_sub">服用ごとに通知</string>
+    <string name="settings_follow_up">フォローアップ通知</string>
+    <string name="settings_follow_up_sub">記録するまで繰り返しお知らせ</string>
+    <string name="settings_follow_up_delay">フォロー通知までの時間</string>
+    <plurals name="settings_minutes">
+        <item quantity="other">%1$d分</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d分</string>
+    <string name="settings_hide_names">通知でお薬の名前を隠す</string>
+    <string name="settings_hide_names_sub">ロック画面に薬名を出しません</string>
+    <string name="settings_alert_sound">通知音</string>
+    <string name="settings_urgent">緊急のリマインダー</string>
+    <string name="settings_urgent_sub">優先度の高いチャンネルです。サイレントモードが優先される場合があります</string>
+    <string name="settings_exact_alarm">正確なアラームの許可</string>
+    <string name="settings_exact_alarm_sub">Androidの「アラームとリマインダー」を開く</string>
+    <string name="settings_refill_reminders">補充のお知らせ</string>
+    <string name="settings_refill_reminders_sub">設定した残量を下回ったら通知</string>
+    <string name="settings_sound_title">リマインダー音</string>
+    <string name="settings_sound_hint">音をタップすると試聴できます。保存後に反映されます。一部の音はMediTick Proが必要です。</string>
+    <string name="sound_standard">MediTick（標準）</string>
+    <string name="sound_chime">チャイム（長め）</string>
+    <string name="sound_bell">ベル</string>
+    <string name="sound_urgent">緊急</string>
+    <string name="sound_silent">無音</string>
+    <string name="settings_export">バックアップを書き出す</string>
+    <string name="settings_export_sub">すべてをJSONファイルで</string>
+    <string name="settings_import">バックアップを読み込む</string>
+    <string name="settings_import_sub">iOSまたはAndroidのMediTickバックアップを復元</string>
+    <string name="settings_erase">すべてのデータを消去</string>
+    <string name="settings_erase_sub">すべてのお薬・予定・記録</string>
+    <string name="settings_erase_title">すべて消去しますか？</string>
+    <string name="settings_erase_body">この端末からすべてのお薬、処方、履歴が完全に削除されます。</string>
+    <string name="settings_msg_link_failed">リンクを開けませんでした。</string>
+    <string name="settings_msg_exported">バックアップを書き出しました。</string>
+    <string name="settings_msg_export_failed">バックアップを書き出せませんでした。</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="other">バックアップを復元しました。お薬%1$d件を読み込みました。</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">このファイルはMediTickのバックアップではないようです。</string>
+    <string name="settings_feedback">フィードバック・不具合の報告</string>
+    <string name="settings_feedback_sub">端末と再現手順をお知らせください</string>
+    <string name="settings_feature_request">機能のリクエスト</string>
+    <string name="settings_feature_request_sub">MediTickをより良くする案をお聞かせください</string>
+    <string name="settings_review">レビューを書く</string>
+    <string name="settings_share">MediTickをシェア</string>
+    <string name="settings_share_text">MediTick — 飲み忘れをゼロに。お薬タイマー、リマインダー、記録管理。</string>
+    <string name="settings_community_title">ひとりで抱えなくて大丈夫</string>
+    <string name="settings_community_body">ほかのMediTickユーザーと習慣を共有し、質問し、不具合を報告し、新機能をいち早く知ることができます。</string>
+    <string name="settings_website">ウェブサイト</string>
+    <string name="settings_whats_new">新着情報</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">プライバシーポリシー</string>
+    <string name="settings_privacy_sub">MediTickでのデータの扱い</string>
+    <string name="settings_terms">利用規約</string>
+    <string name="settings_terms_sub">リマインダーアプリとしての範囲</string>
+    <string name="settings_about">MediTickについて</string>
+    <string name="settings_version">バージョン %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick・健康データはこの端末内にのみ保存されます。\nこれはリマインダーツールであり、医療アドバイスではありません。</string>
+    <string name="info_widgets_title">ウィジェット</string>
+    <string name="info_widgets_body">ホーム画面のウィジェット一覧からMediTickを追加してください。ロック画面のウィジェットに対応しているかはAndroidのバージョンと端末メーカーによって異なり、アプリから自動で有効にはできません。現在のウィジェットは今日の進捗と次の服用を表示します。記録はアプリを開いて行います。</string>
+    <string name="info_privacy_title">プライバシー</string>
+    <string name="info_privacy_body">お薬の情報・スケジュール・記録はこの端末に保存されます。書き出しはご自身で選んだときだけ行われます。購入はGoogle Playが、通知の配信はAndroidが担当します。</string>
+    <string name="info_terms_title">利用規約</string>
+    <string name="info_terms_body">MediTickはリマインダーと個人記録のためのアプリで、医学的助言ではありません。かならず医師の指示に従い、お薬について不明な点は専門家にご相談ください。</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\n通信不要でプライバシーを守るAndroid向け服薬リマインダー。</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">「飲んだっけ？」と迷わない。</string>
+    <string name="paywall_feature_alerts">習慣を見える形に保つ通知</string>
+    <string name="paywall_feature_follow_ups">記録が済むまで続くフォロー通知</string>
+    <string name="paywall_feature_unlimited">お薬と処方を無制限に登録</string>
+    <string name="paywall_feature_insights">連続記録・分析・ウィジェット</string>
+    <string name="paywall_loading">Google Playのプランを読み込み中…</string>
+    <string name="paywall_unavailable">サブスクリプションのプランを利用できません。</string>
+    <string name="paywall_upgrade">Proにアップグレード</string>
+    <string name="paywall_lifetime_note">一度のお支払いで、ずっとPro。</string>
+    <string name="paywall_renew_note">自動更新されます。Google Playからいつでも解約できます。</string>
+    <string name="paywall_restore">購入を復元</string>
+    <string name="add_sheet_title">新規追加</string>
+    <string name="add_sheet_prescription">処方を作成</string>
+    <string name="add_sheet_prescription_sub">定期的なお薬をまとめる</string>
+    <string name="add_sheet_medication">お薬を追加</string>
+    <string name="add_sheet_medication_sub">お薬1つ分のリマインダーを作る</string>
+    <string name="release_latest">最新バージョン</string>
+    <string name="release_lead">このアップデートで、iPhoneとAndroidの機能がそろいました:</string>
+    <string name="release_bullet_filters">治療を種類別、および実施中・完了・アーカイブ別に絞り込めるようになりました。</string>
+    <string name="release_bullet_prescriptions">処方に医師・医療機関・連絡先・診断名・治療期間を記録でき、完了・アーカイブ・復元もできます。</string>
+    <string name="release_bullet_per_dose">服用ごとに量と食事との関係を設定できます。同じお薬を8:00の固定時刻と夕食の30分前に設定できます。</string>
+    <string name="release_bullet_shapes">N日ごと、服用と休薬のサイクルという新しいスケジュールが加わりました（曜日指定・頓服に加えて）。</string>
+    <string name="release_bullet_take_all">「まとめて記録」で同じ時刻のグループを一度に記録できます。</string>
+    <string name="release_bullet_progress">進捗に全期間カレンダーと月の切り替えが加わり、服薬率・時間どおり・連続記録の説明も見られます。</string>
+    <string name="release_bullet_sounds">リマインダー音、ロック画面に薬名を出さない通知、アプリ内の言語選択に対応しました。</string>
+    <string name="release_bullet_refills">補充では確定前に補充後の残量を確認でき、記録した時刻はあとから修正できます。</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">朝,朝食,起床</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">昼,正午,昼食,お昼</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">夕方,夜,夕食,晩</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">就寝前,寝る前,就寝</string>
+    <string name="parse_meal_before" tools:ignore="Typos">食前,食事前,朝食前,昼食前,夕食前</string>
+    <string name="parse_meal_after" tools:ignore="Typos">食後,食事後,朝食後,昼食後,夕食後</string>
+    <string name="parse_meal_with" tools:ignore="Typos">食事と一緒,食中,食事とともに</string>
+    <string name="parse_twice" tools:ignore="Typos">1日2回,一日二回,2回</string>
+    <string name="parse_unit_day" tools:ignore="Typos">日間,日</string>
+    <string name="parse_unit_week" tools:ignore="Typos">週間,週</string>
+    <string name="parse_unit_month" tools:ignore="Typos">ヶ月,か月,カ月</string>
+    <string name="parse_marker_am" tools:ignore="Typos">午前</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">午後</string>
+    <string name="parse_stopwords" tools:ignore="Typos">毎日,毎,2回,1回,服用,飲む,一緒,前,後,朝,夜,夕方,昼,就寝,昼食,夕食,朝食,食事</string>
+</resources>

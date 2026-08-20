@@ -40,6 +40,9 @@ object NotificationScheduler {
     const val ACTION_SKIP = "com.kabi.pillpal.meditick.SKIP"
     const val ACTION_SNOOZE = "com.kabi.pillpal.meditick.SNOOZE"
 
+    /** Shared by the notification action label and [scheduleSnooze] so the two can't drift. */
+    const val SNOOZE_MINUTES = 10
+
     private val executor = Executors.newSingleThreadExecutor()
 
     fun createChannels(context: Context, settings: SettingsStore = SettingsStore.get(context)) {
@@ -47,22 +50,17 @@ object NotificationScheduler {
         val manager = context.getSystemService(NotificationManager::class.java)
         val importance = if (settings.timeSensitiveEnabled) NotificationManager.IMPORTANCE_HIGH else NotificationManager.IMPORTANCE_DEFAULT
         val audio = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT).build()
-        val dose = NotificationChannel(doseChannel(settings), "Dose reminders", importance).apply {
-            description = "Alerts at scheduled medication times"
-            val sound = when (settings.alertSound) {
-                AlertSound.STANDARD, AlertSound.CHIME -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-                AlertSound.BELL -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
-                AlertSound.URGENT -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-                AlertSound.SILENT -> null
-            }
+        val dose = NotificationChannel(doseChannel(settings), context.getString(R.string.channel_dose_name), importance).apply {
+            description = context.getString(R.string.channel_dose_description)
+            val sound = soundUri(settings.alertSound)
             setSound(sound, if (sound == null) null else audio)
             enableVibration(settings.alertSound != AlertSound.SILENT)
         }
-        val followUp = NotificationChannel(CHANNEL_FOLLOW_UP, "Follow-up reminders", NotificationManager.IMPORTANCE_HIGH).apply {
-            description = "A gentle nudge when a dose has not been logged"; enableVibration(true)
+        val followUp = NotificationChannel(CHANNEL_FOLLOW_UP, context.getString(R.string.channel_follow_up_name), NotificationManager.IMPORTANCE_HIGH).apply {
+            description = context.getString(R.string.channel_follow_up_description); enableVibration(true)
         }
-        val refill = NotificationChannel(CHANNEL_REFILL, "Refill reminders", NotificationManager.IMPORTANCE_DEFAULT).apply {
-            description = "Alerts when tracked medication supply runs low"
+        val refill = NotificationChannel(CHANNEL_REFILL, context.getString(R.string.channel_refill_name), NotificationManager.IMPORTANCE_DEFAULT).apply {
+            description = context.getString(R.string.channel_refill_description)
         }
         manager.createNotificationChannels(listOf(dose, followUp, refill))
     }
@@ -98,7 +96,7 @@ object NotificationScheduler {
         }
     }
 
-    fun scheduleSnooze(context: Context, medicationId: String, scheduledAt: Long, minutes: Int = 10) {
+    fun scheduleSnooze(context: Context, medicationId: String, scheduledAt: Long, minutes: Int = SNOOZE_MINUTES) {
         schedule(context, KIND_SNOOZE, medicationId, scheduledAt, System.currentTimeMillis() + minutes * 60_000L)
     }
 
@@ -170,6 +168,20 @@ object NotificationScheduler {
         timeInMillis
     }
 
+    /** The system tone each reminder sound maps to; null means silent. */
+    fun soundUri(sound: AlertSound): android.net.Uri? = when (sound) {
+        AlertSound.STANDARD, AlertSound.CHIME -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        AlertSound.BELL -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        AlertSound.URGENT -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        AlertSound.SILENT -> null
+    }
+
+    /** Plays a reminder sound once so the picker can preview it. */
+    fun previewSound(context: Context, sound: AlertSound) {
+        val uri = soundUri(sound) ?: return
+        runCatching { RingtoneManager.getRingtone(context.applicationContext, uri)?.play() }
+    }
+
     fun doseChannel(settings: SettingsStore): String =
         "$CHANNEL_DOSE-${settings.alertSound.name.lowercase()}-${if (settings.timeSensitiveEnabled) "high" else "normal"}"
 }
@@ -230,19 +242,20 @@ class DoseAlarmReceiver : BroadcastReceiver() {
         NotificationScheduler.createChannels(context, settings)
         val repository = AppRepository.get(context)
         val med = repository.medication(medicationId) ?: return
-        val visibleName = if (settings.hideMedicationNames) "your medication" else med.name
+        val visibleName = if (settings.hideMedicationNames) context.getString(R.string.notif_hidden_medication) else med.name
         val title = when (kind) {
-            NotificationScheduler.KIND_NUDGE, NotificationScheduler.KIND_SNOOZE -> "Still waiting: $visibleName"
-            NotificationScheduler.KIND_REFILL -> "Running low: $visibleName"
-            else -> "Time for $visibleName"
+            NotificationScheduler.KIND_NUDGE, NotificationScheduler.KIND_SNOOZE -> context.getString(R.string.notif_title_still_waiting, visibleName)
+            NotificationScheduler.KIND_REFILL -> context.getString(R.string.notif_title_running_low, visibleName)
+            else -> context.getString(R.string.notif_title_time_for, visibleName)
         }
         val body = when (kind) {
-            NotificationScheduler.KIND_NUDGE -> "This dose hasn’t been logged yet. A quick tap and you’re done."
-            NotificationScheduler.KIND_SNOOZE -> "Your snoozed dose is ready."
-            NotificationScheduler.KIND_REFILL -> med.daysOfStockRemaining?.let { "About $it days of supply left. Time to plan a refill." }
-                ?: "Your supply is below the refill level."
-            else -> if (settings.hideMedicationNames) "Open MediTick to view and log this dose."
-                else listOfNotNull(med.doseLabel, med.instructions.takeIf { it.isNotBlank() }).joinToString(" · ")
+            NotificationScheduler.KIND_NUDGE -> context.getString(R.string.notif_body_nudge)
+            NotificationScheduler.KIND_SNOOZE -> context.getString(R.string.notif_body_snooze)
+            NotificationScheduler.KIND_REFILL -> med.daysOfStockRemaining?.let {
+                context.resources.getQuantityString(R.plurals.notif_body_refill_days, it, it)
+            } ?: context.getString(R.string.notif_body_refill_generic)
+            else -> if (settings.hideMedicationNames) context.getString(R.string.notif_body_hidden)
+                else listOfNotNull(med.doseLabel(context), med.instructions.takeIf { it.isNotBlank() }).joinToString(" · ")
         }
         val open = PendingIntent.getActivity(context, 1, Intent(context, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val channel = when (kind) {
@@ -257,9 +270,9 @@ class DoseAlarmReceiver : BroadcastReceiver() {
         if (settings.alertSound == AlertSound.SILENT) builder.setSilent(true)
         if (!settings.timeSensitiveEnabled) builder.priority = NotificationCompat.PRIORITY_DEFAULT
         if (kind != NotificationScheduler.KIND_REFILL) {
-            builder.addAction(0, "Take", actionIntent(context, NotificationScheduler.ACTION_TAKE, medicationId, scheduledAt, 11))
-                .addAction(0, "Snooze 10 min", actionIntent(context, NotificationScheduler.ACTION_SNOOZE, medicationId, scheduledAt, 12))
-                .addAction(0, "Skip", actionIntent(context, NotificationScheduler.ACTION_SKIP, medicationId, scheduledAt, 13))
+            builder.addAction(0, context.getString(R.string.action_take), actionIntent(context, NotificationScheduler.ACTION_TAKE, medicationId, scheduledAt, 11))
+                .addAction(0, context.getString(R.string.action_snooze_minutes, NotificationScheduler.SNOOZE_MINUTES), actionIntent(context, NotificationScheduler.ACTION_SNOOZE, medicationId, scheduledAt, 12))
+                .addAction(0, context.getString(R.string.action_skip), actionIntent(context, NotificationScheduler.ACTION_SKIP, medicationId, scheduledAt, 13))
         }
         NotificationManagerCompat.from(context).notify(notificationId(medicationId, scheduledAt), builder.build())
     }

@@ -2,9 +2,21 @@
 
 Native Android counterpart to the MediTick iOS app. The app is built with Jetpack Compose and uses the same private, offline-first model as iOS: no account, no health-data server, and one portable JSON snapshot.
 
+## Before release: fill in `AppLinks.kt`
+
+Every outbound destination lives in `app/src/main/java/com/kabi/pillpal/meditick/AppLinks.kt` —
+website, What's New, Privacy Policy, Terms of Service, the Facebook group, the
+subreddit, Threads and Instagram. They ship as clearly-marked placeholders, and
+any row still pointing at one is **hidden from Settings** rather than shown as a
+dead link. Replace them and the rows appear.
+
 ## Included
 
-- Today timeline with Morning, Midday, Evening and Bedtime groups
+- Treatments with type (All / Medications / Prescriptions) and status (Active / Completed / Archived) filters
+- Prescriptions with prescriber, clinic, contact, diagnosis and treatment period, plus mark-complete / archive / restore / reactivate
+- Per-dose amounts and per-dose meal relations (fixed, before, with, after) with a meal-linked reminders panel
+- Reminder sound picker with preview, private notifications, and an in-app language picker
+- Today timeline with Morning, Midday, Evening and Bedtime groups, and Take All per time group
 - Live upcoming, due, missed, taken and skipped states
 - Take, skip, snooze and undo actions in-app and from notifications
 - Retro-logging, as-needed doses, adherence, on-time rate and streaks

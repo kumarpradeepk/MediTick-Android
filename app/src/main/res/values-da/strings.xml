@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    da translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">Dagens fremgang og næste dosis</string>
+    <string name="channel_dose_name">Dosispåmindelser</string>
+    <string name="channel_dose_description">Beskeder på de planlagte tidspunkter</string>
+    <string name="channel_follow_up_name">Opfølgende påmindelser</string>
+    <string name="channel_follow_up_description">Et blidt puf, når en dosis endnu ikke er noteret</string>
+    <string name="channel_refill_name">Påmindelser om genbestilling</string>
+    <string name="channel_refill_description">Besked, når en beholdning, du følger, slipper op</string>
+    <string name="notif_hidden_medication">din medicin</string>
+    <string name="notif_title_still_waiting">Venter stadig: %1$s</string>
+    <string name="notif_title_running_low">Snart tom: %1$s</string>
+    <string name="notif_title_time_for">Tid til %1$s</string>
+    <string name="notif_body_nudge">Denne dosis er ikke noteret endnu. Ét tryk, så er den der.</string>
+    <string name="notif_body_snooze">Din udskudte dosis er klar.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="one">Der er cirka %1$d dag tilbage. Tid til at bestille mere.</item>
+        <item quantity="other">Der er cirka %1$d dage tilbage. Tid til at bestille mere.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Din beholdning er under genbestillingsniveauet.</string>
+    <string name="notif_body_hidden">Åbn MediTick for at se og notere denne dosis.</string>
+    <string name="action_take">Tag</string>
+    <string name="action_skip">Spring over</string>
+    <string name="action_snooze_minutes">Udsæt %1$d min</string>
+    <string name="widget_doses_ticked">%1$d ud af %2$d doser klaret</string>
+    <string name="widget_header">MEDITICK · I DAG</string>
+    <string name="widget_no_doses_today">Ingen doser i dag</string>
+    <string name="widget_all_done_today">Alt klaret for i dag</string>
+    <string name="widget_all_caught_up">Du er helt ajour</string>
+    <string name="billing_products_missing">Forbind produkterne “monthly”, “yearly” og “lifetime” i Google Play Console.</string>
+    <string name="billing_plan_lifetime">Livstid</string>
+    <string name="billing_plan_yearly">Årligt</string>
+    <string name="billing_plan_monthly">Månedligt</string>
+    <string name="billing_tag_one_time">Engangskøb</string>
+    <string name="billing_tag_best_value">Bedste værdi</string>
+    <string name="billing_tag_flexible">Fleksibel betaling</string>
+    <string name="billing_checking_purchases">Tjekker dine køb …</string>
+    <string name="billing_restored">Køb gendannet — velkommen tilbage.</string>
+    <string name="billing_none_found">Ingen aktive køb fundet.</string>
+    <string name="billing_pro_unlocked">Velkommen til MediTick Pro — alt er låst op.</string>
+    <string name="meal_breakfast">Morgenmad</string>
+    <string name="meal_lunch">Frokost</string>
+    <string name="meal_dinner">Aftensmad</string>
+    <string name="meal_bedtime">Sengetid</string>
+    <string name="meal_breakfast_inline">morgenmaden</string>
+    <string name="meal_lunch_inline">frokosten</string>
+    <string name="meal_dinner_inline">aftensmaden</string>
+    <string name="meal_bedtime_inline">sengetid</string>
+    <string name="anchor_at_bedtime">Ved sengetid</string>
+    <string name="anchor_with">Med %1$s</string>
+    <string name="anchor_before">Før %1$s</string>
+    <string name="anchor_after">Efter %1$s</string>
+    <string name="anchor_before_offset">%1$d min før %2$s</string>
+    <string name="anchor_after_offset">%1$d min efter %2$s</string>
+    <string name="anchor_fixed_time">Fast tidspunkt</string>
+    <string name="form_pill">Pille</string>
+    <string name="form_capsule">Kapsel</string>
+    <string name="form_tablet">Tablet</string>
+    <string name="form_liquid">Væske</string>
+    <string name="form_drops">Dråbe</string>
+    <string name="form_injection">Injektion</string>
+    <string name="form_patch">Plaster</string>
+    <string name="form_cream">Creme</string>
+    <string name="form_inhaler">Inhalator</string>
+    <string name="form_powder">Pulver</string>
+    <string name="form_gummy">Vingummi</string>
+    <string name="form_spray">Spray</string>
+    <string name="form_other">Andet</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pille</item>
+        <item quantity="other">piller</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="one">kapsel</item>
+        <item quantity="other">kapsler</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="one">tablet</item>
+        <item quantity="other">tabletter</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ml</item>
+        <item quantity="other">ml</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">dråbe</item>
+        <item quantity="other">dråber</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="one">injektion</item>
+        <item quantity="other">injektioner</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="one">plaster</item>
+        <item quantity="other">plastre</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="one">påføring</item>
+        <item quantity="other">påføringer</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pust</item>
+        <item quantity="other">pust</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">måleske</item>
+        <item quantity="other">måleskeer</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="one">vingummi</item>
+        <item quantity="other">vingummier</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="one">spray</item>
+        <item quantity="other">sprays</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="one">dosis</item>
+        <item quantity="other">doser</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="one">%1$d gang/dag</item>
+        <item quantity="other">%1$d gange/dag</item>
+    </plurals>
+    <string name="schedule_no_times_set">Ingen tider valgt</string>
+    <string name="schedule_interval">Hver %1$d. time, %2$s – %3$s</string>
+    <string name="schedule_as_needed">Efter behov</string>
+    <string name="schedule_when_needed">Ved behov</string>
+    <string name="schedule_every_day">Hver dag</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="one">Hver %1$d. dag</item>
+        <item quantity="other">Hver %1$d. dag</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d dage med, %2$d uden"</string>
+    <string name="inventory_not_tracked">Følges ikke</string>
+    <string name="action_cancel">Annuller</string>
+    <string name="action_done">OK</string>
+    <string name="action_save">Gem</string>
+    <string name="action_ok">OK</string>
+    <string name="action_add">Tilføj</string>
+    <string name="action_delete">Slet</string>
+    <string name="action_edit">Rediger</string>
+    <string name="action_close">Luk</string>
+    <string name="action_back">Tilbage</string>
+    <string name="action_continue">Fortsæt</string>
+    <string name="action_try_again">Prøv igen</string>
+    <string name="action_get_started">Kom i gang</string>
+    <string name="action_snooze">Udskyd</string>
+    <string name="action_log_dose">Log dosis</string>
+    <string name="action_take_now">Tag nu</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">I dag</string>
+    <string name="tab_treatments">Behandlinger</string>
+    <string name="tab_progress">Fremgang</string>
+    <string name="tab_settings">Indstillinger</string>
+    <string name="onboarding_badge">"  PRIVAT · UDEN KONTO · GRATIS  "</string>
+    <string name="onboarding_headline">Glem aldrig\nen dosis igen.</string>
+    <string name="onboarding_subhead">Blide påmindelser, smarte planer og en daglig ring, der fyldes, mens du passer på dig selv.</string>
+    <string name="onboarding_feature_sentence">Skriv en sætning, få en plan</string>
+    <string name="onboarding_feature_meals">Påmindelser, der følger dine måltider</string>
+    <string name="onboarding_feature_private">Dine helbredsdata forlader aldrig din telefon</string>
+    <string name="onboarding_setup_label">Klar på 30 sekunder</string>
+    <string name="onboarding_question">Hvad bringer dig til MediTick?</string>
+    <string name="onboarding_choose_all">Vælg alt det, der passer. Du kan ændre det senere.</string>
+    <string name="onboarding_purpose_doses">Huske hver dosis</string>
+    <string name="onboarding_purpose_doses_sub">Rolige, pålidelige påmindelser</string>
+    <string name="onboarding_purpose_meals">Følge måltiderne</string>
+    <string name="onboarding_purpose_meals_sub">Før, til eller efter maden</string>
+    <string name="onboarding_purpose_streak">Holde en stime</string>
+    <string name="onboarding_purpose_streak_sub">Se fremgang uden dårlig samvittighed</string>
+    <string name="onboarding_purpose_refills">Holde øje med beholdningen</string>
+    <string name="onboarding_purpose_refills_sub">Vide det, før du løber tør</string>
+    <string name="onboarding_no_signup">Ingen oprettelse. Ingen e-mail. Dine helbredsdata bliver på denne enhed.</string>
+    <string name="onboarding_build_routine">Byg min rutine</string>
+    <string name="today_empty_title">Lad os bygge din rutine</string>
+    <string name="today_empty_body">Beskriv et lægemiddel, som du ville sige det højt — MediTick laver en plan, påmindelser og en daglig ring ud af det.</string>
+    <string name="today_add_first">Tilføj din første medicin</string>
+    <string name="today_takes_30_seconds">Tager omkring 30 sekunder.</string>
+    <string name="today_greeting_morning">Godmorgen</string>
+    <string name="today_greeting_afternoon">God eftermiddag</string>
+    <string name="today_greeting_evening">God aften</string>
+    <string name="today_add_new">Tilføj</string>
+    <string name="today_take_all">Notér alle</string>
+    <string name="today_when_you_need_it">Når du har brug for det</string>
+    <string name="today_no_doses_logged">Ingen doser noteret i dag</string>
+    <plurals name="today_taken_today">
+        <item quantity="one">%1$d taget i dag</item>
+        <item quantity="other">%1$d taget i dag</item>
+    </plurals>
+    <string name="today_ring_label">I DAG</string>
+    <string name="today_daily_plan">Dagens plan</string>
+    <string name="today_left_next_up">%1$d tilbage · Næste</string>
+    <string name="today_quiet_day">En rolig dag</string>
+    <plurals name="today_doses_missed">
+        <item quantity="one">%1$d dosis glemt</item>
+        <item quantity="other">%1$d doser glemt</item>
+    </plurals>
+    <string name="today_all_done">Alt klaret</string>
+    <string name="today_day_complete">Dagen er fuldført</string>
+    <string name="today_tap_missed">Tryk på en glemt dosis herunder for at notere den</string>
+    <string name="today_doses_ticked">%1$d ud af %2$d doser klaret</string>
+    <string name="today_meals_in_sync">Måltiderne følger med</string>
+    <string name="today_meal_summary">Morgenmad %1$s · Aftensmad %2$s</string>
+    <string name="today_now">NU · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">Morgen</string>
+    <string name="daypart_midday">Middag</string>
+    <string name="daypart_evening">Aften</string>
+    <string name="daypart_bedtime">Sengetid</string>
+    <string name="dose_note_optional">Note (valgfri)</string>
+    <string name="dose_mark_as_taken">Markér som taget</string>
+    <string name="dose_undo_taken">Fortryd taget</string>
+    <string name="dose_undo_skipped">Fortryd sprunget over</string>
+    <string name="dose_as_needed_title">Dosis efter behov</string>
+    <string name="dose_amount_label">Mængde (%1$s)</string>
+    <string name="dose_log_title">Log dosis</string>
+    <string name="dose_logged_time">Noteret kl. %1$s</string>
+    <string name="state_taken">Taget</string>
+    <string name="state_skipped">Sprunget over</string>
+    <string name="state_missed">Glemt</string>
+    <string name="state_upcoming">Kommende</string>
+    <string name="state_due">Skal tages</string>
+    <string name="state_on_time">Til tiden</string>
+    <string name="state_early">Tidligt</string>
+    <string name="state_late">For sent</string>
+    <string name="progress_title">Fremgang</string>
+    <string name="progress_empty_title">Din historie begynder snart</string>
+    <string name="progress_empty_body">Tilføj en medicin, og log dine første doser — stimer, tal og tendenser vokser her.</string>
+    <string name="progress_range_week">7 dage</string>
+    <string name="progress_range_all">Fra start</string>
+    <string name="progress_range_label_all">Fra start</string>
+    <string name="progress_range_label_week">Sidste 7 dage</string>
+    <string name="progress_ring_label">EFTERLEVELSE</string>
+    <string name="progress_metric_on_time">Til tiden</string>
+    <string name="progress_metric_window">±%1$d min.</string>
+    <string name="progress_metric_streak">Dage i træk</string>
+    <string name="progress_metric_best">Bedste %1$d</string>
+    <string name="progress_insight_label">Indsigt</string>
+    <string name="progress_insight_refill">Genbestilling nærmer sig. %1$s er under sin grænse.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="one">%1$d dosis blev glemt i denne periode. En opfølgende påmindelse kan hjælpe på travle dage.</item>
+        <item quantity="other">%1$d doser blev glemt i denne periode. En opfølgende påmindelse kan hjælpe på travle dage.</item>
+    </plurals>
+    <string name="progress_insight_skipped">En sprunget dosis hører med og er ikke et nederlag. Bliv ved med at notere, så din tendens stadig siger noget.</string>
+    <string name="progress_insight_calm">En rolig og stabil uge. Hvert lille flueben holder din rutine på sporet.</string>
+    <string name="progress_patterns_label">Mønstre</string>
+    <string name="progress_pattern_hardest">%1$s er det sværeste tidspunkt</string>
+    <string name="progress_pattern_detail">%1$d ud af %2$d glemte doser lå om %3$s.</string>
+    <string name="progress_calendar_all_days">Kalender over alle dage</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">Logbog · %1$s</string>
+    <string name="progress_previous_month">Forrige måned</string>
+    <string name="progress_next_month">Næste måned</string>
+    <string name="progress_nothing_scheduled">Der er intet planlagt denne dag.</string>
+    <string name="progress_as_needed_log">Efter behov · %1$s</string>
+    <string name="progress_generic_medication">Lægemiddel</string>
+    <string name="progress_delete_log">Slet notering</string>
+    <string name="progress_detail_timing_title">Detaljer om punktlighed</string>
+    <string name="progress_detail_streak_title">Detaljer om stimen</string>
+    <string name="progress_detail_adherence_title">Detaljer om efterlevelse</string>
+    <string name="progress_detail_no_taken">Der er endnu ingen tagne doser i denne periode.</string>
+    <string name="progress_detail_on_time_rate">%1$s af de tagne doser lå inden for ±%2$d minutter.</string>
+    <string name="progress_detail_breakdown">%1$d for tidligt · %2$d til tiden · %3$d for sent · %4$d sprunget over</string>
+    <string name="progress_detail_choose_window">Vælg det interval, dette tal bruger:</string>
+    <string name="progress_detail_streak_line">%1$d dage i træk · bedste %2$d dage</string>
+    <string name="progress_detail_streak_body">En stimedag har mindst én planlagt dosis, hvor alle doser, der skulle tages, blev taget, og ingen blev sprunget over eller glemt.</string>
+    <string name="progress_detail_adherence_rate">%1$s efterlevelse</string>
+    <string name="progress_detail_counts">%1$d planlagt · %2$d taget · %3$d sprunget over · %4$d glemt · %5$d afventer</string>
+    <string name="progress_detail_adherence_body">Efterlevelsen tæller tagne doser blandt de doser, der allerede har et udfald. Kommende doser trækker ikke tallet ned.</string>
+    <string name="progress_detail_needs_attention">Kræver opmærksomhed</string>
+    <string name="progress_detail_no_attention">Ingen sprunget over eller glemte doser i denne periode.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">Hjælp</string>
+    <string name="care_add">+ Tilføj</string>
+    <string name="care_filter_all">Alle</string>
+    <string name="care_filter_medications">Medicin</string>
+    <string name="care_filter_prescriptions">Recepter</string>
+    <string name="status_active">Aktiv</string>
+    <string name="status_completed">Fuldført</string>
+    <string name="status_archived">Arkiveret</string>
+    <string name="status_treatment">Behandling: %1$s</string>
+    <string name="care_empty_title">Dit medicinskab er tomt</string>
+    <string name="care_empty_body">Tilføj en recept eller en enkelt medicin, så bygger din dagsplan sig selv.</string>
+    <string name="care_section_prescriptions">Mine recepter</string>
+    <string name="care_section_medications">Medicin</string>
+    <string name="care_section_standalone">Enkeltstående medicin</string>
+    <string name="care_archived_count">Arkiveret (%1$d)</string>
+    <string name="care_what_adding">Hvad tilføjer vi?</string>
+    <string name="care_mode_prescription">Recept</string>
+    <string name="care_mode_prescription_sub">En behandlingsplan med et eller flere lægemidler</string>
+    <string name="care_mode_single">Enkelt medicin</string>
+    <string name="care_mode_single_sub">Læg det direkte ind i din daglige plan</string>
+    <plurals name="care_medication_count">
+        <item quantity="one">%1$d lægemiddel</item>
+        <item quantity="other">%1$d lægemidler</item>
+    </plurals>
+    <string name="care_stock_left">%1$s tilbage</string>
+    <string name="detail_next_dose">Næste dosis</string>
+    <string name="detail_as_needed">Efter behov</string>
+    <string name="detail_schedule">Plan</string>
+    <string name="detail_amount_per_dose">Mængde pr. dosis</string>
+    <string name="detail_supply">Beholdning</string>
+    <string name="detail_supply_remaining">%1$s tilbage</string>
+    <string name="detail_supply_alert">Advar ved %1$s</string>
+    <string name="detail_supply_alert_days">Advar ved %1$s · Cirka %2$d dage tilbage</string>
+    <string name="detail_supply_untracked">Beholdning følges ikke</string>
+    <string name="detail_supply_enable">Slå opfølgning til, når du redigerer dette lægemiddel</string>
+    <string name="detail_refill">+ Påfyld</string>
+    <string name="detail_recent_history">Seneste historik</string>
+    <string name="detail_history_as_needed">Dosis efter behov</string>
+    <string name="detail_view_medication_logs">Se historik for lægemidlet</string>
+    <string name="detail_view_medication_logs_sub">Fuld historik over tagne og oversprungne doser</string>
+    <string name="detail_restore_medication">Gendan lægemiddel</string>
+    <string name="detail_archive_medication">Arkivér lægemiddel</string>
+    <string name="detail_delete_medication">Slet lægemiddel</string>
+    <string name="confirm_delete_medication_title">Slet %1$s?</string>
+    <string name="confirm_delete_medication_body">Historikken for lægemidlet fjernes også. Det kan ikke fortrydes.</string>
+    <string name="confirm_archive_medication_title">Arkivér %1$s?</string>
+    <string name="confirm_archive_medication_body">Kommende påmindelser stopper. Du kan hente lægemidlet tilbage fra Arkiveret senere.</string>
+    <string name="refill_title">Fyld beholdningen op</string>
+    <string name="refill_units_label">Enheder, der skal tilføjes</string>
+    <string name="logs_title">Historik for %1$s</string>
+    <string name="rx_prescribed_by">Ordineret af %1$s</string>
+    <string name="rx_period_ongoing">%1$s · Løbende</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">Tilføj lægemiddel</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">Nyt eller eksisterende</string>
+    <string name="rx_progress_and_logs">Fremgang og historik</string>
+    <string name="rx_no_decided">Ingen afgjorte doser endnu</string>
+    <string name="rx_adherence">%1$s efterlevelse</string>
+    <string name="rx_counts">%1$d taget · %2$d sprunget over · %3$d glemt</string>
+    <string name="rx_on_time">%1$s til tiden</string>
+    <string name="rx_no_taken">Ingen tagne doser endnu</string>
+    <string name="rx_within_window">Inden for ±%1$d minutter</string>
+    <string name="rx_view_logs">Se historik for recepten</string>
+    <string name="rx_view_logs_sub">Taget, sprunget over og efter behov</string>
+    <string name="rx_notes">Noter</string>
+    <string name="rx_mark_complete">Markér som fuldført</string>
+    <string name="rx_archive">Arkivér recept</string>
+    <string name="rx_reactivate">Genaktivér recept</string>
+    <string name="rx_restore">Gendan recept</string>
+    <string name="rx_delete">Slet recept</string>
+    <string name="rx_confirm_complete_title">Markér som fuldført?</string>
+    <string name="rx_confirm_complete_body">Kommende påmindelser for de tilknyttede lægemidler stopper.</string>
+    <string name="rx_confirm_archive_title">Arkivér recepten?</string>
+    <string name="rx_confirm_archive_body">Recepten og dens tilknyttede lægemidler flyttes til Arkiveret. Du kan hente dem tilbage senere.</string>
+    <string name="rx_confirm_reactivate_title">Genaktivér recepten?</string>
+    <string name="rx_confirm_reactivate_body">Forløbet bliver løbende igen, og påmindelserne vender tilbage. Lægemidler, du har fuldført enkeltvis, forbliver fuldførte.</string>
+    <string name="rx_confirm_restore_title">Gendan recepten?</string>
+    <string name="rx_confirm_restore_body">Kun lægemidler, som denne recept har ændret, bliver gendannet; dem, du selv har arkiveret, forbliver arkiveret.</string>
+    <string name="rx_action_complete">Fuldført</string>
+    <string name="rx_action_archive">Arkivér</string>
+    <string name="rx_action_reactivate">Genaktivér</string>
+    <string name="rx_action_restore">Gendan</string>
+    <string name="rx_confirm_delete_title">Slet denne recept?</string>
+    <string name="rx_confirm_delete_body">Lægemidlerne bliver i dit skab som selvstændige lægemidler.</string>
+    <string name="rx_add_new_medication">Nyt lægemiddel</string>
+    <string name="rx_add_new_medication_sub">Opret og tilknyt en ny påmindelse</string>
+    <string name="rx_add_existing">Eksisterende lægemidler</string>
+    <string name="rx_add_existing_sub">Tilknyt et selvstændigt lægemiddel</string>
+    <string name="rx_no_standalone">Der er ingen selvstændige lægemidler tilgængelige.</string>
+    <string name="rx_editor_new">Ny recept</string>
+    <string name="rx_editor_edit">Rediger recept</string>
+    <string name="rx_field_plan_name">Navn på plan</string>
+    <string name="rx_field_condition">Diagnose</string>
+    <string name="rx_field_prescriber">Ordinerende læge</string>
+    <string name="rx_field_facility">Klinik / afdeling</string>
+    <string name="rx_field_contact">Kontakt</string>
+    <string name="rx_field_notes">Noter</string>
+    <string name="rx_start">Start · %1$s</string>
+    <string name="rx_end">Slut · %1$s</string>
+    <string name="rx_ongoing">Løbende behandling</string>
+    <plurals name="rx_update_linked">
+        <item quantity="one">Opdatér %1$d lægemiddel</item>
+        <item quantity="other">Opdatér %1$d lægemidler</item>
+    </plurals>
+    <string name="rx_apply_dates">Brug disse datoer på de tilknyttede planer</string>
+    <string name="logs_empty">Der er endnu ikke noteret nogen doser.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">Tilføj lægemiddel</string>
+    <string name="form_edit_title">Rediger medicin</string>
+    <string name="form_step">Trin %1$d af 3</string>
+    <string name="form_add_to_routine">Føj til min rutine</string>
+    <string name="form_save_changes">Gem ændringer</string>
+    <string name="form_duplicate_title">Lægemiddel findes allerede</string>
+    <string name="form_duplicate_body">Et lægemiddel ved navn “%1$s” med denne styrke findes allerede.</string>
+    <string name="describe_label">Sig det bare ligeud</string>
+    <string name="describe_question">Hvad tager du?</string>
+    <string name="describe_hint">Prøv “Metformin 500mg every morning with food”.</string>
+    <string name="describe_placeholder">Lægemiddel, styrke og hvornår du tager det …</string>
+    <string name="describe_examples">Eksempler</string>
+    <string name="describe_understood">MediTick forstod</string>
+    <string name="basics_label">Det grundlæggende</string>
+    <string name="basics_headline">Gør det let at genkende</string>
+    <string name="basics_field_name">Medicinens navn</string>
+    <string name="basics_no_prescription">Ingen (selvstændigt)</string>
+    <string name="basics_field_strength">Styrke</string>
+    <string name="basics_section_form">Lægemiddelform</string>
+    <string name="basics_field_instructions">Anvisninger (valgfri)</string>
+    <string name="basics_track_supply">Følg beholdningen</string>
+    <string name="basics_track_supply_sub">Bestil mere, før du løber tør</string>
+    <string name="basics_field_stock">På lager</string>
+    <string name="basics_field_alert">Advar ved</string>
+    <string name="rhythm_label">Din rytme</string>
+    <string name="rhythm_headline">Hvornår passer det?</string>
+    <string name="rhythm_every_day">Hver dag</string>
+    <string name="rhythm_every_day_sub">Samme tider hver dag</string>
+    <string name="rhythm_specific">Bestemte dage</string>
+    <string name="rhythm_specific_sub">Vælg ugedage</string>
+    <string name="rhythm_every_other">Hver anden dag</string>
+    <string name="rhythm_every_other_sub">En dag på, en fri</string>
+    <string name="rhythm_interval">Interval</string>
+    <string name="rhythm_interval_sub">Hver N. kalenderdag</string>
+    <string name="rhythm_cyclic">Cyklisk</string>
+    <string name="rhythm_cyclic_sub">Dage med, derefter dage uden</string>
+    <string name="rhythm_as_needed">Efter behov</string>
+    <string name="rhythm_as_needed_sub">Ingen fast plan</string>
+    <string name="rhythm_section_days">Dage</string>
+    <string name="rhythm_days_on">Dage på</string>
+    <string name="rhythm_days_off">Dage fri</string>
+    <string name="rhythm_repeat_every">Gentag hver N. dag</string>
+    <string name="rhythm_section_doses">Doser</string>
+    <string name="rhythm_add_dose">Tilføj dosis</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">Påmindelser knyttet til måltider</string>
+    <string name="rhythm_meal_auto">Ændrede måltidstider opdaterer påmindelserne automatisk</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">Følger påmindelsestiderne</string>
+    <string name="rhythm_amount_per_dose">Mængde pr. dosis</string>
+    <string name="rhythm_start_date">Startdato · %1$s</string>
+    <string name="rhythm_ongoing">Løbende behandling</string>
+    <string name="rhythm_no_end_date">Ingen slutdato</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="one">Forløb på %1$d dag</item>
+        <item quantity="other">Forløb på %1$d dage</item>
+    </plurals>
+    <string name="dose_add_hint">Vælg et præcist tidspunkt, eller tag udgangspunkt i et almindeligt.</string>
+    <string name="dose_custom_time">Eget tidspunkt</string>
+    <string name="dose_edit_title">Redigér dosis</string>
+    <string name="dose_section_amount">Mængde</string>
+    <string name="dose_decrease">Sænk dosis</string>
+    <string name="dose_increase">Hæv dosis</string>
+    <string name="dose_section_timing">Tidspunkt</string>
+    <string name="dose_relation_fixed">Fast</string>
+    <string name="dose_relation_before">Før</string>
+    <string name="dose_relation_with">Med</string>
+    <string name="dose_relation_after">Efter</string>
+    <string name="dose_reminder_time">Påmindelse kl. %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="one">%1$d minut før måltidet</item>
+        <item quantity="other">%1$d minutter før måltidet</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="one">%1$d minut efter måltidet</item>
+        <item quantity="other">%1$d minutter efter måltidet</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s kl. %2$s · ændrede måltidstider opdaterer påmindelserne automatisk</string>
+    <string name="dose_remove">Fjern dosis</string>
+    <string name="settings_title">Indstillinger</string>
+    <string name="settings_pro_active">Pro er aktiv</string>
+    <string name="settings_pro_thanks">Tak for støtten</string>
+    <string name="settings_unlock_pro">Lås MediTick Pro op</string>
+    <string name="settings_unlock_pro_sub">Måltidssynkronisering, opfølgning, fuld historik og ubegrænset medicin</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">Præferencer</string>
+    <string name="settings_group_notifications">Notifikationer</string>
+    <string name="settings_group_data">Dine data</string>
+    <string name="settings_group_community">Fællesskab</string>
+    <string name="settings_group_about">Om</string>
+    <string name="settings_redeem">Indløs kode</string>
+    <string name="settings_redeem_sub">Lås Pro op med en kampagnekode fra Play</string>
+    <string name="settings_join_community">Bliv en del af MediTick-fællesskabet</string>
+    <string name="settings_join_community_sub">Rutiner, spørgsmål og hvad der er på vej</string>
+    <string name="settings_appearance">Udseende</string>
+    <string name="settings_appearance_summary">%1$s · %2$s-accent</string>
+    <string name="settings_appearance_mode">Tilstand</string>
+    <string name="settings_appearance_accent">Accent</string>
+    <string name="appearance_auto">Auto</string>
+    <string name="appearance_daylight">Dagslys</string>
+    <string name="appearance_midnight">Midnat</string>
+    <string name="accent_aurora">Nordlys</string>
+    <string name="accent_ocean">Hav</string>
+    <string name="accent_orchid">Orkidé</string>
+    <string name="accent_ember">Glød</string>
+    <string name="settings_meal_times">Måltidstider</string>
+    <string name="settings_meal_times_sub">Morgenmad · Frokost · Aftensmad · Sengetid</string>
+    <string name="settings_widgets">Widgets</string>
+    <string name="settings_widgets_sub">Hjemmeskærm og understøttede muligheder på låseskærmen</string>
+    <string name="settings_dose_presets">Forvalgte dosistider</string>
+    <string name="settings_dose_presets_sub">Morgen · Middag · Aften · Sengetid</string>
+    <string name="settings_dose_presets_restore">Gendan standardtider</string>
+    <string name="settings_language">Sprog</string>
+    <string name="settings_language_system">System</string>
+    <string name="settings_system_language">Sprogindstillinger for systemet</string>
+    <string name="settings_system_language_sub">Åbn Androids sprog pr. app</string>
+    <string name="settings_haptics">Haptik</string>
+    <string name="settings_haptics_sub">Diskrete vibrationer undervejs</string>
+    <string name="settings_notif_permission">Tilladelse til notifikationer</string>
+    <string name="settings_notif_permission_sub">Tryk for at tillade påmindelser</string>
+    <string name="settings_notif_status">Notifikationsstatus</string>
+    <string name="settings_notif_status_sub">Åbn Androids notifikationsindstillinger</string>
+    <string name="settings_dose_reminders">Dosispåmindelser</string>
+    <string name="settings_dose_reminders_sub">En notifikation ved hver dosis</string>
+    <string name="settings_follow_up">Opfølgende påmindelse</string>
+    <string name="settings_follow_up_sub">Minder igen, til dosen er logget</string>
+    <string name="settings_follow_up_delay">Ventetid før opfølgning</string>
+    <plurals name="settings_minutes">
+        <item quantity="one">%1$d minut</item>
+        <item quantity="other">%1$d minutter</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d min</string>
+    <string name="settings_hide_names">Skjul navne i notifikationer</string>
+    <string name="settings_hide_names_sub">Medicinnavne holdes væk fra låseskærmen</string>
+    <string name="settings_alert_sound">Lyd ved påmindelse</string>
+    <string name="settings_urgent">Vigtige påmindelser</string>
+    <string name="settings_urgent_sub">Kanal med høj prioritet; Forstyr ikke kan stadig gælde</string>
+    <string name="settings_exact_alarm">Adgang til præcise alarmer</string>
+    <string name="settings_exact_alarm_sub">Åbn Androids “Alarmer og påmindelser”</string>
+    <string name="settings_refill_reminders">Påmindelser om genbestilling</string>
+    <string name="settings_refill_reminders_sub">Advar, når du kommer under din grænse</string>
+    <string name="settings_sound_title">Påmindelseslyd</string>
+    <string name="settings_sound_hint">Tryk på en lyd for at høre den. Valget gælder, når du gemmer. Nogle lyde kræver MediTick Pro.</string>
+    <string name="sound_standard">MediTick (standard)</string>
+    <string name="sound_chime">Klokkespil (langt)</string>
+    <string name="sound_bell">Klokke</string>
+    <string name="sound_urgent">Vigtig</string>
+    <string name="sound_silent">Lydløs</string>
+    <string name="settings_export">Eksportér backup</string>
+    <string name="settings_export_sub">Alt som en JSON-fil</string>
+    <string name="settings_import">Importér backup</string>
+    <string name="settings_import_sub">Gendan en MediTick-eksport fra iOS eller Android</string>
+    <string name="settings_erase">Slet alle data</string>
+    <string name="settings_erase_sub">Al medicin, alle planer og hele loggen</string>
+    <string name="settings_erase_title">Slet alt?</string>
+    <string name="settings_erase_body">Dette sletter permanent al medicin, alle recepter og hele historikken fra denne enhed.</string>
+    <string name="settings_msg_link_failed">Linket kunne ikke åbnes.</string>
+    <string name="settings_msg_exported">Sikkerhedskopi eksporteret.</string>
+    <string name="settings_msg_export_failed">Sikkerhedskopien kunne ikke eksporteres.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="one">Sikkerhedskopi gendannet — %1$d lægemiddel indlæst.</item>
+        <item quantity="other">Sikkerhedskopi gendannet — %1$d lægemidler indlæst.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">Filen ligner ikke en MediTick-sikkerhedskopi.</string>
+    <string name="settings_feedback">Send feedback / rapportér fejl</string>
+    <string name="settings_feedback_sub">Fortæl om enheden, og hvordan fejlen opstår</string>
+    <string name="settings_feature_request">Foreslå en funktion</string>
+    <string name="settings_feature_request_sub">Fortæl os, hvad der ville gøre MediTick bedre</string>
+    <string name="settings_review">Skriv en anmeldelse</string>
+    <string name="settings_share">Del MediTick</string>
+    <string name="settings_share_text">MediTick — glem aldrig en dosis igen. Pilletimer, påmindelser og overblik.</string>
+    <string name="settings_community_title">Du er ikke alene om det</string>
+    <string name="settings_community_body">Del rutiner med andre, der bruger MediTick, stil spørgsmål, rapportér fejl og hør om nye funktioner først.</string>
+    <string name="settings_website">Websted</string>
+    <string name="settings_whats_new">Nyheder</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">Privatlivspolitik</string>
+    <string name="settings_privacy_sub">Sådan behandler MediTick dine data</string>
+    <string name="settings_terms">Servicevilkår</string>
+    <string name="settings_terms_sub">Hvad en påmindelsesapp ikke kan</string>
+    <string name="settings_about">Om MediTick</string>
+    <string name="settings_version">Version %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · Dine helbredsdata bliver på denne enhed.\nEt påmindelsesværktøj, ikke lægelig rådgivning.</string>
+    <string name="info_widgets_title">Widgets</string>
+    <string name="info_widgets_body">Tilføj MediTick fra widget-vælgeren på din hjemmeskærm. Om widgets virker på låseskærmen afhænger af din Android-version og din producent og kan ikke slås til automatisk. Den nuværende widget viser dagens fremgang og næste dosis; noteringen åbner stadig appen.</string>
+    <string name="info_privacy_title">Privatliv</string>
+    <string name="info_privacy_body">Data om lægemidler, planer og historik ligger på denne enhed. Der eksporteres kun, når du selv vælger det. Google Play håndterer køb; Android leverer notifikationerne.</string>
+    <string name="info_terms_title">Vilkår for brug</string>
+    <string name="info_terms_body">MediTick er et værktøj til påmindelser og personlig registrering, ikke lægelig rådgivning. Følg altid din læges anvisninger, og søg professionel hjælp ved spørgsmål om medicin.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\nPrivate medicinpåmindelser til Android, der virker uden net.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">Slip for at tænke “tog jeg den nu?”.</string>
+    <string name="paywall_feature_alerts">Beskeder, der holder din rutine synlig</string>
+    <string name="paywall_feature_follow_ups">Opfølgning, indtil hver dosis er noteret</string>
+    <string name="paywall_feature_unlimited">Ubegrænset medicin og recepter</string>
+    <string name="paywall_feature_insights">Stimer, indsigt og widgets</string>
+    <string name="paywall_loading">Henter abonnementer fra Google Play …</string>
+    <string name="paywall_unavailable">Abonnementerne er ikke tilgængelige.</string>
+    <string name="paywall_upgrade">Skift til Pro</string>
+    <string name="paywall_lifetime_note">Én betaling. Pro for altid.</string>
+    <string name="paywall_renew_note">Fornys automatisk. Kan opsiges når som helst i Google Play.</string>
+    <string name="paywall_restore">Gendan køb</string>
+    <string name="add_sheet_title">Tilføj</string>
+    <string name="add_sheet_prescription">Opret recept</string>
+    <string name="add_sheet_prescription_sub">Saml tilbagevendende medicin</string>
+    <string name="add_sheet_medication">Tilføj lægemiddel</string>
+    <string name="add_sheet_medication_sub">Opret en påmindelse for ét lægemiddel</string>
+    <string name="release_latest">Nyeste version</string>
+    <string name="release_lead">Denne opdatering giver MediTick de samme funktioner på iPhone og Android:</string>
+    <string name="release_bullet_filters">Behandlinger kan nu filtreres efter type og efter Aktiv, Fuldført eller Arkiveret.</string>
+    <string name="release_bullet_prescriptions">Recepter husker ordinerende læge, klinik, kontakt, diagnose og behandlingsperiode og kan markeres som fuldførte, arkiveres eller gendannes.</string>
+    <string name="release_bullet_per_dose">Hver dosis kan have sin egen mængde og sit eget forhold til måltidet, så ét lægemiddel kan være fast kl. 08:00 og 30 minutter før aftensmaden.</string>
+    <string name="release_bullet_shapes">Nye planformer: hver N. dag og cyklusser med pause, ud over udvalgte dage og efter behov.</string>
+    <string name="release_bullet_take_all">“Notér alle” klarer en hel tidsgruppe med ét tryk.</string>
+    <string name="release_bullet_progress">Fremgang får en kalender over alle dage med månedsnavigation samt forklaringer på efterlevelse, punktlighed og stimer.</string>
+    <string name="release_bullet_sounds">Påmindelseslyde, private notifikationer der holder medicinnavne væk fra låseskærmen, og en sprogvælger i appen.</string>
+    <string name="release_bullet_refills">Genbestilling viser den nye beholdning, før du bekræfter, og noterede tidspunkter kan rettes bagefter.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">morgen,morgenmad</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">frokost,middagstid</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">aften,aftensmad,middag</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">sengetid,ved sengetid</string>
+    <string name="parse_meal_before" tools:ignore="Typos">før måltid,før mad,før morgenmad,før frokost,før aftensmad</string>
+    <string name="parse_meal_after" tools:ignore="Typos">efter måltid,efter mad,efter morgenmad,efter frokost,efter aftensmad</string>
+    <string name="parse_meal_with" tools:ignore="Typos">sammen med mad,med måltid,til maden</string>
+    <string name="parse_twice" tools:ignore="Typos">to gange,dagligt to gange</string>
+    <string name="parse_unit_day" tools:ignore="Typos">dag,dage</string>
+    <string name="parse_unit_week" tools:ignore="Typos">uge,uger</string>
+    <string name="parse_unit_month" tools:ignore="Typos">måned,måneder</string>
+    <string name="parse_marker_am" tools:ignore="Typos">om formiddagen</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">om aftenen</string>
+    <string name="parse_stopwords" tools:ignore="Typos">hver,hver enkelt,to gange,en gang,dagligt,tag,med,før,efter,morgen,nat,aften,middag,frokost,sengetid,morgenmad,aftensmad,måltid,måltider,og</string>
+</resources>
