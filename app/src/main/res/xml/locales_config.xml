@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The languages MediTick ships, in the same set as iOS.
+
+    This is what puts MediTick in Android 13+'s per-app language screen and
+    tells the Play Store which languages the listing can claim. Adding a locale
+    means three edits, always together: a `values-<qualifier>` folder, an entry
+    here, and a tag in `supportedLanguageTags` in SettingsScreen.kt.
+
+    Note the qualifiers differ from the BCP-47 tags used in code: Norwegian is
+    `nb` (Bokmål) rather than the `no` macrolanguage, Brazilian Portuguese is
+    `pt-rBR`, and the two Chinese scripts need the `b+` form because they are
+    distinguished by script rather than region.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android"
+    android:defaultLocale="en">
+    <locale android:name="en" />
+    <locale android:name="ar" />
+    <locale android:name="da" />
+    <locale android:name="de" />
+    <locale android:name="es" />
+    <locale android:name="fr" />
+    <locale android:name="it" />
+    <locale android:name="ja" />
+    <locale android:name="ko" />
+    <locale android:name="nb" />
+    <locale android:name="nl" />
+    <locale android:name="pt-BR" />
+    <locale android:name="ru" />
+    <locale android:name="sv" />
+    <locale android:name="vi" />
+    <locale android:name="zh-Hans" />
+    <locale android:name="zh-Hant" />
+</locale-config>

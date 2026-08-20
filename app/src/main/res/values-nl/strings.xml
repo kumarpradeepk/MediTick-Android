@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    nl translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">De voortgang van vandaag en de volgende dosis</string>
+    <string name="channel_dose_name">Dosisherinneringen</string>
+    <string name="channel_dose_description">Meldingen op de geplande innametijden</string>
+    <string name="channel_follow_up_name">Herinneringen achteraf</string>
+    <string name="channel_follow_up_description">Een vriendelijk duwtje als een dosis nog niet is genoteerd</string>
+    <string name="channel_refill_name">Bijbestelmeldingen</string>
+    <string name="channel_refill_description">Meldingen als een bijgehouden voorraad opraakt</string>
+    <string name="notif_hidden_medication">je medicijn</string>
+    <string name="notif_title_still_waiting">Nog open: %1$s</string>
+    <string name="notif_title_running_low">Bijna op: %1$s</string>
+    <string name="notif_title_time_for">Tijd voor %1$s</string>
+    <string name="notif_body_nudge">Deze dosis is nog niet genoteerd. Eén tik en het staat er.</string>
+    <string name="notif_body_snooze">Je uitgestelde dosis staat klaar.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="one">Nog voor ongeveer %1$d dag voorraad. Tijd om bij te bestellen.</item>
+        <item quantity="other">Nog voor ongeveer %1$d dagen voorraad. Tijd om bij te bestellen.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Je voorraad is onder je ingestelde minimum.</string>
+    <string name="notif_body_hidden">Open MediTick om deze dosis te bekijken en te noteren.</string>
+    <string name="action_take">Innemen</string>
+    <string name="action_skip">Overslaan</string>
+    <string name="action_snooze_minutes">%1$d min uitstellen</string>
+    <string name="widget_doses_ticked">%1$d van %2$d doses afgevinkt</string>
+    <string name="widget_header">MEDITICK · VANDAAG</string>
+    <string name="widget_no_doses_today">Vandaag geen doses</string>
+    <string name="widget_all_done_today">Alles gedaan voor vandaag</string>
+    <string name="widget_all_caught_up">Je bent helemaal bij</string>
+    <string name="billing_products_missing">Koppel de producten ‘monthly’, ‘yearly’ en ‘lifetime’ in de Google Play Console.</string>
+    <string name="billing_plan_lifetime">Levenslang</string>
+    <string name="billing_plan_yearly">Jaarlijks</string>
+    <string name="billing_plan_monthly">Maandelijks</string>
+    <string name="billing_tag_one_time">Eenmalige aankoop</string>
+    <string name="billing_tag_best_value">Voordeligste abonnement</string>
+    <string name="billing_tag_flexible">Flexibel opzegbaar</string>
+    <string name="billing_checking_purchases">Je aankopen worden gecontroleerd…</string>
+    <string name="billing_restored">Aankopen hersteld — welkom terug.</string>
+    <string name="billing_none_found">Geen actieve aankopen gevonden.</string>
+    <string name="billing_pro_unlocked">Welkom bij MediTick Pro — alles is ontgrendeld.</string>
+    <string name="meal_breakfast">Ontbijt</string>
+    <string name="meal_lunch">Lunch</string>
+    <string name="meal_dinner">Avondeten</string>
+    <string name="meal_bedtime">Bedtijd</string>
+    <string name="meal_breakfast_inline">het ontbijt</string>
+    <string name="meal_lunch_inline">de lunch</string>
+    <string name="meal_dinner_inline">het avondeten</string>
+    <string name="meal_bedtime_inline">het slapengaan</string>
+    <string name="anchor_at_bedtime">Voor het slapen</string>
+    <string name="anchor_with">Bij %1$s</string>
+    <string name="anchor_before">Voor %1$s</string>
+    <string name="anchor_after">Na %1$s</string>
+    <string name="anchor_before_offset">%1$d min voor %2$s</string>
+    <string name="anchor_after_offset">%1$d min na %2$s</string>
+    <string name="anchor_fixed_time">Vast tijdstip</string>
+    <string name="form_pill">Pil</string>
+    <string name="form_capsule">Capsule</string>
+    <string name="form_tablet">Tablet</string>
+    <string name="form_liquid">Vloeistof</string>
+    <string name="form_drops">Druppel</string>
+    <string name="form_injection">Injectie</string>
+    <string name="form_patch">Pleister</string>
+    <string name="form_cream">Crème</string>
+    <string name="form_inhaler">Inhalator</string>
+    <string name="form_powder">Poeder</string>
+    <string name="form_gummy">Gummy</string>
+    <string name="form_spray">Spray</string>
+    <string name="form_other">Overig</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pil</item>
+        <item quantity="other">pillen</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="one">capsule</item>
+        <item quantity="other">capsules</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="one">tablet</item>
+        <item quantity="other">tabletten</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ml</item>
+        <item quantity="other">ml</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">druppel</item>
+        <item quantity="other">druppels</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="one">injectie</item>
+        <item quantity="other">injecties</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pleister</item>
+        <item quantity="other">pleisters</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="one">toepassing</item>
+        <item quantity="other">toepassingen</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pufje</item>
+        <item quantity="other">pufjes</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">maatschep</item>
+        <item quantity="other">maatscheppen</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="one">gummy</item>
+        <item quantity="other">gummies</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="one">verstuiving</item>
+        <item quantity="other">verstuivingen</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="one">dosis</item>
+        <item quantity="other">doses</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="one">%1$d keer/dag</item>
+        <item quantity="other">%1$d keer/dag</item>
+    </plurals>
+    <string name="schedule_no_times_set">Geen tijden ingesteld</string>
+    <string name="schedule_interval">Elke %1$du, %2$s – %3$s</string>
+    <string name="schedule_as_needed">Zo nodig</string>
+    <string name="schedule_when_needed">Wanneer nodig</string>
+    <string name="schedule_every_day">Elke dag</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="one">Elke %1$d dag</item>
+        <item quantity="other">Elke %1$d dagen</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d dagen innemen, %2$d dagen pauze"</string>
+    <string name="inventory_not_tracked">Niet bijgehouden</string>
+    <string name="action_cancel">Annuleren</string>
+    <string name="action_done">Klaar</string>
+    <string name="action_save">Bewaar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_add">Toevoegen</string>
+    <string name="action_delete">Verwijderen</string>
+    <string name="action_edit">Bewerken</string>
+    <string name="action_close">Sluiten</string>
+    <string name="action_back">Terug</string>
+    <string name="action_continue">Doorgaan</string>
+    <string name="action_try_again">Opnieuw</string>
+    <string name="action_get_started">Aan de slag</string>
+    <string name="action_snooze">Uitstellen</string>
+    <string name="action_log_dose">Dosis registreren</string>
+    <string name="action_take_now">Nu innemen</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">Vandaag</string>
+    <string name="tab_treatments">Behandelingen</string>
+    <string name="tab_progress">Voortgang</string>
+    <string name="tab_settings">Instellingen</string>
+    <string name="onboarding_badge">"  PRIVÉ · GEEN ACCOUNT · GRATIS  "</string>
+    <string name="onboarding_headline">Nooit meer\neen dosis missen.</string>
+    <string name="onboarding_subhead">Vriendelijke herinneringen, slimme schema\'s en een dagring die vult terwijl je goed voor jezelf zorgt.</string>
+    <string name="onboarding_feature_sentence">Typ een zin, krijg een schema</string>
+    <string name="onboarding_feature_meals">Herinneringen op je maaltijdritme</string>
+    <string name="onboarding_feature_private">Je gezondheidsgegevens blijven op je telefoon</string>
+    <string name="onboarding_setup_label">In 30 seconden klaar</string>
+    <string name="onboarding_question">Wat brengt je naar MediTick?</string>
+    <string name="onboarding_choose_all">Kies alles wat past. Je kunt het later wijzigen.</string>
+    <string name="onboarding_purpose_doses">Elke dosis onthouden</string>
+    <string name="onboarding_purpose_doses_sub">Rustige, betrouwbare herinneringen</string>
+    <string name="onboarding_purpose_meals">Meelopen met de maaltijden</string>
+    <string name="onboarding_purpose_meals_sub">Voor, bij of na het eten</string>
+    <string name="onboarding_purpose_streak">Een reeks opbouwen</string>
+    <string name="onboarding_purpose_streak_sub">Voortgang zien zonder schuldgevoel</string>
+    <string name="onboarding_purpose_refills">Voorraad bijhouden</string>
+    <string name="onboarding_purpose_refills_sub">Het weten voordat je zonder zit</string>
+    <string name="onboarding_no_signup">Geen registratie. Geen e-mail. Je gezondheidsgegevens blijven op dit toestel.</string>
+    <string name="onboarding_build_routine">Mijn routine maken</string>
+    <string name="today_empty_title">Laten we je routine opbouwen</string>
+    <string name="today_empty_body">Beschrijf een medicijn zoals je het zou zeggen — MediTick maakt er een schema, herinneringen en een dagelijkse ring van.</string>
+    <string name="today_add_first">Voeg je eerste medicijn toe</string>
+    <string name="today_takes_30_seconds">Duurt ongeveer 30 seconden.</string>
+    <string name="today_greeting_morning">Goedemorgen</string>
+    <string name="today_greeting_afternoon">Goedemiddag</string>
+    <string name="today_greeting_evening">Goedenavond</string>
+    <string name="today_add_new">Nieuw</string>
+    <string name="today_take_all">Alles noteren</string>
+    <string name="today_when_you_need_it">Als je het nodig hebt</string>
+    <string name="today_no_doses_logged">Vandaag nog niets genoteerd</string>
+    <plurals name="today_taken_today">
+        <item quantity="one">%1$d vandaag ingenomen</item>
+        <item quantity="other">%1$d vandaag ingenomen</item>
+    </plurals>
+    <string name="today_ring_label">VANDAAG</string>
+    <string name="today_daily_plan">Dagplan</string>
+    <string name="today_left_next_up">Nog %1$d · Hierna</string>
+    <string name="today_quiet_day">Een rustige dag</string>
+    <plurals name="today_doses_missed">
+        <item quantity="one">%1$d dosis gemist</item>
+        <item quantity="other">%1$d doses gemist</item>
+    </plurals>
+    <string name="today_all_done">Alles gedaan</string>
+    <string name="today_day_complete">Dag afgerond</string>
+    <string name="today_tap_missed">Tik hieronder op een gemiste dosis om die te noteren</string>
+    <string name="today_doses_ticked">%1$d van %2$d doses afgevinkt</string>
+    <string name="today_meals_in_sync">Maaltijden blijven gelijklopen</string>
+    <string name="today_meal_summary">Ontbijt %1$s · Avondeten %2$s</string>
+    <string name="today_now">NU · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">Ochtend</string>
+    <string name="daypart_midday">Middag</string>
+    <string name="daypart_evening">Avond</string>
+    <string name="daypart_bedtime">Bedtijd</string>
+    <string name="dose_note_optional">Notitie (optioneel)</string>
+    <string name="dose_mark_as_taken">Markeer als ingenomen</string>
+    <string name="dose_undo_taken">Inname ongedaan maken</string>
+    <string name="dose_undo_skipped">Overslaan ongedaan maken</string>
+    <string name="dose_as_needed_title">Dosis zo nodig</string>
+    <string name="dose_amount_label">Hoeveelheid (%1$s)</string>
+    <string name="dose_log_title">Dosis registreren</string>
+    <string name="dose_logged_time">Genoteerd om %1$s</string>
+    <string name="state_taken">Ingenomen</string>
+    <string name="state_skipped">Overgeslagen</string>
+    <string name="state_missed">Gemist</string>
+    <string name="state_upcoming">Straks</string>
+    <string name="state_due">Nu innemen</string>
+    <string name="state_on_time">Op tijd</string>
+    <string name="state_early">Te vroeg</string>
+    <string name="state_late">Te laat</string>
+    <string name="progress_title">Voortgang</string>
+    <string name="progress_empty_title">Je verhaal begint bijna</string>
+    <string name="progress_empty_body">Voeg een medicijn toe en registreer je eerste doses — reeksen, percentages en trends groeien hier.</string>
+    <string name="progress_range_week">7 dagen</string>
+    <string name="progress_range_all">Alles</string>
+    <string name="progress_range_label_all">Alles</string>
+    <string name="progress_range_label_week">Laatste 7 dagen</string>
+    <string name="progress_ring_label">THERAPIETROUW</string>
+    <string name="progress_metric_on_time">Op tijd</string>
+    <string name="progress_metric_window">±%1$d min</string>
+    <string name="progress_metric_streak">Dagen op rij</string>
+    <string name="progress_metric_best">Record %1$d</string>
+    <string name="progress_insight_label">Inzicht</string>
+    <string name="progress_insight_refill">Bijbestellen komt eraan. %1$s zit onder de meldgrens.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="one">In deze periode is %1$d dosis gemist. Een herinnering achteraf kan helpen op drukke dagen.</item>
+        <item quantity="other">In deze periode zijn %1$d doses gemist. Een herinnering achteraf kan helpen op drukke dagen.</item>
+    </plurals>
+    <string name="progress_insight_skipped">Een overgeslagen dosis hoort erbij en is geen mislukking. Blijf noteren, dan blijft je trend bruikbaar.</string>
+    <string name="progress_insight_calm">Een rustige, gelijkmatige week. Elk klein vinkje houdt je routine op de rails.</string>
+    <string name="progress_patterns_label">Patronen</string>
+    <string name="progress_pattern_hardest">%1$s is het lastigste moment</string>
+    <string name="progress_pattern_detail">%1$d van de %2$d gemiste doses vielen in de %3$s.</string>
+    <string name="progress_calendar_all_days">Volledige kalender</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">Logboek · %1$s</string>
+    <string name="progress_previous_month">Vorige maand</string>
+    <string name="progress_next_month">Volgende maand</string>
+    <string name="progress_nothing_scheduled">Deze dag staat er niets gepland.</string>
+    <string name="progress_as_needed_log">Zo nodig · %1$s</string>
+    <string name="progress_generic_medication">Medicijn</string>
+    <string name="progress_delete_log">Notitie verwijderen</string>
+    <string name="progress_detail_timing_title">Stiptheid in detail</string>
+    <string name="progress_detail_streak_title">Reeks in detail</string>
+    <string name="progress_detail_adherence_title">Therapietrouw in detail</string>
+    <string name="progress_detail_no_taken">Nog geen ingenomen doses in deze periode.</string>
+    <string name="progress_detail_on_time_rate">%1$s van de ingenomen doses viel binnen ±%2$d minuten.</string>
+    <string name="progress_detail_breakdown">%1$d te vroeg · %2$d op tijd · %3$d te laat · %4$d overgeslagen</string>
+    <string name="progress_detail_choose_window">Kies de marge die dit cijfer gebruikt:</string>
+    <string name="progress_detail_streak_line">%1$d dagen op rij · record %2$d dagen</string>
+    <string name="progress_detail_streak_body">Een reeksdag heeft minstens één geplande dosis, waarbij elke dosis die aan de beurt was is ingenomen en er niets is overgeslagen of gemist.</string>
+    <string name="progress_detail_adherence_rate">%1$s therapietrouw</string>
+    <string name="progress_detail_counts">%1$d gepland · %2$d ingenomen · %3$d overgeslagen · %4$d gemist · %5$d open</string>
+    <string name="progress_detail_adherence_body">Therapietrouw telt ingenomen doses binnen de doses die al een uitkomst hebben. Doses die nog moeten komen, drukken het percentage niet.</string>
+    <string name="progress_detail_needs_attention">Vraagt aandacht</string>
+    <string name="progress_detail_no_attention">Geen overgeslagen of gemiste doses in deze periode.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">Zorg</string>
+    <string name="care_add">+ Toevoegen</string>
+    <string name="care_filter_all">Alles</string>
+    <string name="care_filter_medications">Medicijnen</string>
+    <string name="care_filter_prescriptions">Recepten</string>
+    <string name="status_active">Actief</string>
+    <string name="status_completed">Afgerond</string>
+    <string name="status_archived">Gearchiveerd</string>
+    <string name="status_treatment">Behandeling %1$s</string>
+    <string name="care_empty_title">Je medicijnkastje is leeg</string>
+    <string name="care_empty_body">Voeg een recept of los medicijn toe en je dagplan maakt zichzelf.</string>
+    <string name="care_section_prescriptions">Mijn recepten</string>
+    <string name="care_section_medications">Medicijnen</string>
+    <string name="care_section_standalone">Losse medicijnen</string>
+    <string name="care_archived_count">Gearchiveerd (%1$d)</string>
+    <string name="care_what_adding">Wat gaan we toevoegen?</string>
+    <string name="care_mode_prescription">Recept</string>
+    <string name="care_mode_prescription_sub">Een behandelplan met een of meer medicijnen</string>
+    <string name="care_mode_single">Los medicijn</string>
+    <string name="care_mode_single_sub">Direct aan je dagplan toevoegen</string>
+    <plurals name="care_medication_count">
+        <item quantity="one">%1$d medicijn</item>
+        <item quantity="other">%1$d medicijnen</item>
+    </plurals>
+    <string name="care_stock_left">%1$s over</string>
+    <string name="detail_next_dose">Volgende dosis</string>
+    <string name="detail_as_needed">Zo nodig</string>
+    <string name="detail_schedule">Schema</string>
+    <string name="detail_amount_per_dose">Hoeveelheid per dosis</string>
+    <string name="detail_supply">Voorraad</string>
+    <string name="detail_supply_remaining">Nog %1$s</string>
+    <string name="detail_supply_alert">Melding bij %1$s</string>
+    <string name="detail_supply_alert_days">Melding bij %1$s · Nog ongeveer %2$d dagen</string>
+    <string name="detail_supply_untracked">Voorraad niet bijgehouden</string>
+    <string name="detail_supply_enable">Zet bijhouden aan bij het bewerken van dit medicijn</string>
+    <string name="detail_refill">+ Bijvullen</string>
+    <string name="detail_recent_history">Recente geschiedenis</string>
+    <string name="detail_history_as_needed">Dosis zo nodig</string>
+    <string name="detail_view_medication_logs">Geschiedenis van het medicijn</string>
+    <string name="detail_view_medication_logs_sub">Volledige geschiedenis van innames en overgeslagen doses</string>
+    <string name="detail_restore_medication">Medicijn herstellen</string>
+    <string name="detail_archive_medication">Medicijn archiveren</string>
+    <string name="detail_delete_medication">Medicijn verwijderen</string>
+    <string name="confirm_delete_medication_title">%1$s verwijderen?</string>
+    <string name="confirm_delete_medication_body">De innamegeschiedenis verdwijnt ook. Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="confirm_archive_medication_title">%1$s archiveren?</string>
+    <string name="confirm_archive_medication_body">Komende herinneringen stoppen. Je kunt dit medicijn later terughalen uit Gearchiveerd.</string>
+    <string name="refill_title">Voorraad aanvullen</string>
+    <string name="refill_units_label">Aantal toe te voegen</string>
+    <string name="logs_title">Geschiedenis van %1$s</string>
+    <string name="rx_prescribed_by">Voorgeschreven door %1$s</string>
+    <string name="rx_period_ongoing">%1$s · Doorlopend</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">Medicijn toevoegen</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">Nieuw of bestaand</string>
+    <string name="rx_progress_and_logs">Voortgang en geschiedenis</string>
+    <string name="rx_no_decided">Nog geen afgeronde doses</string>
+    <string name="rx_adherence">%1$s therapietrouw</string>
+    <string name="rx_counts">%1$d ingenomen · %2$d overgeslagen · %3$d gemist</string>
+    <string name="rx_on_time">%1$s op tijd</string>
+    <string name="rx_no_taken">Nog geen ingenomen doses</string>
+    <string name="rx_within_window">Binnen ±%1$d minuten</string>
+    <string name="rx_view_logs">Geschiedenis van het recept</string>
+    <string name="rx_view_logs_sub">Ingenomen, overgeslagen en zo nodig</string>
+    <string name="rx_notes">Notities</string>
+    <string name="rx_mark_complete">Markeren als afgerond</string>
+    <string name="rx_archive">Recept archiveren</string>
+    <string name="rx_reactivate">Recept heractiveren</string>
+    <string name="rx_restore">Recept herstellen</string>
+    <string name="rx_delete">Recept verwijderen</string>
+    <string name="rx_confirm_complete_title">Markeren als afgerond?</string>
+    <string name="rx_confirm_complete_body">Komende herinneringen voor de gekoppelde medicijnen stoppen.</string>
+    <string name="rx_confirm_archive_title">Recept archiveren?</string>
+    <string name="rx_confirm_archive_body">Het recept en de gekoppelde medicijnen gaan naar Gearchiveerd. Je kunt ze later terughalen.</string>
+    <string name="rx_confirm_reactivate_title">Recept heractiveren?</string>
+    <string name="rx_confirm_reactivate_body">De kuur loopt weer door en de herinneringen komen terug. Medicijnen die je apart hebt afgerond, blijven afgerond.</string>
+    <string name="rx_confirm_restore_title">Recept herstellen?</string>
+    <string name="rx_confirm_restore_body">Alleen medicijnen die door dit recept zijn gewijzigd worden hersteld; wat je zelf hebt gearchiveerd blijft gearchiveerd.</string>
+    <string name="rx_action_complete">Voltooid</string>
+    <string name="rx_action_archive">Archiveren</string>
+    <string name="rx_action_reactivate">Heractiveren</string>
+    <string name="rx_action_restore">Herstellen</string>
+    <string name="rx_confirm_delete_title">Dit recept verwijderen?</string>
+    <string name="rx_confirm_delete_body">De medicijnen blijven als losse medicijnen in je kastje staan.</string>
+    <string name="rx_add_new_medication">Nieuw medicijn</string>
+    <string name="rx_add_new_medication_sub">Een nieuwe herinnering maken en koppelen</string>
+    <string name="rx_add_existing">Bestaande medicijnen</string>
+    <string name="rx_add_existing_sub">Een los medicijn koppelen</string>
+    <string name="rx_no_standalone">Er zijn geen losse medicijnen beschikbaar.</string>
+    <string name="rx_editor_new">Nieuw recept</string>
+    <string name="rx_editor_edit">Recept bewerken</string>
+    <string name="rx_field_plan_name">Naam van het plan</string>
+    <string name="rx_field_condition">Aandoening</string>
+    <string name="rx_field_prescriber">Voorschrijver</string>
+    <string name="rx_field_facility">Instelling / praktijk</string>
+    <string name="rx_field_contact">Contact</string>
+    <string name="rx_field_notes">Notities</string>
+    <string name="rx_start">Start · %1$s</string>
+    <string name="rx_end">Einde · %1$s</string>
+    <string name="rx_ongoing">Doorlopende behandeling</string>
+    <plurals name="rx_update_linked">
+        <item quantity="one">%1$d medicijn bijwerken</item>
+        <item quantity="other">%1$d medicijnen bijwerken</item>
+    </plurals>
+    <string name="rx_apply_dates">Deze data toepassen op de gekoppelde schema’s</string>
+    <string name="logs_empty">Er zijn nog geen doses genoteerd.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">Medicijn toevoegen</string>
+    <string name="form_edit_title">Medicijn bewerken</string>
+    <string name="form_step">Stap %1$d van 3</string>
+    <string name="form_add_to_routine">Aan mijn routine toevoegen</string>
+    <string name="form_save_changes">Wijzigingen opslaan</string>
+    <string name="form_duplicate_title">Dubbel medicijn</string>
+    <string name="form_duplicate_body">Er bestaat al een medicijn met de naam ‘%1$s’ en deze sterkte.</string>
+    <string name="describe_label">Zeg het gewoon</string>
+    <string name="describe_question">Wat neem je in?</string>
+    <string name="describe_hint">Probeer ‘Metformin 500mg every morning with food’.</string>
+    <string name="describe_placeholder">Medicijn, sterkte en wanneer je het inneemt…</string>
+    <string name="describe_examples">Voorbeelden</string>
+    <string name="describe_understood">MediTick begreep</string>
+    <string name="basics_label">De basis</string>
+    <string name="basics_headline">Maak het herkenbaar</string>
+    <string name="basics_field_name">Naam medicijn</string>
+    <string name="basics_no_prescription">Geen (los medicijn)</string>
+    <string name="basics_field_strength">Sterkte</string>
+    <string name="basics_section_form">Toedieningsvorm</string>
+    <string name="basics_field_instructions">Instructies (optioneel)</string>
+    <string name="basics_track_supply">Voorraad bijhouden</string>
+    <string name="basics_track_supply_sub">Bijbestellen voordat je zonder zit</string>
+    <string name="basics_field_stock">Op voorraad</string>
+    <string name="basics_field_alert">Melding bij</string>
+    <string name="rhythm_label">Jouw ritme</string>
+    <string name="rhythm_headline">Wanneer komt het uit?</string>
+    <string name="rhythm_every_day">Elke dag</string>
+    <string name="rhythm_every_day_sub">Elke dag dezelfde tijden</string>
+    <string name="rhythm_specific">Specifieke dagen</string>
+    <string name="rhythm_specific_sub">Weekdagen kiezen</string>
+    <string name="rhythm_every_other">Om de dag</string>
+    <string name="rhythm_every_other_sub">1 dag aan, 1 dag pauze</string>
+    <string name="rhythm_interval">Interval</string>
+    <string name="rhythm_interval_sub">Elke N kalenderdagen</string>
+    <string name="rhythm_cyclic">Cyclisch</string>
+    <string name="rhythm_cyclic_sub">Dagen innemen, dan pauze</string>
+    <string name="rhythm_as_needed">Zo nodig</string>
+    <string name="rhythm_as_needed_sub">Geen vast schema</string>
+    <string name="rhythm_section_days">Dagen</string>
+    <string name="rhythm_days_on">Dagen aan</string>
+    <string name="rhythm_days_off">Dagen pauze</string>
+    <string name="rhythm_repeat_every">Elke N dagen herhalen</string>
+    <string name="rhythm_section_doses">Doses</string>
+    <string name="rhythm_add_dose">Dosis toevoegen</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">Herinneringen bij maaltijden</string>
+    <string name="rhythm_meal_auto">Andere maaltijdtijden passen de herinneringen automatisch aan</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">Gelijk met de herinneringstijden</string>
+    <string name="rhythm_amount_per_dose">Hoeveelheid per dosis</string>
+    <string name="rhythm_start_date">Startdatum · %1$s</string>
+    <string name="rhythm_ongoing">Doorlopende behandeling</string>
+    <string name="rhythm_no_end_date">Geen einddatum</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="one">Kuur van %1$d dag</item>
+        <item quantity="other">Kuur van %1$d dagen</item>
+    </plurals>
+    <string name="dose_add_hint">Kies een exact tijdstip of begin met een gangbaar moment.</string>
+    <string name="dose_custom_time">Eigen tijdstip</string>
+    <string name="dose_edit_title">Dosis bewerken</string>
+    <string name="dose_section_amount">Hoeveelheid</string>
+    <string name="dose_decrease">Dosis verlagen</string>
+    <string name="dose_increase">Dosis verhogen</string>
+    <string name="dose_section_timing">Moment</string>
+    <string name="dose_relation_fixed">Vast</string>
+    <string name="dose_relation_before">Voor</string>
+    <string name="dose_relation_with">Bij</string>
+    <string name="dose_relation_after">Na</string>
+    <string name="dose_reminder_time">Herinnering om %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="one">%1$d minuut voor de maaltijd</item>
+        <item quantity="other">%1$d minuten voor de maaltijd</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="one">%1$d minuut na de maaltijd</item>
+        <item quantity="other">%1$d minuten na de maaltijd</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s om %2$s · andere maaltijdtijden passen de herinneringen automatisch aan</string>
+    <string name="dose_remove">Dosis verwijderen</string>
+    <string name="settings_title">Instellingen</string>
+    <string name="settings_pro_active">Pro is actief</string>
+    <string name="settings_pro_thanks">Bedankt voor je steun</string>
+    <string name="settings_unlock_pro">MediTick Pro ontgrendelen</string>
+    <string name="settings_unlock_pro_sub">Maaltijdsynchronisatie, herinneringen achteraf, volledige geschiedenis en onbeperkt medicijnen</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">Voorkeuren</string>
+    <string name="settings_group_notifications">Meldingen</string>
+    <string name="settings_group_data">Je gegevens</string>
+    <string name="settings_group_community">Community</string>
+    <string name="settings_group_about">Over</string>
+    <string name="settings_redeem">Code inwisselen</string>
+    <string name="settings_redeem_sub">Ontgrendel Pro met een Play-actiecode</string>
+    <string name="settings_join_community">Word lid van de MediTick-community</string>
+    <string name="settings_join_community_sub">Routines, vragen en wat er aankomt</string>
+    <string name="settings_appearance">Weergave</string>
+    <string name="settings_appearance_summary">%1$s · accent %2$s</string>
+    <string name="settings_appearance_mode">Modus</string>
+    <string name="settings_appearance_accent">Accent</string>
+    <string name="appearance_auto">Automatisch</string>
+    <string name="appearance_daylight">Daglicht</string>
+    <string name="appearance_midnight">Middernacht</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_ocean">Oceaan</string>
+    <string name="accent_orchid">Orchidee</string>
+    <string name="accent_ember">Gloed</string>
+    <string name="settings_meal_times">Maaltijdtijden</string>
+    <string name="settings_meal_times_sub">Ontbijt · Lunch · Avondeten · Bedtijd</string>
+    <string name="settings_widgets">Widgets</string>
+    <string name="settings_widgets_sub">Beginscherm en ondersteunde opties voor het toegangsscherm</string>
+    <string name="settings_dose_presets">Standaard dosistijden</string>
+    <string name="settings_dose_presets_sub">Ochtend · Middag · Avond · Nacht</string>
+    <string name="settings_dose_presets_restore">Standaardtijden herstellen</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_system">Systeem</string>
+    <string name="settings_system_language">Taalinstellingen van het systeem</string>
+    <string name="settings_system_language_sub">Open de taal per app van Android</string>
+    <string name="settings_haptics">Trillingen</string>
+    <string name="settings_haptics_sub">Subtiele trillingen tijdens gebruik</string>
+    <string name="settings_notif_permission">Toestemming voor meldingen</string>
+    <string name="settings_notif_permission_sub">Tik om herinneringen toe te staan</string>
+    <string name="settings_notif_status">Meldingsstatus</string>
+    <string name="settings_notif_status_sub">Open de meldingsinstellingen van Android</string>
+    <string name="settings_dose_reminders">Dosisherinneringen</string>
+    <string name="settings_dose_reminders_sub">Een melding bij elke dosis</string>
+    <string name="settings_follow_up">Vervolgherinnering</string>
+    <string name="settings_follow_up_sub">Herinnert tot je de dosis registreert</string>
+    <string name="settings_follow_up_delay">Wachttijd voor herinnering</string>
+    <plurals name="settings_minutes">
+        <item quantity="one">%1$d minuut</item>
+        <item quantity="other">%1$d minuten</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d min</string>
+    <string name="settings_hide_names">Medicijnnamen verbergen in meldingen</string>
+    <string name="settings_hide_names_sub">Namen blijven van het toegangsscherm</string>
+    <string name="settings_alert_sound">Meldingsgeluid</string>
+    <string name="settings_urgent">Dringende herinneringen</string>
+    <string name="settings_urgent_sub">Kanaal met hoge prioriteit; Niet storen kan alsnog gelden</string>
+    <string name="settings_exact_alarm">Toegang tot exacte alarmen</string>
+    <string name="settings_exact_alarm_sub">Open ‘Alarmen en herinneringen’ van Android</string>
+    <string name="settings_refill_reminders">Bijbestelmeldingen</string>
+    <string name="settings_refill_reminders_sub">Waarschuwen onder je voorraadgrens</string>
+    <string name="settings_sound_title">Herinneringsgeluid</string>
+    <string name="settings_sound_hint">Tik op een geluid om het te horen. De keuze geldt pas na bewaren. Sommige geluiden vragen MediTick Pro.</string>
+    <string name="sound_standard">MediTick (standaard)</string>
+    <string name="sound_chime">Klokkenspel (lang)</string>
+    <string name="sound_bell">Bel</string>
+    <string name="sound_urgent">Dringend</string>
+    <string name="sound_silent">Stil</string>
+    <string name="settings_export">Back-up exporteren</string>
+    <string name="settings_export_sub">Alles als JSON-bestand</string>
+    <string name="settings_import">Back-up importeren</string>
+    <string name="settings_import_sub">Zet een MediTick-export van iOS of Android terug</string>
+    <string name="settings_erase">Alle gegevens wissen</string>
+    <string name="settings_erase_sub">Elk medicijn, plan en logboek</string>
+    <string name="settings_erase_title">Alles wissen?</string>
+    <string name="settings_erase_body">Dit verwijdert alle medicijnen, recepten en historie definitief van dit apparaat.</string>
+    <string name="settings_msg_link_failed">Kon die link niet openen.</string>
+    <string name="settings_msg_exported">Back-up geëxporteerd.</string>
+    <string name="settings_msg_export_failed">Kon de back-up niet exporteren.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="one">Back-up hersteld — %1$d medicijn geladen.</item>
+        <item quantity="other">Back-up hersteld — %1$d medicijnen geladen.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">Dit bestand lijkt geen MediTick-back-up.</string>
+    <string name="settings_feedback">Feedback sturen / bug melden</string>
+    <string name="settings_feedback_sub">Deel je toestel en hoe je het kunt herhalen</string>
+    <string name="settings_feature_request">Functie voorstellen</string>
+    <string name="settings_feature_request_sub">Vertel ons wat MediTick beter zou maken</string>
+    <string name="settings_review">Schrijf een review</string>
+    <string name="settings_share">MediTick delen</string>
+    <string name="settings_share_text">MediTick — mis nooit meer een dosis. Pillentimer, herinneringen en tracking.</string>
+    <string name="settings_community_title">Je staat er niet alleen voor</string>
+    <string name="settings_community_body">Wissel routines uit met andere MediTick-gebruikers, stel vragen, meld bugs en hoor als eerste over nieuwe functies.</string>
+    <string name="settings_website">Website</string>
+    <string name="settings_whats_new">Nieuw</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">Privacybeleid</string>
+    <string name="settings_privacy_sub">Hoe MediTick met je gegevens omgaat</string>
+    <string name="settings_terms">Gebruiksvoorwaarden</string>
+    <string name="settings_terms_sub">Grenzen van een herinneringsapp</string>
+    <string name="settings_about">Over MediTick</string>
+    <string name="settings_version">Versie %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · Je gezondheidsgegevens blijven op dit apparaat.\nEen herinneringshulp, geen medisch advies.</string>
+    <string name="info_widgets_title">Widgets</string>
+    <string name="info_widgets_body">Voeg MediTick toe via de widgetkiezer van je beginscherm. Of widgets op het toegangsscherm werken, hangt af van je Android-versie en de fabrikant van je toestel, en kan niet automatisch worden aangezet. De huidige widget toont de voortgang van vandaag en de volgende dosis; noteren opent nog steeds de app.</string>
+    <string name="info_privacy_title">Privacy</string>
+    <string name="info_privacy_body">Medicijngegevens, schema’s en geschiedenis staan op dit toestel. Exporteren gebeurt alleen als jij dat kiest. Google Play verwerkt aankopen; Android bezorgt de meldingen.</string>
+    <string name="info_terms_title">Gebruiksvoorwaarden</string>
+    <string name="info_terms_body">MediTick is een hulpmiddel voor herinneringen en eigen registratie, geen medisch advies. Volg altijd de aanwijzingen van je arts en vraag een professional om raad bij vragen over je medicijnen.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\nPrivé medicijnherinneringen voor Android, die offline werken.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">Nooit meer twijfelen: ‘heb ik het genomen?’</string>
+    <string name="paywall_feature_alerts">Meldingen die je routine zichtbaar houden</string>
+    <string name="paywall_feature_follow_ups">Herinneringen tot elke dosis is afgevinkt</string>
+    <string name="paywall_feature_unlimited">Onbeperkt medicijnen en recepten</string>
+    <string name="paywall_feature_insights">Reeksen, inzichten en widgets</string>
+    <string name="paywall_loading">Google Play-abonnementen laden…</string>
+    <string name="paywall_unavailable">Abonnementen zijn niet beschikbaar.</string>
+    <string name="paywall_upgrade">Upgraden naar Pro</string>
+    <string name="paywall_lifetime_note">Eén betaling. Pro voor altijd.</string>
+    <string name="paywall_renew_note">Wordt automatisch verlengd. Op elk moment opzegbaar in Google Play.</string>
+    <string name="paywall_restore">Aankopen herstellen</string>
+    <string name="add_sheet_title">Nieuw</string>
+    <string name="add_sheet_prescription">Recept aanmaken</string>
+    <string name="add_sheet_prescription_sub">Groepeer terugkerende medicijnen</string>
+    <string name="add_sheet_medication">Medicijn toevoegen</string>
+    <string name="add_sheet_medication_sub">Een herinnering voor één medicijn maken</string>
+    <string name="release_latest">Nieuwste versie</string>
+    <string name="release_lead">Deze update brengt MediTick op iPhone en Android op hetzelfde niveau:</string>
+    <string name="release_bullet_filters">Behandelingen filtert nu op soort en op Actief, Afgerond of Gearchiveerd.</string>
+    <string name="release_bullet_prescriptions">Recepten bewaren voorschrijver, praktijk, contact, aandoening en behandelperiode, en kunnen worden afgerond, gearchiveerd of hersteld.</string>
+    <string name="release_bullet_per_dose">Elke dosis kan een eigen hoeveelheid en een eigen relatie met de maaltijd hebben, dus één medicijn kan om 08:00 vast staan én 30 minuten voor het avondeten.</string>
+    <string name="release_bullet_shapes">Nieuwe schema’s: elke N dagen en cycli van innemen/pauze, naast vaste weekdagen en zo nodig.</string>
+    <string name="release_bullet_take_all">‘Alles noteren’ handelt een hele tijdgroep in één tik af.</string>
+    <string name="release_bullet_progress">Voortgang krijgt een volledige kalender met navigatie per maand, plus uitleg over therapietrouw, stiptheid en reeksen.</string>
+    <string name="release_bullet_sounds">Herinneringsgeluiden, privémeldingen die medicijnnamen van het toegangsscherm houden, en een taalkiezer in de app.</string>
+    <string name="release_bullet_refills">Bij aanvullen zie je de nieuwe voorraad vóór je bevestigt, en genoteerde tijden kun je achteraf corrigeren.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">ochtend,ontbijt</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">middag,lunch</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">avond,avondeten</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">bedtijd,voor het slapen</string>
+    <string name="parse_meal_before" tools:ignore="Typos">voor het eten,voor de maaltijd,voor het ontbijt,voor de lunch,voor het avondeten</string>
+    <string name="parse_meal_after" tools:ignore="Typos">na het eten,na de maaltijd,na het ontbijt,na de lunch,na het avondeten</string>
+    <string name="parse_meal_with" tools:ignore="Typos">bij de maaltijd,met eten</string>
+    <string name="parse_twice" tools:ignore="Typos">twee keer,tweemaal</string>
+    <string name="parse_unit_day" tools:ignore="Typos">dag,dagen</string>
+    <string name="parse_unit_week" tools:ignore="Typos">week,weken</string>
+    <string name="parse_unit_month" tools:ignore="Typos">maand,maanden</string>
+    <string name="parse_marker_am" tools:ignore="Typos">\'s ochtends,voormiddag</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">\'s middags,\'s avonds</string>
+    <string name="parse_stopwords" tools:ignore="Typos">elke,iedere,twee keer,een keer,dagelijks,neem,innemen,met,voor,na,ochtend,nacht,avond,middag,bed,bedtijd,lunch,avondeten,ontbijt,maaltijd,maaltijden,de,het,en</string>
+</resources>

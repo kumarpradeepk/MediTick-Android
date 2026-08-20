@@ -23,6 +23,12 @@ class MainActivity : ComponentActivity() {
         NotificationScheduler.scheduleAll(this)
     }
 
+    /// Applies the in-app language before any resource is resolved.
+    override fun attachBaseContext(base: android.content.Context) {
+        val tag = SettingsStore.get(base).languageTag
+        super.attachBaseContext(LocaleSupport.wrap(base, tag))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

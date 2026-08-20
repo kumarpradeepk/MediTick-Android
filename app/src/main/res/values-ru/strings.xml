@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ru translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">Прогресс за сегодня и следующий приём</string>
+    <string name="channel_dose_name">Напоминания о дозах</string>
+    <string name="channel_dose_description">Уведомления в назначенное время приёма</string>
+    <string name="channel_follow_up_name">Повторные напоминания</string>
+    <string name="channel_follow_up_description">Мягкое напоминание, если приём ещё не отмечен</string>
+    <string name="channel_refill_name">Напоминания о пополнении</string>
+    <string name="channel_refill_description">Уведомления, когда отслеживаемый запас подходит к концу</string>
+    <string name="notif_hidden_medication">ваш препарат</string>
+    <string name="notif_title_still_waiting">Ещё не принято: %1$s</string>
+    <string name="notif_title_running_low">Запас на исходе: %1$s</string>
+    <string name="notif_title_time_for">Пора принять %1$s</string>
+    <string name="notif_body_nudge">Этот приём ещё не отмечен. Одно касание — и готово.</string>
+    <string name="notif_body_snooze">Отложенный приём снова напоминает о себе.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="one">Осталось примерно на %1$d день. Пора пополнить запас.</item>
+        <item quantity="few">Осталось примерно на %1$d дня. Пора пополнить запас.</item>
+        <item quantity="many">Осталось примерно на %1$d дней. Пора пополнить запас.</item>
+        <item quantity="other">Осталось примерно на %1$d дня. Пора пополнить запас.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Запас ниже уровня пополнения.</string>
+    <string name="notif_body_hidden">Откройте MediTick, чтобы посмотреть и отметить этот приём.</string>
+    <string name="action_take">Принять</string>
+    <string name="action_skip">Отменить</string>
+    <string name="action_snooze_minutes">Отложить на %1$d мин</string>
+    <string name="widget_doses_ticked">%1$d из %2$d приёмов отмечено</string>
+    <string name="widget_header">MEDITICK · СЕГОДНЯ</string>
+    <string name="widget_no_doses_today">Сегодня приёмов нет</string>
+    <string name="widget_all_done_today">На сегодня всё</string>
+    <string name="widget_all_caught_up">Вы всё успели</string>
+    <string name="billing_products_missing">Подключите продукты «monthly», «yearly» и «lifetime» в Google Play Console.</string>
+    <string name="billing_plan_lifetime">Навсегда</string>
+    <string name="billing_plan_yearly">На год</string>
+    <string name="billing_plan_monthly">На месяц</string>
+    <string name="billing_tag_one_time">Разовая покупка</string>
+    <string name="billing_tag_best_value">Самое выгодное</string>
+    <string name="billing_tag_flexible">Гибкая оплата</string>
+    <string name="billing_checking_purchases">Проверяем ваши покупки…</string>
+    <string name="billing_restored">Покупки восстановлены — с возвращением.</string>
+    <string name="billing_none_found">Активных покупок не найдено.</string>
+    <string name="billing_pro_unlocked">Добро пожаловать в MediTick Pro — всё открыто.</string>
+    <string name="meal_breakfast">Завтрак</string>
+    <string name="meal_lunch">Обед</string>
+    <string name="meal_dinner">Ужин</string>
+    <string name="meal_bedtime">Перед сном</string>
+    <string name="meal_breakfast_inline">завтрака</string>
+    <string name="meal_lunch_inline">обеда</string>
+    <string name="meal_dinner_inline">ужина</string>
+    <string name="meal_bedtime_inline">сна</string>
+    <string name="anchor_at_bedtime">Перед сном</string>
+    <string name="anchor_with">Во время: %1$s</string>
+    <string name="anchor_before">До: %1$s</string>
+    <string name="anchor_after">После: %1$s</string>
+    <string name="anchor_before_offset">За %1$d мин до: %2$s</string>
+    <string name="anchor_after_offset">Через %1$d мин после: %2$s</string>
+    <string name="anchor_fixed_time">Точное время</string>
+    <string name="form_pill">Таблетка</string>
+    <string name="form_capsule">Капсула</string>
+    <string name="form_tablet">Таблетка</string>
+    <string name="form_liquid">Жидкость</string>
+    <string name="form_drops">Капля</string>
+    <string name="form_injection">Инъекция</string>
+    <string name="form_patch">Пластырь</string>
+    <string name="form_cream">Крем</string>
+    <string name="form_inhaler">Ингалятор</string>
+    <string name="form_powder">Порошок</string>
+    <string name="form_gummy">Пастилка</string>
+    <string name="form_spray">Спрей</string>
+    <string name="form_other">Другое</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="one">таблетка</item>
+        <item quantity="few">таблетки</item>
+        <item quantity="many">таблеток</item>
+        <item quantity="other">таблетки</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="one">капсула</item>
+        <item quantity="few">капсулы</item>
+        <item quantity="many">капсул</item>
+        <item quantity="other">капсулы</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="one">таблетка</item>
+        <item quantity="few">таблетки</item>
+        <item quantity="many">таблеток</item>
+        <item quantity="other">таблетки</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="one">мл</item>
+        <item quantity="few">мл</item>
+        <item quantity="many">мл</item>
+        <item quantity="other">мл</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">капля</item>
+        <item quantity="few">капли</item>
+        <item quantity="many">капель</item>
+        <item quantity="other">капли</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="one">инъекция</item>
+        <item quantity="few">инъекции</item>
+        <item quantity="many">инъекций</item>
+        <item quantity="other">инъекции</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="one">пластырь</item>
+        <item quantity="few">пластыря</item>
+        <item quantity="many">пластырей</item>
+        <item quantity="other">пластыря</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="one">нанесение</item>
+        <item quantity="few">нанесения</item>
+        <item quantity="many">нанесений</item>
+        <item quantity="other">нанесения</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="one">вдох</item>
+        <item quantity="few">вдоха</item>
+        <item quantity="many">вдохов</item>
+        <item quantity="other">вдоха</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">мерная ложка</item>
+        <item quantity="few">мерные ложки</item>
+        <item quantity="many">мерных ложек</item>
+        <item quantity="other">мерные ложки</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="one">пастилка</item>
+        <item quantity="few">пастилки</item>
+        <item quantity="many">пастилок</item>
+        <item quantity="other">пастилки</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="one">впрыск</item>
+        <item quantity="few">впрыска</item>
+        <item quantity="many">впрысков</item>
+        <item quantity="other">впрыска</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="one">доза</item>
+        <item quantity="few">дозы</item>
+        <item quantity="many">доз</item>
+        <item quantity="other">дозы</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="one">%1$d раз/день</item>
+        <item quantity="few">%1$d раза/день</item>
+        <item quantity="many">%1$d раз/день</item>
+        <item quantity="other">%1$d раза/день</item>
+    </plurals>
+    <string name="schedule_no_times_set">Время не задано</string>
+    <string name="schedule_interval">Каждые %1$d ч, %2$s – %3$s</string>
+    <string name="schedule_as_needed">По необходимости</string>
+    <string name="schedule_when_needed">Когда нужно</string>
+    <string name="schedule_every_day">Каждый день</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="one">Каждый %1$d-й день</item>
+        <item quantity="few">Каждые %1$d дня</item>
+        <item quantity="many">Каждые %1$d дней</item>
+        <item quantity="other">Каждые %1$d дня</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d дней приёма, %2$d перерыва"</string>
+    <string name="inventory_not_tracked">Не отслеживается</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_done">Готово</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_ok">ОК</string>
+    <string name="action_add">Добавить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_edit">Изменить</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_back">Назад</string>
+    <string name="action_continue">Продолжить</string>
+    <string name="action_try_again">Повторить</string>
+    <string name="action_get_started">Начать</string>
+    <string name="action_snooze">Отложить</string>
+    <string name="action_log_dose">Отметить дозу</string>
+    <string name="action_take_now">Принять сейчас</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">Сегодня</string>
+    <string name="tab_treatments">Лечение</string>
+    <string name="tab_progress">Прогресс</string>
+    <string name="tab_settings">Настройки</string>
+    <string name="onboarding_badge">"  ПРИВАТНО · БЕЗ АККАУНТА · БЕСПЛАТНО  "</string>
+    <string name="onboarding_headline">Больше никогда\nне пропускайте приём.</string>
+    <string name="onboarding_subhead">Мягкие напоминания, умные расписания и дневное кольцо, которое заполняется, пока вы заботитесь о себе.</string>
+    <string name="onboarding_feature_sentence">Введите фразу — получите расписание</string>
+    <string name="onboarding_feature_meals">Напоминания подстраиваются под ваши приёмы пищи</string>
+    <string name="onboarding_feature_private">Данные о здоровье не покидают ваш телефон</string>
+    <string name="onboarding_setup_label">Настройка за 30 секунд</string>
+    <string name="onboarding_question">Что привело вас в MediTick?</string>
+    <string name="onboarding_choose_all">Отметьте всё, что подходит. Позже это можно изменить.</string>
+    <string name="onboarding_purpose_doses">Помнить о каждом приёме</string>
+    <string name="onboarding_purpose_doses_sub">Спокойные и надёжные напоминания</string>
+    <string name="onboarding_purpose_meals">Подстроиться под еду</string>
+    <string name="onboarding_purpose_meals_sub">До, во время или после еды</string>
+    <string name="onboarding_purpose_streak">Собрать серию</string>
+    <string name="onboarding_purpose_streak_sub">Видеть прогресс без чувства вины</string>
+    <string name="onboarding_purpose_refills">Следить за запасом</string>
+    <string name="onboarding_purpose_refills_sub">Узнать заранее, что запас кончается</string>
+    <string name="onboarding_no_signup">Без регистрации. Без почты. Данные о здоровье остаются на этом устройстве.</string>
+    <string name="onboarding_build_routine">Собрать мой распорядок</string>
+    <string name="today_empty_title">Давайте соберём ваш распорядок</string>
+    <string name="today_empty_body">Опишите препарат так, как сказали бы вслух, — MediTick превратит это в расписание, напоминания и дневное кольцо.</string>
+    <string name="today_add_first">Добавьте первый препарат</string>
+    <string name="today_takes_30_seconds">Займёт около 30 секунд.</string>
+    <string name="today_greeting_morning">Доброе утро</string>
+    <string name="today_greeting_afternoon">Добрый день</string>
+    <string name="today_greeting_evening">Добрый вечер</string>
+    <string name="today_add_new">Добавить</string>
+    <string name="today_take_all">Отметить все</string>
+    <string name="today_when_you_need_it">По необходимости</string>
+    <string name="today_no_doses_logged">Сегодня ничего не отмечено</string>
+    <plurals name="today_taken_today">
+        <item quantity="one">%1$d принята сегодня</item>
+        <item quantity="few">%1$d принято сегодня</item>
+        <item quantity="many">%1$d принято сегодня</item>
+        <item quantity="other">%1$d принято сегодня</item>
+    </plurals>
+    <string name="today_ring_label">СЕГОДНЯ</string>
+    <string name="today_daily_plan">План на день</string>
+    <string name="today_left_next_up">Осталось %1$d · Далее</string>
+    <string name="today_quiet_day">Спокойный день</string>
+    <plurals name="today_doses_missed">
+        <item quantity="one">%1$d доза пропущена</item>
+        <item quantity="few">%1$d дозы пропущено</item>
+        <item quantity="many">%1$d доз пропущено</item>
+        <item quantity="other">%1$d дозы пропущено</item>
+    </plurals>
+    <string name="today_all_done">Всё готово</string>
+    <string name="today_day_complete">День завершён</string>
+    <string name="today_tap_missed">Нажмите на пропущенный приём ниже, чтобы отметить его</string>
+    <string name="today_doses_ticked">%1$d из %2$d приёмов отмечено</string>
+    <string name="today_meals_in_sync">Приёмы пищи учтены</string>
+    <string name="today_meal_summary">Завтрак %1$s · Ужин %2$s</string>
+    <string name="today_now">СЕЙЧАС · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">Утро</string>
+    <string name="daypart_midday">День</string>
+    <string name="daypart_evening">Вечер</string>
+    <string name="daypart_bedtime">Перед сном</string>
+    <string name="dose_note_optional">Заметка (необязательно)</string>
+    <string name="dose_mark_as_taken">Отметить как принятое</string>
+    <string name="dose_undo_taken">Отменить приём</string>
+    <string name="dose_undo_skipped">Вернуть пропуск</string>
+    <string name="dose_as_needed_title">Приём по необходимости</string>
+    <string name="dose_amount_label">Количество (%1$s)</string>
+    <string name="dose_log_title">Отметить дозу</string>
+    <string name="dose_logged_time">Отмечено в %1$s</string>
+    <string name="state_taken">Принято</string>
+    <string name="state_skipped">Отменено</string>
+    <string name="state_missed">Пропущено</string>
+    <string name="state_upcoming">Впереди</string>
+    <string name="state_due">Пора принять</string>
+    <string name="state_on_time">Вовремя</string>
+    <string name="state_early">Раньше</string>
+    <string name="state_late">Позже</string>
+    <string name="progress_title">Прогресс</string>
+    <string name="progress_empty_title">Ваша история скоро начнётся</string>
+    <string name="progress_empty_body">Добавьте препарат и отметьте первые дозы — здесь появятся серии, показатели и тренды.</string>
+    <string name="progress_range_week">7 дней</string>
+    <string name="progress_range_all">Всё время</string>
+    <string name="progress_range_label_all">Всё время</string>
+    <string name="progress_range_label_week">Последние 7 дней</string>
+    <string name="progress_ring_label">СОБЛЮДЕНИЕ</string>
+    <string name="progress_metric_on_time">Вовремя</string>
+    <string name="progress_metric_window">±%1$d мин</string>
+    <string name="progress_metric_streak">Дней подряд</string>
+    <string name="progress_metric_best">Рекорд %1$d</string>
+    <string name="progress_insight_label">Наблюдение</string>
+    <string name="progress_insight_refill">Скоро понадобится пополнение. %1$s ниже порога оповещения.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="one">За этот период пропущена %1$d доза. В загруженные дни поможет повторное напоминание.</item>
+        <item quantity="few">За этот период пропущено %1$d дозы. В загруженные дни поможет повторное напоминание.</item>
+        <item quantity="many">За этот период пропущено %1$d доз. В загруженные дни поможет повторное напоминание.</item>
+        <item quantity="other">За этот период пропущено %1$d дозы. В загруженные дни поможет повторное напоминание.</item>
+    </plurals>
+    <string name="progress_insight_skipped">Пропущенный приём — часть пути, а не провал. Продолжайте отмечать, и динамика останется полезной.</string>
+    <string name="progress_insight_calm">Спокойная и ровная неделя. Каждая маленькая отметка держит ваш распорядок.</string>
+    <string name="progress_patterns_label">Закономерности</string>
+    <string name="progress_pattern_hardest">Сложнее всего даётся %1$s</string>
+    <string name="progress_pattern_detail">%1$d из %2$d пропущенных приёмов пришлись на время «%3$s».</string>
+    <string name="progress_calendar_all_days">Календарь за всё время</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">Записи · %1$s</string>
+    <string name="progress_previous_month">Предыдущий месяц</string>
+    <string name="progress_next_month">Следующий месяц</string>
+    <string name="progress_nothing_scheduled">В этот день ничего не запланировано.</string>
+    <string name="progress_as_needed_log">По необходимости · %1$s</string>
+    <string name="progress_generic_medication">Препарат</string>
+    <string name="progress_delete_log">Удалить запись</string>
+    <string name="progress_detail_timing_title">Подробнее о точности</string>
+    <string name="progress_detail_streak_title">Подробнее о серии</string>
+    <string name="progress_detail_adherence_title">Подробнее о соблюдении</string>
+    <string name="progress_detail_no_taken">За этот период принятых доз пока нет.</string>
+    <string name="progress_detail_on_time_rate">%1$s принятых доз уложились в ±%2$d минут.</string>
+    <string name="progress_detail_breakdown">%1$d раньше · %2$d вовремя · %3$d позже · %4$d пропущено</string>
+    <string name="progress_detail_choose_window">Выберите допуск для этого показателя:</string>
+    <string name="progress_detail_streak_line">%1$d дней подряд · рекорд %2$d дней</string>
+    <string name="progress_detail_streak_body">День входит в серию, если в нём был хотя бы один запланированный приём, все положенные дозы приняты и ни одна не пропущена и не отменена.</string>
+    <string name="progress_detail_adherence_rate">%1$s соблюдения</string>
+    <string name="progress_detail_counts">%1$d запланировано · %2$d принято · %3$d отменено · %4$d пропущено · %5$d впереди</string>
+    <string name="progress_detail_adherence_body">Соблюдение считает принятые дозы среди тех, по которым уже есть результат. Будущие дозы не снижают показатель.</string>
+    <string name="progress_detail_needs_attention">Требует внимания</string>
+    <string name="progress_detail_no_attention">За этот период нет отменённых или пропущенных доз.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">Аптечка</string>
+    <string name="care_add">+ Добавить</string>
+    <string name="care_filter_all">Все</string>
+    <string name="care_filter_medications">Препараты</string>
+    <string name="care_filter_prescriptions">Рецепты</string>
+    <string name="status_active">Активно</string>
+    <string name="status_completed">Завершено</string>
+    <string name="status_archived">В архиве</string>
+    <string name="status_treatment">Лечение: %1$s</string>
+    <string name="care_empty_title">Ваша аптечка пуста</string>
+    <string name="care_empty_body">Добавьте рецепт или отдельный препарат — дневной план соберётся сам.</string>
+    <string name="care_section_prescriptions">Мои рецепты</string>
+    <string name="care_section_medications">Препараты</string>
+    <string name="care_section_standalone">Отдельные препараты</string>
+    <string name="care_archived_count">В архиве (%1$d)</string>
+    <string name="care_what_adding">Что добавим?</string>
+    <string name="care_mode_prescription">Рецепт</string>
+    <string name="care_mode_prescription_sub">План лечения из одного или нескольких препаратов</string>
+    <string name="care_mode_single">Отдельный препарат</string>
+    <string name="care_mode_single_sub">Добавить сразу в план на день</string>
+    <plurals name="care_medication_count">
+        <item quantity="one">%1$d препарат</item>
+        <item quantity="few">%1$d препарата</item>
+        <item quantity="many">%1$d препаратов</item>
+        <item quantity="other">%1$d препарата</item>
+    </plurals>
+    <string name="care_stock_left">Осталось: %1$s</string>
+    <string name="detail_next_dose">Следующий приём</string>
+    <string name="detail_as_needed">По необходимости</string>
+    <string name="detail_schedule">Расписание</string>
+    <string name="detail_amount_per_dose">Количество на дозу</string>
+    <string name="detail_supply">Запас</string>
+    <string name="detail_supply_remaining">Осталось %1$s</string>
+    <string name="detail_supply_alert">Оповещать при %1$s</string>
+    <string name="detail_supply_alert_days">Оповещать при %1$s · Хватит примерно на %2$d дней</string>
+    <string name="detail_supply_untracked">Запас не отслеживается</string>
+    <string name="detail_supply_enable">Включите отслеживание при редактировании препарата</string>
+    <string name="detail_refill">+ Пополнить</string>
+    <string name="detail_recent_history">Недавняя история</string>
+    <string name="detail_history_as_needed">Приём по необходимости</string>
+    <string name="detail_view_medication_logs">История приёма препарата</string>
+    <string name="detail_view_medication_logs_sub">Полная история принятых и пропущенных доз</string>
+    <string name="detail_restore_medication">Восстановить препарат</string>
+    <string name="detail_archive_medication">Отправить препарат в архив</string>
+    <string name="detail_delete_medication">Удалить препарат</string>
+    <string name="confirm_delete_medication_title">Удалить %1$s?</string>
+    <string name="confirm_delete_medication_body">История приёма тоже будет удалена. Это действие необратимо.</string>
+    <string name="confirm_archive_medication_title">Отправить %1$s в архив?</string>
+    <string name="confirm_archive_medication_body">Будущие напоминания прекратятся. Препарат можно будет вернуть из архива позже.</string>
+    <string name="refill_title">Пополнить запас</string>
+    <string name="refill_units_label">Сколько добавить</string>
+    <string name="logs_title">История: %1$s</string>
+    <string name="rx_prescribed_by">Назначил(а) %1$s</string>
+    <string name="rx_period_ongoing">%1$s · Продолжается</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">Добавить препарат</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">Новый или существующий</string>
+    <string name="rx_progress_and_logs">Прогресс и история</string>
+    <string name="rx_no_decided">Пока нет завершённых приёмов</string>
+    <string name="rx_adherence">%1$s соблюдения</string>
+    <string name="rx_counts">%1$d принято · %2$d отменено · %3$d пропущено</string>
+    <string name="rx_on_time">%1$s вовремя</string>
+    <string name="rx_no_taken">Пока нет принятых доз</string>
+    <string name="rx_within_window">В пределах ±%1$d минут</string>
+    <string name="rx_view_logs">История по рецепту</string>
+    <string name="rx_view_logs_sub">Принятые, отменённые и по необходимости</string>
+    <string name="rx_notes">Заметки</string>
+    <string name="rx_mark_complete">Отметить как завершённый</string>
+    <string name="rx_archive">Отправить рецепт в архив</string>
+    <string name="rx_reactivate">Возобновить рецепт</string>
+    <string name="rx_restore">Восстановить рецепт</string>
+    <string name="rx_delete">Удалить рецепт</string>
+    <string name="rx_confirm_complete_title">Отметить как завершённый?</string>
+    <string name="rx_confirm_complete_body">Будущие напоминания по связанным препаратам прекратятся.</string>
+    <string name="rx_confirm_archive_title">Отправить рецепт в архив?</string>
+    <string name="rx_confirm_archive_body">Рецепт и связанные препараты уйдут в архив. Позже их можно вернуть.</string>
+    <string name="rx_confirm_reactivate_title">Возобновить рецепт?</string>
+    <string name="rx_confirm_reactivate_body">Курс снова станет активным, и напоминания вернутся. Препараты, завершённые по отдельности, останутся завершёнными.</string>
+    <string name="rx_confirm_restore_title">Восстановить рецепт?</string>
+    <string name="rx_confirm_restore_body">Вернутся только препараты, изменённые этим рецептом; те, что вы убрали в архив сами, там и останутся.</string>
+    <string name="rx_action_complete">Полностью</string>
+    <string name="rx_action_archive">В архив</string>
+    <string name="rx_action_reactivate">Возобновить</string>
+    <string name="rx_action_restore">Восстановить</string>
+    <string name="rx_confirm_delete_title">Удалить этот рецепт?</string>
+    <string name="rx_confirm_delete_body">Его препараты останутся в вашей аптечке как отдельные препараты.</string>
+    <string name="rx_add_new_medication">Новый препарат</string>
+    <string name="rx_add_new_medication_sub">Создать и привязать новое напоминание</string>
+    <string name="rx_add_existing">Существующие препараты</string>
+    <string name="rx_add_existing_sub">Привязать отдельный препарат</string>
+    <string name="rx_no_standalone">Отдельных препаратов нет.</string>
+    <string name="rx_editor_new">Новый рецепт</string>
+    <string name="rx_editor_edit">Изменить рецепт</string>
+    <string name="rx_field_plan_name">Название плана</string>
+    <string name="rx_field_condition">Диагноз</string>
+    <string name="rx_field_prescriber">Кто назначил</string>
+    <string name="rx_field_facility">Учреждение / клиника</string>
+    <string name="rx_field_contact">Контакт</string>
+    <string name="rx_field_notes">Заметки</string>
+    <string name="rx_start">Начало · %1$s</string>
+    <string name="rx_end">Окончание · %1$s</string>
+    <string name="rx_ongoing">Постоянный приём</string>
+    <plurals name="rx_update_linked">
+        <item quantity="one">Обновить %1$d препарат</item>
+        <item quantity="few">Обновить %1$d препарата</item>
+        <item quantity="many">Обновить %1$d препаратов</item>
+        <item quantity="other">Обновить %1$d препарата</item>
+    </plurals>
+    <string name="rx_apply_dates">Применить эти даты к связанным расписаниям</string>
+    <string name="logs_empty">Пока не отмечено ни одного приёма.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">Добавить препарат</string>
+    <string name="form_edit_title">Изменить препарат</string>
+    <string name="form_step">Шаг %1$d из 3</string>
+    <string name="form_add_to_routine">Добавить в распорядок</string>
+    <string name="form_save_changes">Сохранить изменения</string>
+    <string name="form_duplicate_title">Такой препарат уже есть</string>
+    <string name="form_duplicate_body">Препарат «%1$s» с такой дозировкой уже существует.</string>
+    <string name="describe_label">Скажите своими словами</string>
+    <string name="describe_question">Что вы принимаете?</string>
+    <string name="describe_hint">Попробуйте «Metformin 500mg every morning with food».</string>
+    <string name="describe_placeholder">Препарат, дозировка и когда вы его принимаете…</string>
+    <string name="describe_examples">Примеры</string>
+    <string name="describe_understood">MediTick понял</string>
+    <string name="basics_label">Основное</string>
+    <string name="basics_headline">Сделайте его узнаваемым</string>
+    <string name="basics_field_name">Название препарата</string>
+    <string name="basics_no_prescription">Нет (отдельный)</string>
+    <string name="basics_field_strength">Дозировка</string>
+    <string name="basics_section_form">Форма выпуска</string>
+    <string name="basics_field_instructions">Указания (необязательно)</string>
+    <string name="basics_track_supply">Следить за запасом</string>
+    <string name="basics_track_supply_sub">Пополняйте, пока не закончилось</string>
+    <string name="basics_field_stock">В наличии</string>
+    <string name="basics_field_alert">Оповещать при</string>
+    <string name="rhythm_label">Ваш ритм</string>
+    <string name="rhythm_headline">Когда вам удобно?</string>
+    <string name="rhythm_every_day">Каждый день</string>
+    <string name="rhythm_every_day_sub">Одно время, ежедневно</string>
+    <string name="rhythm_specific">Выбранные дни</string>
+    <string name="rhythm_specific_sub">Выбрать дни недели</string>
+    <string name="rhythm_every_other">Через день</string>
+    <string name="rhythm_every_other_sub">День приёма, день перерыва</string>
+    <string name="rhythm_interval">Интервал</string>
+    <string name="rhythm_interval_sub">Каждые N календарных дней</string>
+    <string name="rhythm_cyclic">Циклами</string>
+    <string name="rhythm_cyclic_sub">Дни приёма, затем перерыв</string>
+    <string name="rhythm_as_needed">По необходимости</string>
+    <string name="rhythm_as_needed_sub">Без чёткого расписания</string>
+    <string name="rhythm_section_days">Дни</string>
+    <string name="rhythm_days_on">Дней приёма</string>
+    <string name="rhythm_days_off">Дней перерыва</string>
+    <string name="rhythm_repeat_every">Повторять каждые N дней</string>
+    <string name="rhythm_section_doses">Приёмы</string>
+    <string name="rhythm_add_dose">Добавить приём</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">Напоминания привязаны к еде</string>
+    <string name="rhythm_meal_auto">Изменение времени приёмов пищи обновляет напоминания автоматически</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">Синхронно со временем напоминаний</string>
+    <string name="rhythm_amount_per_dose">Количество на дозу</string>
+    <string name="rhythm_start_date">Начало · %1$s</string>
+    <string name="rhythm_ongoing">Постоянный приём</string>
+    <string name="rhythm_no_end_date">Без даты окончания</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="one">Курс на %1$d день</item>
+        <item quantity="few">Курс на %1$d дня</item>
+        <item quantity="many">Курс на %1$d дней</item>
+        <item quantity="other">Курс на %1$d дня</item>
+    </plurals>
+    <string name="dose_add_hint">Выберите точное время или начните с привычного.</string>
+    <string name="dose_custom_time">Своё время</string>
+    <string name="dose_edit_title">Изменить приём</string>
+    <string name="dose_section_amount">Количество</string>
+    <string name="dose_decrease">Уменьшить дозу</string>
+    <string name="dose_increase">Увеличить дозу</string>
+    <string name="dose_section_timing">Время</string>
+    <string name="dose_relation_fixed">Точное время</string>
+    <string name="dose_relation_before">До еды</string>
+    <string name="dose_relation_with">Во время еды</string>
+    <string name="dose_relation_after">После еды</string>
+    <string name="dose_reminder_time">Напоминание в %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="one">За %1$d минуту до еды</item>
+        <item quantity="few">За %1$d минуты до еды</item>
+        <item quantity="many">За %1$d минут до еды</item>
+        <item quantity="other">За %1$d минуты до еды</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="one">Через %1$d минуту после еды</item>
+        <item quantity="few">Через %1$d минуты после еды</item>
+        <item quantity="many">Через %1$d минут после еды</item>
+        <item quantity="other">Через %1$d минуты после еды</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s в %2$s · изменение времени приёмов пищи обновляет напоминания автоматически</string>
+    <string name="dose_remove">Убрать приём</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_pro_active">Pro активен</string>
+    <string name="settings_pro_thanks">Спасибо за поддержку</string>
+    <string name="settings_unlock_pro">Откройте MediTick Pro</string>
+    <string name="settings_unlock_pro_sub">Привязка к еде, повторные напоминания, полная история и препараты без ограничений</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">Параметры</string>
+    <string name="settings_group_notifications">Уведомления</string>
+    <string name="settings_group_data">Ваши данные</string>
+    <string name="settings_group_community">Сообщество</string>
+    <string name="settings_group_about">О приложении</string>
+    <string name="settings_redeem">Активировать код</string>
+    <string name="settings_redeem_sub">Откройте Pro по промокоду Google Play</string>
+    <string name="settings_join_community">Присоединиться к сообществу MediTick</string>
+    <string name="settings_join_community_sub">Распорядки, вопросы и планы на будущее</string>
+    <string name="settings_appearance">Оформление</string>
+    <string name="settings_appearance_summary">%1$s · акцент «%2$s»</string>
+    <string name="settings_appearance_mode">Режим</string>
+    <string name="settings_appearance_accent">Акцент</string>
+    <string name="appearance_auto">Авто</string>
+    <string name="appearance_daylight">День</string>
+    <string name="appearance_midnight">Полночь</string>
+    <string name="accent_aurora">Сияние</string>
+    <string name="accent_ocean">Океан</string>
+    <string name="accent_orchid">Орхидея</string>
+    <string name="accent_ember">Уголёк</string>
+    <string name="settings_meal_times">Время приёмов пищи</string>
+    <string name="settings_meal_times_sub">Завтрак · Обед · Ужин · Перед сном</string>
+    <string name="settings_widgets">Виджеты</string>
+    <string name="settings_widgets_sub">Главный экран и поддерживаемые варианты на экране блокировки</string>
+    <string name="settings_dose_presets">Стандартное время доз</string>
+    <string name="settings_dose_presets_sub">Утро · День · Вечер · Перед сном</string>
+    <string name="settings_dose_presets_restore">Вернуть время по умолчанию</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system">Системный</string>
+    <string name="settings_system_language">Языковые настройки системы</string>
+    <string name="settings_system_language_sub">Открыть настройку языка приложения в Android</string>
+    <string name="settings_haptics">Тактильный отклик</string>
+    <string name="settings_haptics_sub">Лёгкие отклики при взаимодействии</string>
+    <string name="settings_notif_permission">Разрешение на уведомления</string>
+    <string name="settings_notif_permission_sub">Нажмите, чтобы разрешить напоминания</string>
+    <string name="settings_notif_status">Статус уведомлений</string>
+    <string name="settings_notif_status_sub">Открыть настройки уведомлений Android</string>
+    <string name="settings_dose_reminders">Напоминания о дозах</string>
+    <string name="settings_dose_reminders_sub">Уведомление для каждой дозы</string>
+    <string name="settings_follow_up">Повторное напоминание</string>
+    <string name="settings_follow_up_sub">Напоминаем, пока вы не отметите дозу</string>
+    <string name="settings_follow_up_delay">Задержка повторного напоминания</string>
+    <plurals name="settings_minutes">
+        <item quantity="one">%1$d минута</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минуты</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d мин</string>
+    <string name="settings_hide_names">Скрывать названия в уведомлениях</string>
+    <string name="settings_hide_names_sub">Названия препаратов не попадут на экран блокировки</string>
+    <string name="settings_alert_sound">Звук уведомления</string>
+    <string name="settings_urgent">Срочные напоминания</string>
+    <string name="settings_urgent_sub">Канал с высоким приоритетом; режим «Не беспокоить» всё равно может сработать</string>
+    <string name="settings_exact_alarm">Доступ к точным будильникам</string>
+    <string name="settings_exact_alarm_sub">Открыть «Будильники и напоминания» в Android</string>
+    <string name="settings_refill_reminders">Напоминания о пополнении</string>
+    <string name="settings_refill_reminders_sub">Оповещать, когда запас ниже порога</string>
+    <string name="settings_sound_title">Звук напоминания</string>
+    <string name="settings_sound_hint">Нажмите на звук, чтобы прослушать. Выбор применится после сохранения. Некоторые звуки доступны в MediTick Pro.</string>
+    <string name="sound_standard">MediTick (обычный)</string>
+    <string name="sound_chime">Перезвон (длинный)</string>
+    <string name="sound_bell">Колокольчик</string>
+    <string name="sound_urgent">Срочный</string>
+    <string name="sound_silent">Без звука</string>
+    <string name="settings_export">Экспорт резервной копии</string>
+    <string name="settings_export_sub">Все данные в файле JSON</string>
+    <string name="settings_import">Импорт резервной копии</string>
+    <string name="settings_import_sub">Восстановить экспорт MediTick с iOS или Android</string>
+    <string name="settings_erase">Стереть все данные</string>
+    <string name="settings_erase_sub">Все препараты, планы и записи</string>
+    <string name="settings_erase_title">Стереть всё?</string>
+    <string name="settings_erase_body">Это навсегда удалит все препараты, рецепты и историю с этого устройства.</string>
+    <string name="settings_msg_link_failed">Не удалось открыть ссылку.</string>
+    <string name="settings_msg_exported">Резервная копия сохранена.</string>
+    <string name="settings_msg_export_failed">Не удалось сохранить резервную копию.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="one">Копия восстановлена — загружен %1$d препарат.</item>
+        <item quantity="few">Копия восстановлена — загружено %1$d препарата.</item>
+        <item quantity="many">Копия восстановлена — загружено %1$d препаратов.</item>
+        <item quantity="other">Копия восстановлена — загружено %1$d препарата.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">Этот файл не похож на резервную копию MediTick.</string>
+    <string name="settings_feedback">Отправить отзыв / сообщить об ошибке</string>
+    <string name="settings_feedback_sub">Укажите устройство и как воспроизвести</string>
+    <string name="settings_feature_request">Предложить функцию</string>
+    <string name="settings_feature_request_sub">Расскажите, что сделает MediTick лучше</string>
+    <string name="settings_review">Написать отзыв</string>
+    <string name="settings_share">Поделиться MediTick</string>
+    <string name="settings_share_text">MediTick — больше ни одной пропущенной дозы. Таймер таблеток, напоминания и учёт.</string>
+    <string name="settings_community_title">Вы в этом не одни</string>
+    <string name="settings_community_body">Обменивайтесь распорядками с другими пользователями MediTick, задавайте вопросы, сообщайте об ошибках и узнавайте о новинках первыми.</string>
+    <string name="settings_website">Сайт</string>
+    <string name="settings_whats_new">Что нового</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">Политика конфиденциальности</string>
+    <string name="settings_privacy_sub">Как MediTick обращается с вашими данными</string>
+    <string name="settings_terms">Условия использования</string>
+    <string name="settings_terms_sub">Ограничения приложения-напоминалки</string>
+    <string name="settings_about">О MediTick</string>
+    <string name="settings_version">Версия %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · Ваши данные о здоровье остаются на этом устройстве.\nИнструмент напоминаний, а не медицинская консультация.</string>
+    <string name="info_widgets_title">Виджеты</string>
+    <string name="info_widgets_body">Добавьте MediTick через выбор виджетов на главном экране. Поддержка виджетов на экране блокировки зависит от версии Android и производителя устройства и не включается автоматически. Текущий виджет показывает прогресс за сегодня и следующий приём; отметка по-прежнему открывает приложение.</string>
+    <string name="info_privacy_title">Конфиденциальность</string>
+    <string name="info_privacy_body">Данные о препаратах, расписания и история хранятся на этом устройстве. Экспорт происходит только по вашему решению. Google Play обрабатывает покупки; Android доставляет уведомления.</string>
+    <string name="info_terms_title">Условия использования</string>
+    <string name="info_terms_body">MediTick — инструмент напоминаний и личных записей, а не медицинская консультация. Всегда следуйте указаниям врача и обращайтесь к специалисту с вопросами о лекарствах.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\nПриватные напоминания о приёме лекарств для Android, работающие без сети.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">Больше не гадайте: «я это принял?»</string>
+    <string name="paywall_feature_alerts">Уведомления, которые держат распорядок на виду</string>
+    <string name="paywall_feature_follow_ups">Повторные напоминания, пока каждый приём не отмечен</string>
+    <string name="paywall_feature_unlimited">Препараты и рецепты без ограничений</string>
+    <string name="paywall_feature_insights">Серии, наблюдения и виджеты</string>
+    <string name="paywall_loading">Загружаем планы Google Play…</string>
+    <string name="paywall_unavailable">Планы подписки недоступны.</string>
+    <string name="paywall_upgrade">Перейти на Pro</string>
+    <string name="paywall_lifetime_note">Один платёж. Pro навсегда.</string>
+    <string name="paywall_renew_note">Продлевается автоматически. Отменить можно в любой момент в Google Play.</string>
+    <string name="paywall_restore">Восстановить покупки</string>
+    <string name="add_sheet_title">Добавить</string>
+    <string name="add_sheet_prescription">Создать рецепт</string>
+    <string name="add_sheet_prescription_sub">Группа регулярных препаратов</string>
+    <string name="add_sheet_medication">Добавить препарат</string>
+    <string name="add_sheet_medication_sub">Создать напоминание для одного препарата</string>
+    <string name="release_latest">Последняя версия</string>
+    <string name="release_lead">Это обновление уравнивает MediTick на iPhone и Android по возможностям:</string>
+    <string name="release_bullet_filters">Лечение теперь фильтруется по типу и по статусу: активно, завершено или в архиве.</string>
+    <string name="release_bullet_prescriptions">Рецепты хранят врача, клинику, контакт, диагноз и период лечения, их можно завершить, убрать в архив или восстановить.</string>
+    <string name="release_bullet_per_dose">У каждого приёма может быть своё количество и своя связь с едой: один препарат может быть и строго в 08:00, и за 30 минут до ужина.</string>
+    <string name="release_bullet_shapes">Новые схемы: каждые N дней и циклы приём/перерыв, помимо выбранных дней и приёма по необходимости.</string>
+    <string name="release_bullet_take_all">«Отметить все» закрывает целую группу по времени одним касанием.</string>
+    <string name="release_bullet_progress">В прогрессе появился календарь за всё время с переходом по месяцам, а также пояснения о соблюдении, точности и сериях.</string>
+    <string name="release_bullet_sounds">Звуки напоминаний, приватные уведомления без названий препаратов на экране блокировки и выбор языка внутри приложения.</string>
+    <string name="release_bullet_refills">Пополнение показывает итоговый запас до подтверждения, а отмеченное время можно поправить задним числом.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">утро,утром,завтрак</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">полдень,обед</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">вечер,вечером,ужин,ночь</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">перед сном,на ночь</string>
+    <string name="parse_meal_before" tools:ignore="Typos">перед едой,до еды,перед завтраком,перед обедом,перед ужином</string>
+    <string name="parse_meal_after" tools:ignore="Typos">после еды,после завтрака,после обеда,после ужина</string>
+    <string name="parse_meal_with" tools:ignore="Typos">во время еды,с едой</string>
+    <string name="parse_twice" tools:ignore="Typos">два раза,дважды</string>
+    <string name="parse_unit_day" tools:ignore="Typos">день,дня,дней</string>
+    <string name="parse_unit_week" tools:ignore="Typos">неделя,недели,недель</string>
+    <string name="parse_unit_month" tools:ignore="Typos">месяц,месяца,месяцев</string>
+    <string name="parse_marker_am" tools:ignore="Typos">утра</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">вечера</string>
+    <string name="parse_stopwords" tools:ignore="Typos">каждый,каждые,два раза,один раз,ежедневно,принимать,принять,с,перед,до,после,утро,ночь,вечер,полдень,сон,обед,ужин,завтрак,еда,еды,и</string>
+</resources>

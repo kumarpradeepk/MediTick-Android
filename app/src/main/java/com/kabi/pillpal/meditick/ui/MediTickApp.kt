@@ -18,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.annotation.StringRes
+import com.kabi.pillpal.meditick.R
 import androidx.compose.ui.unit.dp
 import com.kabi.pillpal.meditick.billing.BillingManager
 import com.kabi.pillpal.meditick.data.AppRepository
@@ -33,11 +36,11 @@ private sealed interface Route {
     data object Paywall : Route
 }
 
-private enum class MainTab(val title: String, val selected: ImageVector, val idle: ImageVector) {
-    TODAY("Today", Icons.Filled.Home, Icons.Outlined.Home),
-    CARE("Treatments", Icons.Filled.Medication, Icons.Outlined.Medication),
-    PROGRESS("Progress", Icons.Filled.BarChart, Icons.Outlined.BarChart),
-    SETTINGS("Settings", Icons.Filled.Tune, Icons.Outlined.Tune),
+private enum class MainTab(@StringRes val title: Int, val selected: ImageVector, val idle: ImageVector) {
+    TODAY(R.string.tab_today, Icons.Filled.Home, Icons.Outlined.Home),
+    CARE(R.string.tab_treatments, Icons.Filled.Medication, Icons.Outlined.Medication),
+    PROGRESS(R.string.tab_progress, Icons.Filled.BarChart, Icons.Outlined.BarChart),
+    SETTINGS(R.string.tab_settings, Icons.Filled.Tune, Icons.Outlined.Tune),
 }
 
 @Composable
@@ -116,13 +119,13 @@ private fun MainShell(
     }
     if (showAddChoice) ModalBottomSheet(onDismissRequest = { showAddChoice = false }, containerColor = DS.colors.bg3) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
-            Text("Add New", style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
+            Text(stringResource(R.string.add_sheet_title), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink)
             Spacer(Modifier.height(14.dp))
-            AddChoiceRow(Icons.Default.Description, "Create prescription", "Group recurring medications") {
+            AddChoiceRow(Icons.Default.Description, stringResource(R.string.add_sheet_prescription), stringResource(R.string.add_sheet_prescription_sub)) {
                 showAddChoice = false; showPrescriptionEditor = true
             }
             Spacer(Modifier.height(9.dp))
-            AddChoiceRow(Icons.Default.Medication, "Add medication", "Add a single medication reminder") {
+            AddChoiceRow(Icons.Default.Medication, stringResource(R.string.add_sheet_medication), stringResource(R.string.add_sheet_medication_sub)) {
                 showAddChoice = false
                 if (billing.isPro || repository.activeMedications.isEmpty()) navigate(Route.MedicationForm()) else navigate(Route.Paywall)
             }
@@ -159,7 +162,7 @@ private fun Dock(selected: MainTab, onSelect: (MainTab) -> Unit, onAdd: () -> Un
             Modifier.padding(horizontal = 6.dp).size(58.dp).shadow(15.dp, RoundedCornerShape(22.dp))
                 .clip(RoundedCornerShape(22.dp)).background(c.gradient).clickable(onClick = onAdd),
             contentAlignment = Alignment.Center,
-        ) { Icon(Icons.Default.Add, "Add medication", tint = c.onMint, modifier = Modifier.size(27.dp)) }
+        ) { Icon(Icons.Default.Add, stringResource(R.string.add_sheet_medication), tint = c.onMint, modifier = Modifier.size(27.dp)) }
         DockItem(MainTab.PROGRESS, selected, onSelect, Modifier.weight(1f))
         DockItem(MainTab.SETTINGS, selected, onSelect, Modifier.weight(1f))
     }
@@ -177,7 +180,7 @@ private fun DockItem(item: MainTab, selected: MainTab, onSelect: (MainTab) -> Un
             Modifier.size(width = 46.dp, height = 30.dp).clip(RoundedCornerShape(12.dp))
                 .background(if (active) c.mint.copy(.13f) else androidx.compose.ui.graphics.Color.Transparent),
             contentAlignment = Alignment.Center,
-        ) { Icon(if (active) item.selected else item.idle, item.title, tint = if (active) c.mint else c.ink3, modifier = Modifier.size(20.dp)) }
-        Text(item.title, style = MaterialTheme.typography.labelSmall, color = if (active) c.mint else c.ink3)
+        ) { Icon(if (active) item.selected else item.idle, stringResource(item.title), tint = if (active) c.mint else c.ink3, modifier = Modifier.size(20.dp)) }
+        Text(stringResource(item.title), style = MaterialTheme.typography.labelSmall, color = if (active) c.mint else c.ink3)
     }
 }

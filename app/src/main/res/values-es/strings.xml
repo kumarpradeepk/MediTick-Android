@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    es translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">El progreso de hoy y la próxima toma</string>
+    <string name="channel_dose_name">Recordatorios de dosis</string>
+    <string name="channel_dose_description">Avisos a las horas de toma programadas</string>
+    <string name="channel_follow_up_name">Avisos de seguimiento</string>
+    <string name="channel_follow_up_description">Un recordatorio suave cuando una dosis sigue sin registrarse</string>
+    <string name="channel_refill_name">Avisos de reposición</string>
+    <string name="channel_refill_description">Avisos cuando se agotan las existencias que sigues</string>
+    <string name="notif_hidden_medication">tu medicamento</string>
+    <string name="notif_title_still_waiting">Sigue pendiente: %1$s</string>
+    <string name="notif_title_running_low">Queda poco: %1$s</string>
+    <string name="notif_title_time_for">Hora de %1$s</string>
+    <string name="notif_body_nudge">Esta dosis aún no está registrada. Un toque y listo.</string>
+    <string name="notif_body_snooze">Tu dosis pospuesta ya está lista.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="one">Queda alrededor de %1$d día de tratamiento. Toca reponer.</item>
+        <item quantity="many">Quedan alrededor de %1$d días de tratamiento. Toca reponer.</item>
+        <item quantity="other">Quedan alrededor de %1$d días de tratamiento. Toca reponer.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Tus existencias están por debajo del nivel de recarga.</string>
+    <string name="notif_body_hidden">Abre MediTick para ver y registrar esta dosis.</string>
+    <string name="action_take">Tomar</string>
+    <string name="action_skip">Omitir</string>
+    <string name="action_snooze_minutes">Posponer %1$d min</string>
+    <string name="widget_doses_ticked">%1$d de %2$d dosis marcadas</string>
+    <string name="widget_header">MEDITICK · HOY</string>
+    <string name="widget_no_doses_today">Hoy no hay dosis</string>
+    <string name="widget_all_done_today">Todo hecho por hoy</string>
+    <string name="widget_all_caught_up">Estás al día</string>
+    <string name="billing_products_missing">Conecta los productos «monthly», «yearly» y «lifetime» en Google Play Console.</string>
+    <string name="billing_plan_lifetime">Para siempre</string>
+    <string name="billing_plan_yearly">Anual</string>
+    <string name="billing_plan_monthly">Mensual</string>
+    <string name="billing_tag_one_time">Pago único</string>
+    <string name="billing_tag_best_value">La mejor relación calidad-precio</string>
+    <string name="billing_tag_flexible">Facturación flexible</string>
+    <string name="billing_checking_purchases">Comprobando tus compras…</string>
+    <string name="billing_restored">Compras restauradas: bienvenido de nuevo.</string>
+    <string name="billing_none_found">No se encontraron compras activas.</string>
+    <string name="billing_pro_unlocked">Bienvenido a MediTick Pro: todo está desbloqueado.</string>
+    <string name="meal_breakfast">Desayuno</string>
+    <string name="meal_lunch">Almuerzo</string>
+    <string name="meal_dinner">Cena</string>
+    <string name="meal_bedtime">Antes de dormir</string>
+    <string name="meal_breakfast_inline">el desayuno</string>
+    <string name="meal_lunch_inline">la comida</string>
+    <string name="meal_dinner_inline">la cena</string>
+    <string name="meal_bedtime_inline">acostarte</string>
+    <string name="anchor_at_bedtime">Al acostarse</string>
+    <string name="anchor_with">Con %1$s</string>
+    <string name="anchor_before">Antes de %1$s</string>
+    <string name="anchor_after">Después de %1$s</string>
+    <string name="anchor_before_offset">%1$d min antes de %2$s</string>
+    <string name="anchor_after_offset">%1$d min después de %2$s</string>
+    <string name="anchor_fixed_time">Hora fija</string>
+    <string name="form_pill">Píldora</string>
+    <string name="form_capsule">Cápsula</string>
+    <string name="form_tablet">Tableta</string>
+    <string name="form_liquid">Líquido</string>
+    <string name="form_drops">Gota</string>
+    <string name="form_injection">Inyección</string>
+    <string name="form_patch">Parche</string>
+    <string name="form_cream">Crema</string>
+    <string name="form_inhaler">Inhalador</string>
+    <string name="form_powder">Polvo</string>
+    <string name="form_gummy">Gominola</string>
+    <string name="form_spray">Aerosol</string>
+    <string name="form_other">Otro</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="one">píldora</item>
+        <item quantity="many">píldoras</item>
+        <item quantity="other">píldoras</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="one">cápsula</item>
+        <item quantity="many">cápsulas</item>
+        <item quantity="other">cápsulas</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="one">comprimido</item>
+        <item quantity="many">comprimidos</item>
+        <item quantity="other">comprimidos</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ml</item>
+        <item quantity="many">ml</item>
+        <item quantity="other">ml</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">gota</item>
+        <item quantity="many">gotas</item>
+        <item quantity="other">gotas</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="one">inyección</item>
+        <item quantity="many">inyecciones</item>
+        <item quantity="other">inyecciones</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="one">parche</item>
+        <item quantity="many">parches</item>
+        <item quantity="other">parches</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="one">aplicación</item>
+        <item quantity="many">aplicaciones</item>
+        <item quantity="other">aplicaciones</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="one">inhalación</item>
+        <item quantity="many">inhalaciones</item>
+        <item quantity="other">inhalaciones</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="one">medida</item>
+        <item quantity="many">medidas</item>
+        <item quantity="other">medidas</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="one">gominola</item>
+        <item quantity="many">gominolas</item>
+        <item quantity="other">gominolas</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="one">pulverización</item>
+        <item quantity="many">pulverizaciones</item>
+        <item quantity="other">pulverizaciones</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="one">dosis</item>
+        <item quantity="many">dosis</item>
+        <item quantity="other">dosis</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s %2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="one">%1$d vez/día</item>
+        <item quantity="many">%1$d veces/día</item>
+        <item quantity="other">%1$d veces/día</item>
+    </plurals>
+    <string name="schedule_no_times_set">Sin horarios definidos</string>
+    <string name="schedule_interval">Cada %1$dh, %2$s – %3$s</string>
+    <string name="schedule_as_needed">Según necesidad</string>
+    <string name="schedule_when_needed">Cuando se necesite</string>
+    <string name="schedule_every_day">Todos los días</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="one">Cada %1$d día</item>
+        <item quantity="many">Cada %1$d días</item>
+        <item quantity="other">Cada %1$d días</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d días de toma, %2$d de descanso"</string>
+    <string name="inventory_not_tracked">Sin seguimiento</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_done">Listo</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_add">Agregar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_close">Cerrar</string>
+    <string name="action_back">Atrás</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_try_again">Reintentar</string>
+    <string name="action_get_started">Comenzar</string>
+    <string name="action_snooze">Posponer</string>
+    <string name="action_log_dose">Registrar dosis</string>
+    <string name="action_take_now">Tomar ahora</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">Hoy</string>
+    <string name="tab_treatments">Tratamientos</string>
+    <string name="tab_progress">Progreso</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="onboarding_badge">"  PRIVADO · SIN CUENTA · GRATIS  "</string>
+    <string name="onboarding_headline">Nunca vuelvas\na olvidar una dosis.</string>
+    <string name="onboarding_subhead">Recordatorios amables, horarios inteligentes y un anillo diario que se llena mientras cuidas de ti.</string>
+    <string name="onboarding_feature_sentence">Escribe una frase y obtén un horario</string>
+    <string name="onboarding_feature_meals">Recordatorios que se adaptan a tus comidas</string>
+    <string name="onboarding_feature_private">Tus datos de salud nunca salen de tu teléfono</string>
+    <string name="onboarding_setup_label">Listo en 30 segundos</string>
+    <string name="onboarding_question">¿Qué te trae a MediTick?</string>
+    <string name="onboarding_choose_all">Elige todo lo que encaje. Puedes cambiarlo después.</string>
+    <string name="onboarding_purpose_doses">Recordar cada dosis</string>
+    <string name="onboarding_purpose_doses_sub">Avisos discretos y fiables</string>
+    <string name="onboarding_purpose_meals">Sincronizar con las comidas</string>
+    <string name="onboarding_purpose_meals_sub">Antes, durante o después de comer</string>
+    <string name="onboarding_purpose_streak">Mantener una racha</string>
+    <string name="onboarding_purpose_streak_sub">Ver tu progreso sin culpa</string>
+    <string name="onboarding_purpose_refills">Controlar las existencias</string>
+    <string name="onboarding_purpose_refills_sub">Saberlo antes de quedarte sin nada</string>
+    <string name="onboarding_no_signup">Sin registro. Sin correo. Tus datos de salud se quedan en este dispositivo.</string>
+    <string name="onboarding_build_routine">Crear mi rutina</string>
+    <string name="today_empty_title">Vamos a crear tu rutina</string>
+    <string name="today_empty_body">Describe un medicamento como lo dirías en voz alta y MediTick lo convierte en un horario, avisos y un anillo diario.</string>
+    <string name="today_add_first">Agrega tu primer medicamento</string>
+    <string name="today_takes_30_seconds">Toma unos 30 segundos.</string>
+    <string name="today_greeting_morning">Buenos días</string>
+    <string name="today_greeting_afternoon">Buenas tardes</string>
+    <string name="today_greeting_evening">Buenas noches</string>
+    <string name="today_add_new">Añadir</string>
+    <string name="today_take_all">Marcar todas</string>
+    <string name="today_when_you_need_it">Cuando lo necesites</string>
+    <string name="today_no_doses_logged">Hoy no has registrado ninguna dosis</string>
+    <plurals name="today_taken_today">
+        <item quantity="one">%1$d tomada hoy</item>
+        <item quantity="many">%1$d tomadas hoy</item>
+        <item quantity="other">%1$d tomadas hoy</item>
+    </plurals>
+    <string name="today_ring_label">HOY</string>
+    <string name="today_daily_plan">Plan del día</string>
+    <string name="today_left_next_up">%1$d pendientes · A continuación</string>
+    <string name="today_quiet_day">Un día tranquilo</string>
+    <plurals name="today_doses_missed">
+        <item quantity="one">%1$d dosis no tomada</item>
+        <item quantity="many">%1$d dosis no tomadas</item>
+        <item quantity="other">%1$d dosis no tomadas</item>
+    </plurals>
+    <string name="today_all_done">Todo hecho</string>
+    <string name="today_day_complete">Día completado</string>
+    <string name="today_tap_missed">Toca abajo una dosis no tomada para registrarla</string>
+    <string name="today_doses_ticked">%1$d de %2$d dosis marcadas</string>
+    <string name="today_meals_in_sync">Las comidas siguen sincronizadas</string>
+    <string name="today_meal_summary">Desayuno %1$s · Cena %2$s</string>
+    <string name="today_now">AHORA · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">Mañana</string>
+    <string name="daypart_midday">Mediodía</string>
+    <string name="daypart_evening">Noche</string>
+    <string name="daypart_bedtime">Antes de dormir</string>
+    <string name="dose_note_optional">Nota (opcional)</string>
+    <string name="dose_mark_as_taken">Marcar como tomada</string>
+    <string name="dose_undo_taken">Deshacer la toma</string>
+    <string name="dose_undo_skipped">Deshacer la omisión</string>
+    <string name="dose_as_needed_title">Dosis según necesidad</string>
+    <string name="dose_amount_label">Cantidad (%1$s)</string>
+    <string name="dose_log_title">Registrar dosis</string>
+    <string name="dose_logged_time">Registrada a las %1$s</string>
+    <string name="state_taken">Tomada</string>
+    <string name="state_skipped">Omitida</string>
+    <string name="state_missed">No tomada</string>
+    <string name="state_upcoming">Próxima</string>
+    <string name="state_due">Toca ahora</string>
+    <string name="state_on_time">A tiempo</string>
+    <string name="state_early">Temprano</string>
+    <string name="state_late">Tarde</string>
+    <string name="progress_title">Progreso</string>
+    <string name="progress_empty_title">Tu historia empieza pronto</string>
+    <string name="progress_empty_body">Agrega un medicamento y registra tus primeras dosis — aquí crecen rachas, tasas y tendencias.</string>
+    <string name="progress_range_week">7 días</string>
+    <string name="progress_range_all">Histórico</string>
+    <string name="progress_range_label_all">Histórico</string>
+    <string name="progress_range_label_week">Últimos 7 días</string>
+    <string name="progress_ring_label">ADHERENCIA</string>
+    <string name="progress_metric_on_time">A tiempo</string>
+    <string name="progress_metric_window">±%1$d min</string>
+    <string name="progress_metric_streak">Días seguidos</string>
+    <string name="progress_metric_best">Récord %1$d</string>
+    <string name="progress_insight_label">Observación</string>
+    <string name="progress_insight_refill">Se acerca una reposición. %1$s está por debajo de su nivel de aviso.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="one">En este periodo no se tomó %1$d dosis. Un aviso de seguimiento puede ayudar en los días ajetreados.</item>
+        <item quantity="many">En este periodo no se tomaron %1$d dosis. Un aviso de seguimiento puede ayudar en los días ajetreados.</item>
+        <item quantity="other">En este periodo no se tomaron %1$d dosis. Un aviso de seguimiento puede ayudar en los días ajetreados.</item>
+    </plurals>
+    <string name="progress_insight_skipped">Una dosis omitida forma parte del proceso, no es un fracaso. Sigue registrando para que tu tendencia sea útil.</string>
+    <string name="progress_insight_calm">Una semana tranquila y constante. Cada pequeña marca mantiene tu rutina en pie.</string>
+    <string name="progress_patterns_label">Patrones</string>
+    <string name="progress_pattern_hardest">%1$s es tu momento más difícil</string>
+    <string name="progress_pattern_detail">%1$d de %2$d dosis no tomadas ocurrieron por la %3$s.</string>
+    <string name="progress_calendar_all_days">Calendario completo</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">Registros · %1$s</string>
+    <string name="progress_previous_month">Mes anterior</string>
+    <string name="progress_next_month">Mes siguiente</string>
+    <string name="progress_nothing_scheduled">No hay nada programado este día.</string>
+    <string name="progress_as_needed_log">Según necesidad · %1$s</string>
+    <string name="progress_generic_medication">Medicamento</string>
+    <string name="progress_delete_log">Eliminar registro</string>
+    <string name="progress_detail_timing_title">Detalle de puntualidad</string>
+    <string name="progress_detail_streak_title">Detalle de la racha</string>
+    <string name="progress_detail_adherence_title">Detalle de adherencia</string>
+    <string name="progress_detail_no_taken">Todavía no hay dosis tomadas en este periodo.</string>
+    <string name="progress_detail_on_time_rate">El %1$s de las dosis tomadas estuvo dentro de ±%2$d minutos.</string>
+    <string name="progress_detail_breakdown">%1$d antes · %2$d a tiempo · %3$d tarde · %4$d omitidas</string>
+    <string name="progress_detail_choose_window">Elige el margen que usa esta métrica:</string>
+    <string name="progress_detail_streak_line">%1$d días seguidos · récord de %2$d días</string>
+    <string name="progress_detail_streak_body">Un día cuenta para la racha si tiene al menos una dosis programada, se tomaron todas las que tocaban y no se omitió ni se perdió ninguna.</string>
+    <string name="progress_detail_adherence_rate">%1$s de adherencia</string>
+    <string name="progress_detail_counts">%1$d programadas · %2$d tomadas · %3$d omitidas · %4$d no tomadas · %5$d pendientes</string>
+    <string name="progress_detail_adherence_body">La adherencia cuenta las dosis tomadas entre las que ya tienen un resultado. Las dosis futuras pendientes no bajan el porcentaje.</string>
+    <string name="progress_detail_needs_attention">Requiere atención</string>
+    <string name="progress_detail_no_attention">No hay dosis omitidas ni no tomadas en este periodo.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">Cuidado</string>
+    <string name="care_add">+ Agregar</string>
+    <string name="care_filter_all">Todo</string>
+    <string name="care_filter_medications">Medicamentos</string>
+    <string name="care_filter_prescriptions">Recetas</string>
+    <string name="status_active">Activo</string>
+    <string name="status_completed">Completado</string>
+    <string name="status_archived">Archivado</string>
+    <string name="status_treatment">Tratamiento %1$s</string>
+    <string name="care_empty_title">Tu botiquín está vacío</string>
+    <string name="care_empty_body">Agrega una receta o un medicamento y tu plan diario se arma solo.</string>
+    <string name="care_section_prescriptions">Mis recetas</string>
+    <string name="care_section_medications">Medicamentos</string>
+    <string name="care_section_standalone">Medicamentos independientes</string>
+    <string name="care_archived_count">Archivados (%1$d)</string>
+    <string name="care_what_adding">¿Qué vamos a agregar?</string>
+    <string name="care_mode_prescription">Receta</string>
+    <string name="care_mode_prescription_sub">Un plan de tratamiento con uno o varios medicamentos</string>
+    <string name="care_mode_single">Medicamento individual</string>
+    <string name="care_mode_single_sub">Añadirlo directamente a tu plan diario</string>
+    <plurals name="care_medication_count">
+        <item quantity="one">%1$d medicamento</item>
+        <item quantity="many">%1$d medicamentos</item>
+        <item quantity="other">%1$d medicamentos</item>
+    </plurals>
+    <string name="care_stock_left">Quedan %1$s</string>
+    <string name="detail_next_dose">Próxima dosis</string>
+    <string name="detail_as_needed">Según necesidad</string>
+    <string name="detail_schedule">Horario</string>
+    <string name="detail_amount_per_dose">Cantidad por dosis</string>
+    <string name="detail_supply">Existencias</string>
+    <string name="detail_supply_remaining">Quedan %1$s</string>
+    <string name="detail_supply_alert">Avisar en %1$s</string>
+    <string name="detail_supply_alert_days">Avisar en %1$s · Para unos %2$d días</string>
+    <string name="detail_supply_untracked">Sin seguimiento de existencias</string>
+    <string name="detail_supply_enable">Activa el seguimiento al editar este medicamento</string>
+    <string name="detail_refill">+ Recarga</string>
+    <string name="detail_recent_history">Historial reciente</string>
+    <string name="detail_history_as_needed">Dosis según necesidad</string>
+    <string name="detail_view_medication_logs">Ver el historial del medicamento</string>
+    <string name="detail_view_medication_logs_sub">Historial completo de tomas y omisiones</string>
+    <string name="detail_restore_medication">Restaurar medicamento</string>
+    <string name="detail_archive_medication">Archivar medicamento</string>
+    <string name="detail_delete_medication">Eliminar medicamento</string>
+    <string name="confirm_delete_medication_title">¿Eliminar %1$s?</string>
+    <string name="confirm_delete_medication_body">También se borrará su historial de tomas. Esta acción no se puede deshacer.</string>
+    <string name="confirm_archive_medication_title">¿Archivar %1$s?</string>
+    <string name="confirm_archive_medication_body">Los próximos avisos se detendrán. Podrás restaurar este medicamento más adelante desde Archivados.</string>
+    <string name="refill_title">Reponer existencias</string>
+    <string name="refill_units_label">Unidades a añadir</string>
+    <string name="logs_title">Historial de %1$s</string>
+    <string name="rx_prescribed_by">Recetado por %1$s</string>
+    <string name="rx_period_ongoing">%1$s · En curso</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">Añadir medicamento</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">Nuevo o existente</string>
+    <string name="rx_progress_and_logs">Progreso e historial</string>
+    <string name="rx_no_decided">Aún no hay dosis resueltas</string>
+    <string name="rx_adherence">%1$s de adherencia</string>
+    <string name="rx_counts">%1$d tomadas · %2$d omitidas · %3$d no tomadas</string>
+    <string name="rx_on_time">%1$s a tiempo</string>
+    <string name="rx_no_taken">Aún no hay dosis tomadas</string>
+    <string name="rx_within_window">Dentro de ±%1$d minutos</string>
+    <string name="rx_view_logs">Ver el historial de la receta</string>
+    <string name="rx_view_logs_sub">Tomas, omisiones y dosis según necesidad</string>
+    <string name="rx_notes">Notas</string>
+    <string name="rx_mark_complete">Marcar como completada</string>
+    <string name="rx_archive">Archivar receta</string>
+    <string name="rx_reactivate">Reactivar receta</string>
+    <string name="rx_restore">Restaurar receta</string>
+    <string name="rx_delete">Eliminar receta</string>
+    <string name="rx_confirm_complete_title">¿Marcar como completada?</string>
+    <string name="rx_confirm_complete_body">Se detendrán los próximos avisos de los medicamentos vinculados.</string>
+    <string name="rx_confirm_archive_title">¿Archivar la receta?</string>
+    <string name="rx_confirm_archive_body">La receta y sus medicamentos vinculados pasan a Archivados. Podrás restaurarlos más adelante.</string>
+    <string name="rx_confirm_reactivate_title">¿Reactivar la receta?</string>
+    <string name="rx_confirm_reactivate_body">El tratamiento vuelve a estar en curso y los avisos se reanudan. Los medicamentos completados por separado siguen completados.</string>
+    <string name="rx_confirm_restore_title">¿Restaurar la receta?</string>
+    <string name="rx_confirm_restore_body">Solo se restaurarán los medicamentos que cambió esta receta; los que archivaste tú seguirán archivados.</string>
+    <string name="rx_action_complete">Completo</string>
+    <string name="rx_action_archive">Archivar</string>
+    <string name="rx_action_reactivate">Reactivar</string>
+    <string name="rx_action_restore">Restaurar</string>
+    <string name="rx_confirm_delete_title">¿Eliminar esta receta?</string>
+    <string name="rx_confirm_delete_body">Sus medicamentos seguirán en tu botiquín como medicamentos independientes.</string>
+    <string name="rx_add_new_medication">Nuevo medicamento</string>
+    <string name="rx_add_new_medication_sub">Crear y vincular un aviso nuevo</string>
+    <string name="rx_add_existing">Medicamentos existentes</string>
+    <string name="rx_add_existing_sub">Vincular un medicamento independiente</string>
+    <string name="rx_no_standalone">No hay medicamentos independientes disponibles.</string>
+    <string name="rx_editor_new">Nueva receta</string>
+    <string name="rx_editor_edit">Editar receta</string>
+    <string name="rx_field_plan_name">Nombre del plan</string>
+    <string name="rx_field_condition">Diagnóstico</string>
+    <string name="rx_field_prescriber">Prescriptor</string>
+    <string name="rx_field_facility">Centro / clínica</string>
+    <string name="rx_field_contact">Contacto</string>
+    <string name="rx_field_notes">Notas</string>
+    <string name="rx_start">Inicio · %1$s</string>
+    <string name="rx_end">Fin · %1$s</string>
+    <string name="rx_ongoing">Tratamiento continuo</string>
+    <plurals name="rx_update_linked">
+        <item quantity="one">Actualizar %1$d medicamento</item>
+        <item quantity="many">Actualizar %1$d medicamentos</item>
+        <item quantity="other">Actualizar %1$d medicamentos</item>
+    </plurals>
+    <string name="rx_apply_dates">Aplicar estas fechas a los horarios vinculados</string>
+    <string name="logs_empty">Todavía no se ha registrado ninguna dosis.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">Añadir medicamento</string>
+    <string name="form_edit_title">Editar medicamento</string>
+    <string name="form_step">Paso %1$d de 3</string>
+    <string name="form_add_to_routine">Añadir a mi rutina</string>
+    <string name="form_save_changes">Guardar cambios</string>
+    <string name="form_duplicate_title">Medicamento duplicado</string>
+    <string name="form_duplicate_body">Ya existe un medicamento llamado «%1$s» con esta concentración.</string>
+    <string name="describe_label">Dilo con naturalidad</string>
+    <string name="describe_question">¿Qué tomas?</string>
+    <string name="describe_hint">Prueba con «Metformin 500mg every morning with food».</string>
+    <string name="describe_placeholder">Medicamento, concentración y cuándo lo tomas…</string>
+    <string name="describe_examples">Ejemplos</string>
+    <string name="describe_understood">MediTick ha entendido</string>
+    <string name="basics_label">Lo básico</string>
+    <string name="basics_headline">Que sea fácil de reconocer</string>
+    <string name="basics_field_name">Nombre del medicamento</string>
+    <string name="basics_no_prescription">Ninguna (independiente)</string>
+    <string name="basics_field_strength">Concentración</string>
+    <string name="basics_section_form">Forma farmacéutica</string>
+    <string name="basics_field_instructions">Indicaciones (opcional)</string>
+    <string name="basics_track_supply">Controlar existencias</string>
+    <string name="basics_track_supply_sub">Repón antes de quedarte sin nada</string>
+    <string name="basics_field_stock">En stock</string>
+    <string name="basics_field_alert">Avisar en</string>
+    <string name="rhythm_label">Tu ritmo</string>
+    <string name="rhythm_headline">¿Cuándo te encaja?</string>
+    <string name="rhythm_every_day">Todos los días</string>
+    <string name="rhythm_every_day_sub">Mismos horarios, a diario</string>
+    <string name="rhythm_specific">Días específicos</string>
+    <string name="rhythm_specific_sub">Elegir días de la semana</string>
+    <string name="rhythm_every_other">Cada dos días</string>
+    <string name="rhythm_every_other_sub">Un día sí, un día no</string>
+    <string name="rhythm_interval">Intervalo</string>
+    <string name="rhythm_interval_sub">Cada N días naturales</string>
+    <string name="rhythm_cyclic">Cíclico</string>
+    <string name="rhythm_cyclic_sub">Días de toma y luego de descanso</string>
+    <string name="rhythm_as_needed">Según necesidad</string>
+    <string name="rhythm_as_needed_sub">Sin horario fijo</string>
+    <string name="rhythm_section_days">Días</string>
+    <string name="rhythm_days_on">Días de toma</string>
+    <string name="rhythm_days_off">Días de descanso</string>
+    <string name="rhythm_repeat_every">Repetir cada N días</string>
+    <string name="rhythm_section_doses">Dosis</string>
+    <string name="rhythm_add_dose">Añadir dosis</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">Avisos ligados a las comidas</string>
+    <string name="rhythm_meal_auto">Cambiar los horarios de comida actualiza los avisos automáticamente</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">Sincronizado con las horas de aviso</string>
+    <string name="rhythm_amount_per_dose">Cantidad por dosis</string>
+    <string name="rhythm_start_date">Inicio · %1$s</string>
+    <string name="rhythm_ongoing">Tratamiento continuo</string>
+    <string name="rhythm_no_end_date">Sin fecha de fin</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="one">Tratamiento de %1$d día</item>
+        <item quantity="many">Tratamiento de %1$d días</item>
+        <item quantity="other">Tratamiento de %1$d días</item>
+    </plurals>
+    <string name="dose_add_hint">Elige una hora exacta o parte de un horario habitual.</string>
+    <string name="dose_custom_time">Hora personalizada</string>
+    <string name="dose_edit_title">Editar dosis</string>
+    <string name="dose_section_amount">Cantidad</string>
+    <string name="dose_decrease">Reducir la dosis</string>
+    <string name="dose_increase">Aumentar la dosis</string>
+    <string name="dose_section_timing">Momento</string>
+    <string name="dose_relation_fixed">Fija</string>
+    <string name="dose_relation_before">Antes</string>
+    <string name="dose_relation_with">Con</string>
+    <string name="dose_relation_after">Después</string>
+    <string name="dose_reminder_time">Aviso a las %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="one">%1$d minuto antes de la comida</item>
+        <item quantity="many">%1$d minutos antes de la comida</item>
+        <item quantity="other">%1$d minutos antes de la comida</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="one">%1$d minuto después de la comida</item>
+        <item quantity="many">%1$d minutos después de la comida</item>
+        <item quantity="other">%1$d minutos después de la comida</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s a las %2$s · cambiar los horarios de comida actualiza los avisos automáticamente</string>
+    <string name="dose_remove">Quitar dosis</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_pro_active">Pro está activo</string>
+    <string name="settings_pro_thanks">Gracias por tu apoyo</string>
+    <string name="settings_unlock_pro">Desbloquea MediTick Pro</string>
+    <string name="settings_unlock_pro_sub">Sincronía con comidas, seguimientos, historial completo y medicamentos ilimitados</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">Preferencias</string>
+    <string name="settings_group_notifications">Notificaciones</string>
+    <string name="settings_group_data">Tus datos</string>
+    <string name="settings_group_community">Comunidad</string>
+    <string name="settings_group_about">Acerca de</string>
+    <string name="settings_redeem">Canjear código</string>
+    <string name="settings_redeem_sub">Desbloquea Pro con un código promocional de Play</string>
+    <string name="settings_join_community">Únete a la comunidad de MediTick</string>
+    <string name="settings_join_community_sub">Rutinas, dudas y lo que viene</string>
+    <string name="settings_appearance">Apariencia</string>
+    <string name="settings_appearance_summary">%1$s · acento %2$s</string>
+    <string name="settings_appearance_mode">Modo</string>
+    <string name="settings_appearance_accent">Acento</string>
+    <string name="appearance_auto">Auto</string>
+    <string name="appearance_daylight">Día</string>
+    <string name="appearance_midnight">Medianoche</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_ocean">Océano</string>
+    <string name="accent_orchid">Orquídea</string>
+    <string name="accent_ember">Brasa</string>
+    <string name="settings_meal_times">Horarios de comida</string>
+    <string name="settings_meal_times_sub">Desayuno · Almuerzo · Cena · Antes de dormir</string>
+    <string name="settings_widgets">Widgets</string>
+    <string name="settings_widgets_sub">Pantalla de inicio y opciones compatibles de pantalla de bloqueo</string>
+    <string name="settings_dose_presets">Horarios predeterminados</string>
+    <string name="settings_dose_presets_sub">Mañana · Mediodía · Tarde · Noche</string>
+    <string name="settings_dose_presets_restore">Restaurar horas predeterminadas</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system">Sistema</string>
+    <string name="settings_system_language">Ajustes de idioma del sistema</string>
+    <string name="settings_system_language_sub">Abrir el idioma por app de Android</string>
+    <string name="settings_haptics">Respuesta háptica</string>
+    <string name="settings_haptics_sub">Toques sutiles al interactuar</string>
+    <string name="settings_notif_permission">Permiso de notificaciones</string>
+    <string name="settings_notif_permission_sub">Toca para permitir los avisos</string>
+    <string name="settings_notif_status">Estado de notificaciones</string>
+    <string name="settings_notif_status_sub">Abrir los ajustes de notificaciones de Android</string>
+    <string name="settings_dose_reminders">Recordatorios de dosis</string>
+    <string name="settings_dose_reminders_sub">Una notificación en cada dosis</string>
+    <string name="settings_follow_up">Recordatorio de seguimiento</string>
+    <string name="settings_follow_up_sub">Te insistimos hasta que registres la dosis</string>
+    <string name="settings_follow_up_delay">Espera del seguimiento</string>
+    <plurals name="settings_minutes">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="many">%1$d minutos</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d min</string>
+    <string name="settings_hide_names">Ocultar nombres en las notificaciones</string>
+    <string name="settings_hide_names_sub">Los nombres no aparecen en la pantalla de bloqueo</string>
+    <string name="settings_alert_sound">Sonido de aviso</string>
+    <string name="settings_urgent">Avisos urgentes</string>
+    <string name="settings_urgent_sub">Canal de alta prioridad; Android puede aplicar igualmente No molestar</string>
+    <string name="settings_exact_alarm">Acceso a alarmas exactas</string>
+    <string name="settings_exact_alarm_sub">Abrir «Alarmas y recordatorios» de Android</string>
+    <string name="settings_refill_reminders">Avisos de reposición</string>
+    <string name="settings_refill_reminders_sub">Avisar al bajar de tu umbral de existencias</string>
+    <string name="settings_sound_title">Sonido del aviso</string>
+    <string name="settings_sound_hint">Toca un sonido para escucharlo. El cambio se aplica al guardar. Algunos sonidos requieren MediTick Pro.</string>
+    <string name="sound_standard">MediTick (estándar)</string>
+    <string name="sound_chime">Campanilla (larga)</string>
+    <string name="sound_bell">Campana</string>
+    <string name="sound_urgent">Urgente</string>
+    <string name="sound_silent">Silencio</string>
+    <string name="settings_export">Exportar respaldo</string>
+    <string name="settings_export_sub">Todo en un archivo JSON</string>
+    <string name="settings_import">Importar respaldo</string>
+    <string name="settings_import_sub">Restaura una exportación de MediTick de iOS o Android</string>
+    <string name="settings_erase">Borrar todos los datos</string>
+    <string name="settings_erase_sub">Cada medicamento, plan y registro</string>
+    <string name="settings_erase_title">¿Borrar todo?</string>
+    <string name="settings_erase_body">Esto elimina permanentemente todos los medicamentos, recetas e historial de este dispositivo.</string>
+    <string name="settings_msg_link_failed">No se pudo abrir ese enlace.</string>
+    <string name="settings_msg_exported">Copia de seguridad exportada.</string>
+    <string name="settings_msg_export_failed">No se pudo exportar la copia de seguridad.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="one">Copia restaurada: se cargó %1$d medicamento.</item>
+        <item quantity="many">Copia restaurada: se cargaron %1$d medicamentos.</item>
+        <item quantity="other">Copia restaurada: se cargaron %1$d medicamentos.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">Ese archivo no parece una copia de seguridad de MediTick.</string>
+    <string name="settings_feedback">Enviar comentarios / informar de un error</string>
+    <string name="settings_feedback_sub">Cuéntanos el dispositivo y cómo reproducirlo</string>
+    <string name="settings_feature_request">Pedir una función</string>
+    <string name="settings_feature_request_sub">Dinos qué haría mejor a MediTick</string>
+    <string name="settings_review">Escribe una reseña</string>
+    <string name="settings_share">Comparte MediTick</string>
+    <string name="settings_share_text">MediTick — no vuelvas a olvidar una dosis. Temporizador de pastillas, recordatorios y seguimiento.</string>
+    <string name="settings_community_title">No estás solo en esto</string>
+    <string name="settings_community_body">Comparte rutinas con otras personas que usan MediTick, pregunta, informa de errores y entérate antes que nadie de las novedades.</string>
+    <string name="settings_website">Sitio web</string>
+    <string name="settings_whats_new">Novedades</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">Política de privacidad</string>
+    <string name="settings_privacy_sub">Cómo trata MediTick tus datos</string>
+    <string name="settings_terms">Términos del servicio</string>
+    <string name="settings_terms_sub">Límites de una app de avisos</string>
+    <string name="settings_about">Acerca de MediTick</string>
+    <string name="settings_version">Versión %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · Tus datos de salud se quedan en este dispositivo.\nUna herramienta de recordatorios, no un consejo médico.</string>
+    <string name="info_widgets_title">Widgets</string>
+    <string name="info_widgets_body">Añade MediTick desde el selector de widgets de tu pantalla de inicio. La compatibilidad con widgets en la pantalla de bloqueo depende de tu versión de Android y del fabricante, y no se puede activar automáticamente. El widget actual muestra el progreso de hoy y la próxima dosis; para registrarla se abre la app.</string>
+    <string name="info_privacy_title">Privacidad</string>
+    <string name="info_privacy_body">Los datos de medicamentos, los horarios y el historial se guardan en este dispositivo. Solo se exportan cuando tú lo pides. Google Play gestiona las compras; Android entrega las notificaciones.</string>
+    <string name="info_terms_title">Condiciones de uso</string>
+    <string name="info_terms_body">MediTick es una herramienta de avisos y registro personal, no un consejo médico. Sigue siempre las indicaciones de tu profesional sanitario y consúltale cualquier duda sobre tu medicación.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\nAvisos de medicación privados y sin conexión para Android.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">No vuelvas a preguntarte «¿me la he tomado?».</string>
+    <string name="paywall_feature_alerts">Avisos que mantienen tu rutina a la vista</string>
+    <string name="paywall_feature_follow_ups">Seguimientos hasta que cada dosis quede marcada</string>
+    <string name="paywall_feature_unlimited">Medicamentos y recetas sin límite</string>
+    <string name="paywall_feature_insights">Rachas, análisis y widgets</string>
+    <string name="paywall_loading">Cargando los planes de Google Play…</string>
+    <string name="paywall_unavailable">Los planes de suscripción no están disponibles.</string>
+    <string name="paywall_upgrade">Pasar a Pro</string>
+    <string name="paywall_lifetime_note">Un solo pago. Pro para siempre.</string>
+    <string name="paywall_renew_note">Se renueva automáticamente. Cancela cuando quieras en Google Play.</string>
+    <string name="paywall_restore">Restaurar compras</string>
+    <string name="add_sheet_title">Añadir</string>
+    <string name="add_sheet_prescription">Crear receta</string>
+    <string name="add_sheet_prescription_sub">Agrupa medicamentos recurrentes</string>
+    <string name="add_sheet_medication">Añadir medicamento</string>
+    <string name="add_sheet_medication_sub">Crear un aviso para un solo medicamento</string>
+    <string name="release_latest">Última versión</string>
+    <string name="release_lead">Esta actualización pone a MediTick al mismo nivel en iPhone y Android:</string>
+    <string name="release_bullet_filters">Tratamientos ya se filtra por tipo y por Activo, Completado o Archivado.</string>
+    <string name="release_bullet_prescriptions">Las recetas guardan quién las receta, el centro, el contacto, el diagnóstico y el periodo de tratamiento, y se pueden completar, archivar o restaurar.</string>
+    <string name="release_bullet_per_dose">Cada dosis puede tener su cantidad y su relación con las comidas, así que un medicamento puede ser a las 08:00 en punto y 30 minutos antes de la cena.</string>
+    <string name="release_bullet_shapes">Nuevas pautas: cada N días y ciclos de toma/descanso, junto a los días concretos y la toma según necesidad.</string>
+    <string name="release_bullet_take_all">«Marcar todas» resuelve un grupo horario completo con un toque.</string>
+    <string name="release_bullet_progress">Progreso añade un calendario completo con navegación por meses, además de explicaciones de adherencia, puntualidad y rachas.</string>
+    <string name="release_bullet_sounds">Sonidos de aviso, notificaciones privadas que mantienen los nombres fuera de la pantalla de bloqueo y un selector de idioma dentro de la app.</string>
+    <string name="release_bullet_refills">Al reponer verás las existencias resultantes antes de confirmar, y las horas registradas se pueden corregir después.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">mañana,desayuno</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">mediodía,almuerzo,comida</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">tarde,noche,cena</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">antes de dormir,al acostarse,hora de dormir</string>
+    <string name="parse_meal_before" tools:ignore="Typos">antes de comer,antes de la comida,antes del desayuno,antes del almuerzo,antes de la cena</string>
+    <string name="parse_meal_after" tools:ignore="Typos">después de comer,después de la comida,después del desayuno,después del almuerzo,después de la cena</string>
+    <string name="parse_meal_with" tools:ignore="Typos">con la comida,con alimentos</string>
+    <string name="parse_twice" tools:ignore="Typos">dos veces</string>
+    <string name="parse_unit_day" tools:ignore="Typos">día,días,dia,dias</string>
+    <string name="parse_unit_week" tools:ignore="Typos">semana,semanas</string>
+    <string name="parse_unit_month" tools:ignore="Typos">mes,meses</string>
+    <string name="parse_marker_am" tools:ignore="Typos">a.m.,de la mañana</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">p.m.,de la tarde,de la noche</string>
+    <string name="parse_stopwords" tools:ignore="Typos">cada,dos veces,una vez,diario,diariamente,toma,tomar,con,antes,después,mañana,noche,tarde,mediodía,cama,dormir,almuerzo,cena,desayuno,comida,comidas,el,la,los,las,y</string>
+</resources>

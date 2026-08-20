@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ko translation of MediTick.
+
+    Strings whose English source also exists in the iOS catalog reuse the
+    translation already shipping there, so a user with both apps sees the
+    same wording. Everything else was translated for this file.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="widget_description">오늘의 진행 상황과 다음 복용</string>
+    <string name="channel_dose_name">복용 알림</string>
+    <string name="channel_dose_description">예정된 복용 시간에 보내는 알림</string>
+    <string name="channel_follow_up_name">재알림</string>
+    <string name="channel_follow_up_description">복용이 아직 기록되지 않았을 때 보내는 부드러운 알림</string>
+    <string name="channel_refill_name">리필 알림</string>
+    <string name="channel_refill_description">관리 중인 보유량이 줄어들 때 보내는 알림</string>
+    <string name="notif_hidden_medication">복용 중인 약</string>
+    <string name="notif_title_still_waiting">아직 기다리고 있어요: %1$s</string>
+    <string name="notif_title_running_low">얼마 안 남았어요: %1$s</string>
+    <string name="notif_title_time_for">%1$s 복용 시간이에요</string>
+    <string name="notif_body_nudge">이 복용은 아직 기록되지 않았어요. 한 번만 누르면 끝나요.</string>
+    <string name="notif_body_snooze">미뤄 둔 복용 시간이에요.</string>
+    <plurals name="notif_body_refill_days">
+        <item quantity="other">약 %1$d일치 남았어요. 다시 채울 때예요.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">보유량이 리필 기준보다 적어요.</string>
+    <string name="notif_body_hidden">MediTick을 열어 이 복용을 확인하고 기록하세요.</string>
+    <string name="action_take">복용</string>
+    <string name="action_skip">건너뛰기</string>
+    <string name="action_snooze_minutes">%1$d분 후 다시 알림</string>
+    <string name="widget_doses_ticked">%2$d회 중 %1$d회 기록</string>
+    <string name="widget_header">MEDITICK · 오늘</string>
+    <string name="widget_no_doses_today">오늘은 복용이 없어요</string>
+    <string name="widget_all_done_today">오늘은 모두 끝났어요</string>
+    <string name="widget_all_caught_up">빠짐없이 기록했어요</string>
+    <string name="billing_products_missing">Google Play Console에서 ‘monthly’, ‘yearly’, ‘lifetime’ 상품을 연결하세요.</string>
+    <string name="billing_plan_lifetime">평생</string>
+    <string name="billing_plan_yearly">연간</string>
+    <string name="billing_plan_monthly">월간</string>
+    <string name="billing_tag_one_time">한 번만 결제</string>
+    <string name="billing_tag_best_value">가장 알찬 선택</string>
+    <string name="billing_tag_flexible">부담 없는 결제</string>
+    <string name="billing_checking_purchases">구매 내역을 확인하고 있어요…</string>
+    <string name="billing_restored">구매를 복원했어요. 다시 오신 걸 환영해요.</string>
+    <string name="billing_none_found">활성화된 구매를 찾지 못했어요.</string>
+    <string name="billing_pro_unlocked">MediTick Pro에 오신 걸 환영해요. 모든 기능이 열렸어요.</string>
+    <string name="meal_breakfast">아침 식사</string>
+    <string name="meal_lunch">점심 식사</string>
+    <string name="meal_dinner">저녁 식사</string>
+    <string name="meal_bedtime">취침 전</string>
+    <string name="meal_breakfast_inline">아침 식사</string>
+    <string name="meal_lunch_inline">점심 식사</string>
+    <string name="meal_dinner_inline">저녁 식사</string>
+    <string name="meal_bedtime_inline">취침</string>
+    <string name="anchor_at_bedtime">취침 전</string>
+    <string name="anchor_with">%1$s와 함께</string>
+    <string name="anchor_before">%1$s 전</string>
+    <string name="anchor_after">%1$s 후</string>
+    <string name="anchor_before_offset">%2$s %1$d분 전</string>
+    <string name="anchor_after_offset">%2$s %1$d분 후</string>
+    <string name="anchor_fixed_time">지정 시간</string>
+    <string name="form_pill">알약</string>
+    <string name="form_capsule">캡슐</string>
+    <string name="form_tablet">정제</string>
+    <string name="form_liquid">액상</string>
+    <string name="form_drops">점안·점적액</string>
+    <string name="form_injection">주사</string>
+    <string name="form_patch">패치</string>
+    <string name="form_cream">크림</string>
+    <string name="form_inhaler">흡입기</string>
+    <string name="form_powder">가루약</string>
+    <string name="form_gummy">젤리</string>
+    <string name="form_spray">스프레이</string>
+    <string name="form_other">기타</string>
+    <plurals name="unit_pill" tools:ignore="ImpliedQuantity">
+        <item quantity="other">알</item>
+    </plurals>
+    <plurals name="unit_capsule" tools:ignore="ImpliedQuantity">
+        <item quantity="other">캡슐</item>
+    </plurals>
+    <plurals name="unit_tablet" tools:ignore="ImpliedQuantity">
+        <item quantity="other">정</item>
+    </plurals>
+    <plurals name="unit_ml" tools:ignore="ImpliedQuantity">
+        <item quantity="other">mL</item>
+    </plurals>
+    <plurals name="unit_drop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">방울</item>
+    </plurals>
+    <plurals name="unit_shot" tools:ignore="ImpliedQuantity">
+        <item quantity="other">회분</item>
+    </plurals>
+    <plurals name="unit_patch" tools:ignore="ImpliedQuantity">
+        <item quantity="other">장</item>
+    </plurals>
+    <plurals name="unit_application" tools:ignore="ImpliedQuantity">
+        <item quantity="other">회</item>
+    </plurals>
+    <plurals name="unit_puff" tools:ignore="ImpliedQuantity">
+        <item quantity="other">회 흡입</item>
+    </plurals>
+    <plurals name="unit_scoop" tools:ignore="ImpliedQuantity">
+        <item quantity="other">스쿱</item>
+    </plurals>
+    <plurals name="unit_gummy" tools:ignore="ImpliedQuantity">
+        <item quantity="other">개</item>
+    </plurals>
+    <plurals name="unit_spray" tools:ignore="ImpliedQuantity">
+        <item quantity="other">회 분무</item>
+    </plurals>
+    <plurals name="unit_dose" tools:ignore="ImpliedQuantity">
+        <item quantity="other">회분</item>
+    </plurals>
+    <string name="amount_with_unit">%1$s%2$s</string>
+    <string name="dose_spec_summary">%1$s • %2$s</string>
+    <plurals name="schedule_times_per_day">
+        <item quantity="other">하루 %1$d회</item>
+    </plurals>
+    <string name="schedule_no_times_set">설정된 시간 없음</string>
+    <string name="schedule_interval">%1$d시간마다, %2$s – %3$s</string>
+    <string name="schedule_as_needed">필요 시</string>
+    <string name="schedule_when_needed">필요 시</string>
+    <string name="schedule_every_day">매일</string>
+    <plurals name="schedule_every_n_days">
+        <item quantity="other">%1$d일마다</item>
+    </plurals>
+    <string name="schedule_cycle_suffix">" · %1$d일 복용, %2$d일 휴약"</string>
+    <string name="inventory_not_tracked">관리 안 함</string>
+    <string name="action_cancel">취소</string>
+    <string name="action_done">완료</string>
+    <string name="action_save">저장</string>
+    <string name="action_ok">확인</string>
+    <string name="action_add">추가</string>
+    <string name="action_delete">삭제</string>
+    <string name="action_edit">편집</string>
+    <string name="action_close">닫기</string>
+    <string name="action_back">뒤로</string>
+    <string name="action_continue">계속</string>
+    <string name="action_try_again">다시 시도</string>
+    <string name="action_get_started">시작하기</string>
+    <string name="action_snooze">미루기</string>
+    <string name="action_log_dose">복용 기록</string>
+    <string name="action_take_now">지금 복용</string>
+    <string name="badge_pro">Pro</string>
+    <string name="value_none">—</string>
+    <string name="tab_today">오늘</string>
+    <string name="tab_treatments">치료</string>
+    <string name="tab_progress">진행 상황</string>
+    <string name="tab_settings">설정</string>
+    <string name="onboarding_badge">"  비공개 · 계정 없이 · 무료  "</string>
+    <string name="onboarding_headline">이제 복용을\n놓치지 마세요.</string>
+    <string name="onboarding_subhead">부드러운 알림, 똑똑한 일정, 그리고 나를 챙길수록 채워지는 데일리 링.</string>
+    <string name="onboarding_feature_sentence">문장 하나면 일정 완성</string>
+    <string name="onboarding_feature_meals">식사 시간에 맞춰지는 알림</string>
+    <string name="onboarding_feature_private">건강 데이터는 휴대폰 밖으로 나가지 않아요</string>
+    <string name="onboarding_setup_label">30초면 준비 끝</string>
+    <string name="onboarding_question">MediTick에서 무엇을 하고 싶으세요?</string>
+    <string name="onboarding_choose_all">해당하는 것을 모두 고르세요. 나중에 바꿀 수 있어요.</string>
+    <string name="onboarding_purpose_doses">매번 잊지 않기</string>
+    <string name="onboarding_purpose_doses_sub">조용하고 믿음직한 알림</string>
+    <string name="onboarding_purpose_meals">식사에 맞추기</string>
+    <string name="onboarding_purpose_meals_sub">식전·식중·식후</string>
+    <string name="onboarding_purpose_streak">연속 기록 쌓기</string>
+    <string name="onboarding_purpose_streak_sub">부담 없이 보는 진행 상황</string>
+    <string name="onboarding_purpose_refills">보유량 챙기기</string>
+    <string name="onboarding_purpose_refills_sub">떨어지기 전에 알기</string>
+    <string name="onboarding_no_signup">가입도 이메일도 없어요. 건강 데이터는 이 기기에만 남아요.</string>
+    <string name="onboarding_build_routine">내 루틴 만들기</string>
+    <string name="today_empty_title">루틴을 만들어 볼까요</string>
+    <string name="today_empty_body">말하듯이 약을 적으면 MediTick이 일정과 알림, 하루 링으로 바꿔 드려요.</string>
+    <string name="today_add_first">첫 약 추가하기</string>
+    <string name="today_takes_30_seconds">약 30초면 충분해요.</string>
+    <string name="today_greeting_morning">좋은 아침이에요</string>
+    <string name="today_greeting_afternoon">좋은 오후예요</string>
+    <string name="today_greeting_evening">좋은 저녁이에요</string>
+    <string name="today_add_new">추가</string>
+    <string name="today_take_all">한 번에 기록</string>
+    <string name="today_when_you_need_it">필요할 때</string>
+    <string name="today_no_doses_logged">오늘 기록한 복용이 없어요</string>
+    <plurals name="today_taken_today">
+        <item quantity="other">오늘 %1$d회 복용</item>
+    </plurals>
+    <string name="today_ring_label">오늘</string>
+    <string name="today_daily_plan">오늘의 계획</string>
+    <string name="today_left_next_up">%1$d회 남음 · 다음</string>
+    <string name="today_quiet_day">여유로운 하루</string>
+    <plurals name="today_doses_missed">
+        <item quantity="other">%1$d회 놓침</item>
+    </plurals>
+    <string name="today_all_done">모두 완료</string>
+    <string name="today_day_complete">오늘 마무리</string>
+    <string name="today_tap_missed">아래에서 놓친 복용을 눌러 기록하세요</string>
+    <string name="today_doses_ticked">%2$d회 중 %1$d회 기록</string>
+    <string name="today_meals_in_sync">식사 시간과 연동 중</string>
+    <string name="today_meal_summary">아침 %1$s · 저녁 %2$s</string>
+    <string name="today_now">지금 · %1$s</string>
+    <string name="today_dose_line">%1$s · %2$s</string>
+    <string name="daypart_morning">아침</string>
+    <string name="daypart_midday">낮</string>
+    <string name="daypart_evening">저녁</string>
+    <string name="daypart_bedtime">취침 전</string>
+    <string name="dose_note_optional">메모(선택)</string>
+    <string name="dose_mark_as_taken">복용 완료로 표시</string>
+    <string name="dose_undo_taken">복용 취소</string>
+    <string name="dose_undo_skipped">건너뜀 취소</string>
+    <string name="dose_as_needed_title">필요시 복용</string>
+    <string name="dose_amount_label">용량(%1$s)</string>
+    <string name="dose_log_title">복용 기록</string>
+    <string name="dose_logged_time">기록 시각 %1$s</string>
+    <string name="state_taken">복용함</string>
+    <string name="state_skipped">건너뜀</string>
+    <string name="state_missed">놓침</string>
+    <string name="state_upcoming">예정</string>
+    <string name="state_due">복용 시간</string>
+    <string name="state_on_time">제시간</string>
+    <string name="state_early">일찍</string>
+    <string name="state_late">늦음</string>
+    <string name="progress_title">진행 상황</string>
+    <string name="progress_empty_title">곧 이야기가 시작돼요</string>
+    <string name="progress_empty_body">약을 추가하고 첫 복용을 기록해 보세요 — 연속 기록, 복용률, 추세가 여기서 자라나요.</string>
+    <string name="progress_range_week">7일</string>
+    <string name="progress_range_all">전체 기간</string>
+    <string name="progress_range_label_all">전체 기간</string>
+    <string name="progress_range_label_week">최근 7일</string>
+    <string name="progress_ring_label">복용률</string>
+    <string name="progress_metric_on_time">제시간</string>
+    <string name="progress_metric_window">±%1$d분</string>
+    <string name="progress_metric_streak">연속 일수</string>
+    <string name="progress_metric_best">최고 %1$d일</string>
+    <string name="progress_insight_label">인사이트</string>
+    <string name="progress_insight_refill">곧 리필이 필요해요. %1$s이(가) 알림 기준보다 적어요.</string>
+    <plurals name="progress_insight_missed">
+        <item quantity="other">이 기간에 %1$d회를 놓쳤어요. 바쁜 날에는 재알림이 도움이 돼요.</item>
+    </plurals>
+    <string name="progress_insight_skipped">건너뛴 복용도 과정의 일부이지 실패가 아니에요. 계속 기록하면 흐름을 읽는 데 도움이 돼요.</string>
+    <string name="progress_insight_calm">차분하고 꾸준한 한 주예요. 작은 체크 하나하나가 루틴을 지켜 줘요.</string>
+    <string name="progress_patterns_label">패턴</string>
+    <string name="progress_pattern_hardest">%1$s이(가) 가장 어려운 시간대예요</string>
+    <string name="progress_pattern_detail">놓친 복용 %2$d회 중 %1$d회가 %3$s에 있었어요.</string>
+    <string name="progress_calendar_all_days">전체 기간 캘린더</string>
+    <string name="progress_calendar_range">%1$s – %2$s</string>
+    <string name="progress_logs_for_day">기록 · %1$s</string>
+    <string name="progress_previous_month">이전 달</string>
+    <string name="progress_next_month">다음 달</string>
+    <string name="progress_nothing_scheduled">이 날은 예정된 복용이 없어요.</string>
+    <string name="progress_as_needed_log">필요시 · %1$s</string>
+    <string name="progress_generic_medication">약</string>
+    <string name="progress_delete_log">기록 삭제</string>
+    <string name="progress_detail_timing_title">제시간 복용 자세히</string>
+    <string name="progress_detail_streak_title">연속 기록 자세히</string>
+    <string name="progress_detail_adherence_title">복용률 자세히</string>
+    <string name="progress_detail_no_taken">이 기간에 복용한 기록이 아직 없어요.</string>
+    <string name="progress_detail_on_time_rate">복용한 것 중 %1$s가 ±%2$d분 안에 있었어요.</string>
+    <string name="progress_detail_breakdown">이르게 %1$d · 제시간 %2$d · 늦게 %3$d · 건너뜀 %4$d</string>
+    <string name="progress_detail_choose_window">이 지표에 쓸 허용 범위를 고르세요:</string>
+    <string name="progress_detail_streak_line">현재 %1$d일 연속 · 최고 %2$d일 연속</string>
+    <string name="progress_detail_streak_body">연속 기록에 들어가는 날은 예정된 복용이 하나 이상 있고, 해당하는 복용을 모두 했으며, 건너뛰거나 놓친 것이 없는 날이에요.</string>
+    <string name="progress_detail_adherence_rate">복용률 %1$s</string>
+    <string name="progress_detail_counts">예정 %1$d · 복용 %2$d · 건너뜀 %3$d · 놓침 %4$d · 대기 %5$d</string>
+    <string name="progress_detail_adherence_body">복용률은 이미 결과가 정해진 복용 가운데 실제로 복용한 비율이에요. 아직 남은 복용은 비율을 낮추지 않아요.</string>
+    <string name="progress_detail_needs_attention">살펴볼 기록</string>
+    <string name="progress_detail_no_attention">이 기간에 건너뛰거나 놓친 복용이 없어요.</string>
+    <string name="progress_detail_attention_row">%1$s · %2$s · %3$s</string>
+    <string name="care_title">케어</string>
+    <string name="care_add">+ 추가</string>
+    <string name="care_filter_all">전체</string>
+    <string name="care_filter_medications">약</string>
+    <string name="care_filter_prescriptions">처방</string>
+    <string name="status_active">진행 중</string>
+    <string name="status_completed">완료</string>
+    <string name="status_archived">보관됨</string>
+    <string name="status_treatment">%1$s 치료</string>
+    <string name="care_empty_title">약 서랍이 비어 있어요</string>
+    <string name="care_empty_body">처방이나 약을 추가하면 하루 일정이 자동으로 만들어져요.</string>
+    <string name="care_section_prescriptions">내 처방</string>
+    <string name="care_section_medications">약</string>
+    <string name="care_section_standalone">개별 약</string>
+    <string name="care_archived_count">보관됨 (%1$d)</string>
+    <string name="care_what_adding">무엇을 추가할까요?</string>
+    <string name="care_mode_prescription">처방</string>
+    <string name="care_mode_prescription_sub">약 하나 이상을 묶은 치료 계획</string>
+    <string name="care_mode_single">개별 약</string>
+    <string name="care_mode_single_sub">오늘의 계획에 바로 추가</string>
+    <plurals name="care_medication_count">
+        <item quantity="other">약 %1$d개</item>
+    </plurals>
+    <string name="care_stock_left">%1$s 남음</string>
+    <string name="detail_next_dose">다음 복용</string>
+    <string name="detail_as_needed">필요 시</string>
+    <string name="detail_schedule">일정</string>
+    <string name="detail_amount_per_dose">1회 복용량</string>
+    <string name="detail_supply">보유량</string>
+    <string name="detail_supply_remaining">%1$s 남음</string>
+    <string name="detail_supply_alert">%1$s에서 알림</string>
+    <string name="detail_supply_alert_days">%1$s에서 알림 · 약 %2$d일치</string>
+    <string name="detail_supply_untracked">보유량 관리 안 함</string>
+    <string name="detail_supply_enable">이 약을 편집해 보유량 관리를 켜세요</string>
+    <string name="detail_refill">+ 리필</string>
+    <string name="detail_recent_history">최근 기록</string>
+    <string name="detail_history_as_needed">필요시 복용</string>
+    <string name="detail_view_medication_logs">약 기록 보기</string>
+    <string name="detail_view_medication_logs_sub">복용과 건너뜀 전체 기록</string>
+    <string name="detail_restore_medication">약 복원</string>
+    <string name="detail_archive_medication">약 보관</string>
+    <string name="detail_delete_medication">약 삭제</string>
+    <string name="confirm_delete_medication_title">%1$s을(를) 삭제할까요?</string>
+    <string name="confirm_delete_medication_body">복용 기록도 함께 지워져요. 되돌릴 수 없어요.</string>
+    <string name="confirm_archive_medication_title">%1$s을(를) 보관할까요?</string>
+    <string name="confirm_archive_medication_body">앞으로의 알림이 멈춰요. 나중에 보관함에서 되돌릴 수 있어요.</string>
+    <string name="refill_title">보유량 채우기</string>
+    <string name="refill_units_label">추가할 수량</string>
+    <string name="logs_title">%1$s 기록</string>
+    <string name="rx_prescribed_by">처방: %1$s</string>
+    <string name="rx_period_ongoing">%1$s · 진행 중</string>
+    <string name="rx_period_range">%1$s – %2$s</string>
+    <string name="rx_add_medication">약 추가</string>
+    <string name="rx_add_medication_locked">MediTick Pro</string>
+    <string name="rx_add_medication_sub">새 약 또는 기존 약</string>
+    <string name="rx_progress_and_logs">진행 상황과 기록</string>
+    <string name="rx_no_decided">아직 확정된 복용이 없어요</string>
+    <string name="rx_adherence">복용률 %1$s</string>
+    <string name="rx_counts">복용 %1$d · 건너뜀 %2$d · 놓침 %3$d</string>
+    <string name="rx_on_time">제시간 %1$s</string>
+    <string name="rx_no_taken">아직 복용한 기록이 없어요</string>
+    <string name="rx_within_window">±%1$d분 이내</string>
+    <string name="rx_view_logs">처방 기록 보기</string>
+    <string name="rx_view_logs_sub">복용·건너뜀·필요시 기록</string>
+    <string name="rx_notes">메모</string>
+    <string name="rx_mark_complete">완료로 표시</string>
+    <string name="rx_archive">처방 보관</string>
+    <string name="rx_reactivate">처방 다시 시작</string>
+    <string name="rx_restore">처방 복원</string>
+    <string name="rx_delete">처방 삭제</string>
+    <string name="rx_confirm_complete_title">완료로 표시할까요?</string>
+    <string name="rx_confirm_complete_body">연결된 약의 앞으로의 알림이 멈춰요.</string>
+    <string name="rx_confirm_archive_title">처방을 보관할까요?</string>
+    <string name="rx_confirm_archive_body">처방과 연결된 약이 보관함으로 옮겨져요. 나중에 되돌릴 수 있어요.</string>
+    <string name="rx_confirm_reactivate_title">처방을 다시 시작할까요?</string>
+    <string name="rx_confirm_reactivate_body">치료가 다시 진행 중이 되고 알림도 돌아와요. 따로 완료한 약은 완료 상태로 남아요.</string>
+    <string name="rx_confirm_restore_title">처방을 복원할까요?</string>
+    <string name="rx_confirm_restore_body">이 처방이 바꾼 약만 복원돼요. 직접 보관한 약은 그대로 보관함에 남아요.</string>
+    <string name="rx_action_complete">완료</string>
+    <string name="rx_action_archive">보관</string>
+    <string name="rx_action_reactivate">다시 시작</string>
+    <string name="rx_action_restore">복원</string>
+    <string name="rx_confirm_delete_title">이 처방을 삭제할까요?</string>
+    <string name="rx_confirm_delete_body">여기에 속한 약은 단독 약으로 약장에 그대로 남아요.</string>
+    <string name="rx_add_new_medication">새 약 추가</string>
+    <string name="rx_add_new_medication_sub">새 알림을 만들어 연결</string>
+    <string name="rx_add_existing">기존 약 추가</string>
+    <string name="rx_add_existing_sub">단독 약을 연결</string>
+    <string name="rx_no_standalone">연결할 수 있는 단독 약이 없어요.</string>
+    <string name="rx_editor_new">새 처방</string>
+    <string name="rx_editor_edit">처방 편집</string>
+    <string name="rx_field_plan_name">계획 이름</string>
+    <string name="rx_field_condition">진단명</string>
+    <string name="rx_field_prescriber">처방한 의사</string>
+    <string name="rx_field_facility">병원 / 진료과</string>
+    <string name="rx_field_contact">연락처</string>
+    <string name="rx_field_notes">메모</string>
+    <string name="rx_start">시작 · %1$s</string>
+    <string name="rx_end">종료 · %1$s</string>
+    <string name="rx_ongoing">계속 복용</string>
+    <plurals name="rx_update_linked">
+        <item quantity="other">약 %1$d개 업데이트</item>
+    </plurals>
+    <string name="rx_apply_dates">이 기간을 연결된 일정에도 적용</string>
+    <string name="logs_empty">아직 기록된 복용이 없어요.</string>
+    <string name="log_row">%1$s · %2$s</string>
+    <string name="form_add_title">약 추가</string>
+    <string name="form_edit_title">약 편집</string>
+    <string name="form_step">%1$d/3단계</string>
+    <string name="form_add_to_routine">내 루틴에 추가</string>
+    <string name="form_save_changes">변경 사항 저장</string>
+    <string name="form_duplicate_title">중복된 약</string>
+    <string name="form_duplicate_body">같은 함량의 ‘%1$s’이(가) 이미 있어요.</string>
+    <string name="describe_label">말하듯 적어 보세요</string>
+    <string name="describe_question">무엇을 복용하세요?</string>
+    <string name="describe_hint">예: ‘Metformin 500mg every morning with food’</string>
+    <string name="describe_placeholder">약, 함량, 복용 시점…</string>
+    <string name="describe_examples">예시</string>
+    <string name="describe_understood">MediTick이 이해한 내용</string>
+    <string name="basics_label">기본 정보</string>
+    <string name="basics_headline">알아보기 쉽게</string>
+    <string name="basics_field_name">약 이름</string>
+    <string name="basics_no_prescription">없음(단독)</string>
+    <string name="basics_field_strength">함량</string>
+    <string name="basics_section_form">제형</string>
+    <string name="basics_field_instructions">복용 안내(선택)</string>
+    <string name="basics_track_supply">보유량 관리</string>
+    <string name="basics_track_supply_sub">떨어지기 전에 채우세요</string>
+    <string name="basics_field_stock">보유 수량</string>
+    <string name="basics_field_alert">알림 기준</string>
+    <string name="rhythm_label">나의 리듬</string>
+    <string name="rhythm_headline">언제가 좋을까요?</string>
+    <string name="rhythm_every_day">매일</string>
+    <string name="rhythm_every_day_sub">매일 같은 시간</string>
+    <string name="rhythm_specific">특정 요일</string>
+    <string name="rhythm_specific_sub">요일 선택</string>
+    <string name="rhythm_every_other">격일</string>
+    <string name="rhythm_every_other_sub">하루 복용, 하루 휴약</string>
+    <string name="rhythm_interval">간격</string>
+    <string name="rhythm_interval_sub">N일마다</string>
+    <string name="rhythm_cyclic">주기 반복</string>
+    <string name="rhythm_cyclic_sub">복용일과 휴약일 반복</string>
+    <string name="rhythm_as_needed">필요 시</string>
+    <string name="rhythm_as_needed_sub">정해진 일정 없음</string>
+    <string name="rhythm_section_days">요일</string>
+    <string name="rhythm_days_on">복용 일수</string>
+    <string name="rhythm_days_off">휴약 일수</string>
+    <string name="rhythm_repeat_every">며칠마다 반복할까요</string>
+    <string name="rhythm_section_doses">복용</string>
+    <string name="rhythm_add_dose">복용 추가</string>
+    <string name="rhythm_dose_summary">%1$s • %2$s</string>
+    <string name="rhythm_meal_linked">식사와 연동된 알림</string>
+    <string name="rhythm_meal_auto">식사 시간을 바꾸면 알림도 자동으로 바뀌어요</string>
+    <string name="rhythm_meal_pill">%1$s %2$s</string>
+    <string name="rhythm_meal_synced">알림 시간과 연동 중</string>
+    <string name="rhythm_amount_per_dose">1회 복용량</string>
+    <string name="rhythm_start_date">시작일 · %1$s</string>
+    <string name="rhythm_ongoing">계속 복용</string>
+    <string name="rhythm_no_end_date">종료일 없음</string>
+    <plurals name="rhythm_course_days">
+        <item quantity="other">%1$d일 복용</item>
+    </plurals>
+    <string name="dose_add_hint">정확한 시간을 고르거나 자주 쓰는 시간대에서 시작하세요.</string>
+    <string name="dose_custom_time">직접 지정</string>
+    <string name="dose_edit_title">복용 편집</string>
+    <string name="dose_section_amount">수량</string>
+    <string name="dose_decrease">용량 줄이기</string>
+    <string name="dose_increase">용량 늘리기</string>
+    <string name="dose_section_timing">시점</string>
+    <string name="dose_relation_fixed">고정</string>
+    <string name="dose_relation_before">식전</string>
+    <string name="dose_relation_with">식중</string>
+    <string name="dose_relation_after">식후</string>
+    <string name="dose_reminder_time">알림 %1$s</string>
+    <plurals name="dose_offset_before">
+        <item quantity="other">식사 %1$d분 전</item>
+    </plurals>
+    <plurals name="dose_offset_after">
+        <item quantity="other">식사 %1$d분 후</item>
+    </plurals>
+    <string name="dose_meal_note">%1$s %2$s · 식사 시간을 바꾸면 알림도 자동으로 바뀌어요</string>
+    <string name="dose_remove">복용 삭제</string>
+    <string name="settings_title">설정</string>
+    <string name="settings_pro_active">Pro 이용 중</string>
+    <string name="settings_pro_thanks">응원해 주셔서 감사해요</string>
+    <string name="settings_unlock_pro">MediTick Pro 잠금 해제</string>
+    <string name="settings_unlock_pro_sub">식사 연동, 재알림, 전체 기록, 약 무제한</string>
+    <string name="settings_group_pro">MediTick Pro</string>
+    <string name="settings_group_preferences">환경 설정</string>
+    <string name="settings_group_notifications">알림</string>
+    <string name="settings_group_data">내 데이터</string>
+    <string name="settings_group_community">커뮤니티</string>
+    <string name="settings_group_about">정보</string>
+    <string name="settings_redeem">코드 사용</string>
+    <string name="settings_redeem_sub">Play 프로모션 코드로 Pro 잠금 해제</string>
+    <string name="settings_join_community">MediTick 커뮤니티 참여</string>
+    <string name="settings_join_community_sub">루틴, 궁금한 점, 앞으로의 계획</string>
+    <string name="settings_appearance">테마</string>
+    <string name="settings_appearance_summary">%1$s · %2$s 색상</string>
+    <string name="settings_appearance_mode">모드</string>
+    <string name="settings_appearance_accent">포인트 컬러</string>
+    <string name="appearance_auto">자동</string>
+    <string name="appearance_daylight">데이라이트</string>
+    <string name="appearance_midnight">미드나이트</string>
+    <string name="accent_aurora">오로라</string>
+    <string name="accent_ocean">오션</string>
+    <string name="accent_orchid">오키드</string>
+    <string name="accent_ember">엠버</string>
+    <string name="settings_meal_times">식사 시간</string>
+    <string name="settings_meal_times_sub">아침 · 점심 · 저녁 · 취침 전</string>
+    <string name="settings_widgets">위젯</string>
+    <string name="settings_widgets_sub">홈 화면과 지원되는 잠금 화면 옵션</string>
+    <string name="settings_dose_presets">복용 시간 프리셋</string>
+    <string name="settings_dose_presets_sub">아침 · 점심 · 저녁 · 취침 전</string>
+    <string name="settings_dose_presets_restore">기본 시간으로 되돌리기</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_language_system">시스템 설정</string>
+    <string name="settings_system_language">시스템 언어 설정</string>
+    <string name="settings_system_language_sub">Android의 앱별 언어 설정 열기</string>
+    <string name="settings_haptics">햅틱</string>
+    <string name="settings_haptics_sub">조작할 때 은은한 진동</string>
+    <string name="settings_notif_permission">알림 권한</string>
+    <string name="settings_notif_permission_sub">눌러서 알림을 허용하세요</string>
+    <string name="settings_notif_status">알림 상태</string>
+    <string name="settings_notif_status_sub">Android 알림 설정 열기</string>
+    <string name="settings_dose_reminders">복용 알림</string>
+    <string name="settings_dose_reminders_sub">복용 시간마다 알림</string>
+    <string name="settings_follow_up">후속 알림</string>
+    <string name="settings_follow_up_sub">기록할 때까지 다시 알려 드려요</string>
+    <string name="settings_follow_up_delay">재알림까지 대기 시간</string>
+    <plurals name="settings_minutes">
+        <item quantity="other">%1$d분</item>
+    </plurals>
+    <string name="settings_minutes_short">%1$d분</string>
+    <string name="settings_hide_names">알림에서 약 이름 숨기기</string>
+    <string name="settings_hide_names_sub">잠금 화면에 약 이름이 뜨지 않아요</string>
+    <string name="settings_alert_sound">알림음</string>
+    <string name="settings_urgent">긴급 알림</string>
+    <string name="settings_urgent_sub">우선순위가 높은 채널이에요. 방해 금지 모드는 그대로 적용될 수 있어요</string>
+    <string name="settings_exact_alarm">정확한 알람 권한</string>
+    <string name="settings_exact_alarm_sub">Android의 ‘알람 및 리마인더’ 열기</string>
+    <string name="settings_refill_reminders">리필 알림</string>
+    <string name="settings_refill_reminders_sub">보유량이 기준 아래로 내려가면 알림</string>
+    <string name="settings_sound_title">알림 소리</string>
+    <string name="settings_sound_hint">소리를 누르면 미리 들을 수 있어요. 저장한 뒤에 적용돼요. 일부 소리는 MediTick Pro가 필요해요.</string>
+    <string name="sound_standard">MediTick(기본)</string>
+    <string name="sound_chime">차임(길게)</string>
+    <string name="sound_bell">벨</string>
+    <string name="sound_urgent">긴급</string>
+    <string name="sound_silent">무음</string>
+    <string name="settings_export">백업 내보내기</string>
+    <string name="settings_export_sub">모든 데이터를 JSON 파일로</string>
+    <string name="settings_import">백업 가져오기</string>
+    <string name="settings_import_sub">iOS 또는 Android에서 내보낸 MediTick 백업 복원</string>
+    <string name="settings_erase">모든 데이터 지우기</string>
+    <string name="settings_erase_sub">모든 약, 일정, 기록</string>
+    <string name="settings_erase_title">모두 지울까요?</string>
+    <string name="settings_erase_body">이 기기의 모든 약, 처방, 기록이 영구적으로 삭제돼요.</string>
+    <string name="settings_msg_link_failed">링크를 열 수 없어요.</string>
+    <string name="settings_msg_exported">백업을 내보냈어요.</string>
+    <string name="settings_msg_export_failed">백업을 내보내지 못했어요.</string>
+    <plurals name="settings_msg_restored">
+        <item quantity="other">백업을 복원했어요. 약 %1$d개를 불러왔어요.</item>
+    </plurals>
+    <string name="settings_msg_bad_backup">이 파일은 MediTick 백업이 아닌 것 같아요.</string>
+    <string name="settings_feedback">의견 보내기 / 오류 신고</string>
+    <string name="settings_feedback_sub">기기와 재현 방법을 알려 주세요</string>
+    <string name="settings_feature_request">기능 제안</string>
+    <string name="settings_feature_request_sub">MediTick이 더 나아질 방법을 알려 주세요</string>
+    <string name="settings_review">리뷰 작성하기</string>
+    <string name="settings_share">MediTick 공유하기</string>
+    <string name="settings_share_text">MediTick — 이제 복용을 놓치지 마세요. 복약 타이머, 알림, 기록까지.</string>
+    <string name="settings_community_title">혼자가 아니에요</string>
+    <string name="settings_community_body">다른 MediTick 사용자와 루틴을 나누고, 궁금한 점을 묻고, 오류를 신고하고, 새 기능 소식을 가장 먼저 받아 보세요.</string>
+    <string name="settings_website">웹사이트</string>
+    <string name="settings_whats_new">새로운 기능</string>
+    <string name="settings_whats_new_sub">MediTick %1$s</string>
+    <string name="settings_privacy">개인정보 처리방침</string>
+    <string name="settings_privacy_sub">MediTick이 데이터를 다루는 방식</string>
+    <string name="settings_terms">서비스 약관</string>
+    <string name="settings_terms_sub">알림 도구로서의 한계</string>
+    <string name="settings_about">MediTick 정보</string>
+    <string name="settings_version">버전 %1$s (%2$s)</string>
+    <string name="settings_disclaimer">MediTick · 건강 데이터는 이 기기에만 저장돼요.\n의학적 조언이 아닌 알림 도구예요.</string>
+    <string name="info_widgets_title">위젯</string>
+    <string name="info_widgets_body">홈 화면의 위젯 목록에서 MediTick을 추가하세요. 잠금 화면 위젯 지원 여부는 Android 버전과 제조사에 따라 달라지며 앱에서 자동으로 켤 수 없어요. 현재 위젯은 오늘의 진행 상황과 다음 복용을 보여 주고, 기록은 앱을 열어서 해요.</string>
+    <string name="info_privacy_title">개인정보</string>
+    <string name="info_privacy_body">약 정보와 일정, 기록은 이 기기에 저장돼요. 내보내기는 직접 선택할 때만 이뤄져요. 결제는 Google Play가, 알림 전달은 Android가 처리해요.</string>
+    <string name="info_terms_title">이용 약관</string>
+    <string name="info_terms_body">MediTick은 알림과 개인 기록을 돕는 도구이지 의학적 조언이 아니에요. 항상 의료진의 지시를 따르고, 약에 관한 궁금증은 전문가에게 문의하세요.</string>
+    <string name="info_about_body">MediTick %1$s (%2$s)\n인터넷 없이 동작하는 Android용 비공개 복약 알림.</string>
+    <string name="paywall_title">MediTick Pro</string>
+    <string name="paywall_headline">‘먹었던가?’ 하고 다시 고민하지 마세요.</string>
+    <string name="paywall_feature_alerts">루틴을 눈에 띄게 지켜 주는 알림</string>
+    <string name="paywall_feature_follow_ups">모두 기록될 때까지 이어지는 재알림</string>
+    <string name="paywall_feature_unlimited">약과 처방 무제한</string>
+    <string name="paywall_feature_insights">연속 기록, 인사이트, 위젯</string>
+    <string name="paywall_loading">Google Play 플랜을 불러오는 중…</string>
+    <string name="paywall_unavailable">구독 플랜을 이용할 수 없어요.</string>
+    <string name="paywall_upgrade">Pro로 업그레이드</string>
+    <string name="paywall_lifetime_note">한 번 결제로 계속 Pro.</string>
+    <string name="paywall_renew_note">자동으로 갱신돼요. Google Play에서 언제든 해지할 수 있어요.</string>
+    <string name="paywall_restore">구매 복원</string>
+    <string name="add_sheet_title">새로 추가</string>
+    <string name="add_sheet_prescription">처방 만들기</string>
+    <string name="add_sheet_prescription_sub">정기 복용 약을 묶어서 관리</string>
+    <string name="add_sheet_medication">약 추가</string>
+    <string name="add_sheet_medication_sub">약 하나에 대한 알림 만들기</string>
+    <string name="release_latest">최신 버전</string>
+    <string name="release_lead">이번 업데이트로 iPhone과 Android의 기능이 같아졌어요:</string>
+    <string name="release_bullet_filters">치료를 종류별로, 그리고 진행 중·완료·보관으로 걸러 볼 수 있어요.</string>
+    <string name="release_bullet_prescriptions">처방에 처방 의사, 병원, 연락처, 진단명, 치료 기간을 담을 수 있고 완료·보관·복원도 가능해요.</string>
+    <string name="release_bullet_per_dose">복용마다 용량과 식사와의 관계를 따로 정할 수 있어서, 같은 약을 08:00 고정과 저녁 30분 전으로 함께 둘 수 있어요.</string>
+    <string name="release_bullet_shapes">N일마다, 복용/휴약 주기 같은 새 일정이 요일 지정과 필요시 복용에 더해졌어요.</string>
+    <string name="release_bullet_take_all">‘한 번에 기록’으로 같은 시간대를 한 번에 정리할 수 있어요.</string>
+    <string name="release_bullet_progress">진행 상황에 전체 기간 캘린더와 월 이동이 생겼고, 복용률·제시간·연속 기록 설명도 볼 수 있어요.</string>
+    <string name="release_bullet_sounds">알림음, 잠금 화면에 약 이름을 감추는 비공개 알림, 앱 안의 언어 선택이 추가됐어요.</string>
+    <string name="release_bullet_refills">리필할 때 결과 보유량을 미리 확인할 수 있고, 기록한 시간도 나중에 고칠 수 있어요.</string>
+
+    <!-- ===================== Smart-input lexicon =====================
+         Comma-separated trigger words for the free-text medication
+         parser, not UI copy. English tokens are always matched too,
+         so translate these to what a local user would actually type. -->
+    <string name="parse_slot_morning" tools:ignore="Typos">아침,조식</string>
+    <string name="parse_slot_midday" tools:ignore="Typos">점심,정오,낮</string>
+    <string name="parse_slot_evening" tools:ignore="Typos">저녁,밤</string>
+    <string name="parse_slot_bedtime" tools:ignore="Typos">취침 전,자기 전,취침</string>
+    <string name="parse_meal_before" tools:ignore="Typos">식전,식사 전,아침 식사 전,점심 식사 전,저녁 식사 전</string>
+    <string name="parse_meal_after" tools:ignore="Typos">식후,식사 후,아침 식사 후,점심 식사 후,저녁 식사 후</string>
+    <string name="parse_meal_with" tools:ignore="Typos">식사와 함께,식사 중</string>
+    <string name="parse_twice" tools:ignore="Typos">하루 2회,하루 두 번,2회</string>
+    <string name="parse_unit_day" tools:ignore="Typos">일간,일</string>
+    <string name="parse_unit_week" tools:ignore="Typos">주간,주</string>
+    <string name="parse_unit_month" tools:ignore="Typos">개월,달</string>
+    <string name="parse_marker_am" tools:ignore="Typos">오전</string>
+    <string name="parse_marker_pm" tools:ignore="Typos">오후</string>
+    <string name="parse_stopwords" tools:ignore="Typos">매일,매,2회,1회,복용,함께,전,후,아침,밤,저녁,점심,취침,식사,끼니</string>
+</resources>

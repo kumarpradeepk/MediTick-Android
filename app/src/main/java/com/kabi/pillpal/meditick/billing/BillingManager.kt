@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.android.billingclient.api.*
+import com.kabi.pillpal.meditick.R
 import com.kabi.pillpal.meditick.notifications.NotificationScheduler
 
 data class BillingPlan(
@@ -63,7 +64,7 @@ class BillingManager private constructor(private val context: Context) : Purchas
                 val lifetime: List<ProductDetails> = if (inAppResult.responseCode == BillingClient.BillingResponseCode.OK) inAppDetails.productDetailsList else emptyList()
                 plans = (subscriptions + lifetime).mapNotNull(::toPlan).sortedBy { listOf("monthly", "yearly", "lifetime").indexOf(it.id) }
                 isLoading = false
-                if (plans.isEmpty()) lastMessage = "Connect monthly, yearly and lifetime products in Google Play Console."
+                if (plans.isEmpty()) lastMessage = context.getString(R.string.billing_products_missing)
             }
         }
     }
@@ -71,12 +72,12 @@ class BillingManager private constructor(private val context: Context) : Purchas
     private fun toPlan(details: ProductDetails): BillingPlan? {
         if (details.productType == BillingClient.ProductType.INAPP) {
             val price = details.oneTimePurchaseOfferDetails?.formattedPrice ?: return null
-            return BillingPlan(details.productId, "Lifetime", "One-time purchase", price, details)
+            return BillingPlan(details.productId, context.getString(R.string.billing_plan_lifetime), context.getString(R.string.billing_tag_one_time), price, details)
         }
         val offer = details.subscriptionOfferDetails?.firstOrNull() ?: return null
         val phase = offer.pricingPhases.pricingPhaseList.lastOrNull() ?: return null
-        val title = if (details.productId == "yearly") "Yearly" else "Monthly"
-        val subtitle = if (details.productId == "yearly") "Best subscription value" else "Flexible billing"
+        val title = context.getString(if (details.productId == "yearly") R.string.billing_plan_yearly else R.string.billing_plan_monthly)
+        val subtitle = context.getString(if (details.productId == "yearly") R.string.billing_tag_best_value else R.string.billing_tag_flexible)
         return BillingPlan(details.productId, title, subtitle, phase.formattedPrice, details, offer.offerToken)
     }
 
@@ -89,8 +90,8 @@ class BillingManager private constructor(private val context: Context) : Purchas
     }
 
     fun restore() {
-        lastMessage = "Checking your purchases…"
-        queryPurchases(onComplete = { lastMessage = if (isPro) "Purchases restored — welcome back." else "No active purchases found." })
+        lastMessage = context.getString(R.string.billing_checking_purchases)
+        queryPurchases(onComplete = { lastMessage = context.getString(if (isPro) R.string.billing_restored else R.string.billing_none_found) })
     }
 
     private fun queryPurchases(onComplete: (() -> Unit)? = null) {
@@ -122,7 +123,7 @@ class BillingManager private constructor(private val context: Context) : Purchas
         isPro = active.isNotEmpty()
         prefs.edit().putBoolean("is_pro", isPro).apply()
         NotificationScheduler.scheduleAll(context)
-        if (isPro) lastMessage = "Welcome to MediTick Pro — everything is unlocked."
+        if (isPro) lastMessage = context.getString(R.string.billing_pro_unlocked)
     }
 
     fun clearMessage() { lastMessage = null }
