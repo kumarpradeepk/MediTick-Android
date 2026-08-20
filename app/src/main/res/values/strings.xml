@@ -1,4 +1,55 @@
 <resources>
     <string name="app_name">MediTick</string>
     <string name="widget_description">Today’s medication progress and next dose</string>
+
+    <!-- ===================== Notification channels ===================== -->
+    <string name="channel_dose_name">Dose reminders</string>
+    <string name="channel_dose_description">Alerts at scheduled medication times</string>
+    <string name="channel_follow_up_name">Follow-up reminders</string>
+    <string name="channel_follow_up_description">A gentle nudge when a dose has not been logged</string>
+    <string name="channel_refill_name">Refill reminders</string>
+    <string name="channel_refill_description">Alerts when tracked medication supply runs low</string>
+
+    <!-- ===================== Notification content ====================== -->
+    <!-- Shown instead of the drug name when the user hides names on the lock screen. -->
+    <string name="notif_hidden_medication">your medication</string>
+    <!-- %1$s is the medication name (or the hidden-name placeholder above). -->
+    <string name="notif_title_still_waiting">Still waiting: %1$s</string>
+    <string name="notif_title_running_low">Running low: %1$s</string>
+    <string name="notif_title_time_for">Time for %1$s</string>
+    <string name="notif_body_nudge">This dose hasn’t been logged yet. A quick tap and you’re done.</string>
+    <string name="notif_body_snooze">Your snoozed dose is ready.</string>
+    <!-- %1$d is a number of days of remaining supply. -->
+    <plurals name="notif_body_refill_days">
+        <item quantity="one">About %1$d day of supply left. Time to plan a refill.</item>
+        <item quantity="other">About %1$d days of supply left. Time to plan a refill.</item>
+    </plurals>
+    <string name="notif_body_refill_generic">Your supply is below the refill level.</string>
+    <string name="notif_body_hidden">Open MediTick to view and log this dose.</string>
+
+    <!-- ===================== Notification actions ====================== -->
+    <string name="action_take">Take</string>
+    <string name="action_skip">Skip</string>
+    <!-- %1$d is a number of minutes. -->
+    <string name="action_snooze_minutes">Snooze %1$d min</string>
+
+    <!-- ===================== Home-screen widget ======================== -->
+    <!-- %1$d taken, %2$d scheduled. -->
+    <string name="widget_doses_ticked">%1$d of %2$d doses ticked</string>
+    <string name="widget_no_doses_today">No doses today</string>
+    <string name="widget_all_done_today">All done for today</string>
+    <string name="widget_all_caught_up">You’re all caught up</string>
+
+    <!-- ===================== Billing / Pro ============================= -->
+    <string name="billing_products_missing">Connect monthly, yearly and lifetime products in Google Play Console.</string>
+    <string name="billing_plan_lifetime">Lifetime</string>
+    <string name="billing_plan_yearly">Yearly</string>
+    <string name="billing_plan_monthly">Monthly</string>
+    <string name="billing_tag_one_time">One-time purchase</string>
+    <string name="billing_tag_best_value">Best subscription value</string>
+    <string name="billing_tag_flexible">Flexible billing</string>
+    <string name="billing_checking_purchases">Checking your purchases…</string>
+    <string name="billing_restored">Purchases restored — welcome back.</string>
+    <string name="billing_none_found">No active purchases found.</string>
+    <string name="billing_pro_unlocked">Welcome to MediTick Pro — everything is unlocked.</string>
 </resources>
