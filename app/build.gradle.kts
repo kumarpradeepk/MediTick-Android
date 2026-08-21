@@ -57,6 +57,9 @@ android {
             optimization {
                 enable = true
             }
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
             if (hasReleaseSigning) {
                 signingConfig = signingConfigs.getByName("release")
             }
