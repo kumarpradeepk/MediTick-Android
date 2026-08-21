@@ -49,10 +49,6 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     var message by remember { mutableStateOf<String?>(null) }
-    fun openMail(subject: String) {
-        val uri = Uri.parse("mailto:tinkersmithstudio@gmail.com?subject=${Uri.encode(subject)}")
-        runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, uri)) }
-    }
     /** Opens an external destination; a missing browser must never crash Settings. */
     fun open(url: String) {
         runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
@@ -116,10 +112,28 @@ fun SettingsScreen(
                 Spacer(Modifier.height(20.dp))
             }
             item { SettingsGroup(stringResource(R.string.settings_group_pro)) {
-                SettingsRow(Icons.Default.Redeem, DS.colors.violet, stringResource(R.string.settings_redeem), stringResource(R.string.settings_redeem_sub),
-                    onClick = { open("https://play.google.com/redeem") })
-                RowDivider(); SettingsRow(Icons.Default.Group, DS.colors.mint, stringResource(R.string.settings_join_community), stringResource(R.string.settings_join_community_sub),
-                    onClick = { open(AppLinks.FACEBOOK_GROUP) })
+                SettingsRow(Icons.Default.Restaurant, DS.colors.amber, stringResource(R.string.settings_meal_times), stringResource(R.string.settings_meal_times_sub),
+                    onClick = { if (billing.isPro) showMeals = true else onShowPaywall() }) {
+                    if (billing.isPro) Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink3) else StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
+                }
+                RowDivider(); SettingsRow(Icons.Default.Alarm, DS.colors.amber, stringResource(R.string.settings_follow_up), stringResource(R.string.settings_follow_up_sub),
+                    onClick = if (billing.isPro) null else onShowPaywall) {
+                    if (billing.isPro) Switch(settings.followUpEnabled, onCheckedChange = { settings.setFollowUp(it); NotificationScheduler.scheduleAll(context) })
+                    else StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
+                }
+                if (billing.isPro && settings.followUpEnabled) {
+                    RowDivider(); SettingsRow(Icons.Default.Timer, DS.colors.amber, stringResource(R.string.settings_follow_up_delay), pluralStringResource(R.plurals.settings_minutes, settings.nudgeDelayMinutes, settings.nudgeDelayMinutes), onClick = null) {
+                        var expanded by remember { mutableStateOf(false) }; Box {
+                            TextButton({ expanded = true }) { Text(stringResource(R.string.settings_minutes_short, settings.nudgeDelayMinutes)) }
+                            DropdownMenu(expanded, { expanded = false }) { listOf(5, 10, 15, 30, 60).forEach { minutes -> DropdownMenuItem({ Text(stringResource(R.string.settings_minutes_short, minutes)) }, { settings.setNudgeDelay(minutes); expanded = false; NotificationScheduler.scheduleAll(context) }) } }
+                        }
+                    }
+                }
+                RowDivider(); SettingsRow(Icons.Default.VisibilityOff, DS.colors.violet, stringResource(R.string.settings_hide_names), stringResource(R.string.settings_hide_names_sub),
+                    onClick = if (billing.isPro) null else onShowPaywall) {
+                    if (billing.isPro) Switch(settings.hideMedicationNames, onCheckedChange = { settings.updateHideMedicationNames(it); NotificationScheduler.scheduleAll(context) })
+                    else StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
+                }
             } }
             item { SettingsGroup(stringResource(R.string.settings_group_preferences)) {
                 SettingsRow(if (settings.appearance == AppearanceMode.LIGHT) Icons.Default.LightMode else Icons.Default.DarkMode, DS.colors.violet,
@@ -130,8 +144,6 @@ fun SettingsScreen(
                         stringResource(accentTitleRes(settings.accent)),
                     ),
                     onClick = { showAppearance = true })
-                RowDivider(); SettingsRow(Icons.Default.Restaurant, DS.colors.amber, stringResource(R.string.settings_meal_times), stringResource(R.string.settings_meal_times_sub),
-                    onClick = { if (billing.isPro) showMeals = true else onShowPaywall() }) { if (billing.isPro) Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink3) else StatusPill(stringResource(R.string.badge_pro), DS.colors.violet) }
                 RowDivider(); SettingsRow(Icons.Default.Widgets, DS.colors.cyan, stringResource(R.string.settings_widgets), stringResource(R.string.settings_widgets_sub), onClick = { infoDialog = "widgets" })
                 RowDivider(); SettingsRow(Icons.Default.Schedule, DS.colors.mint, stringResource(R.string.settings_dose_presets), stringResource(R.string.settings_dose_presets_sub), onClick = { showPresets = true })
                 RowDivider(); SettingsRow(Icons.Default.Language, DS.colors.cyan, stringResource(R.string.settings_language), stringResource(languageTitleRes(settings.languageTag)), onClick = { showLanguage = true })
@@ -155,21 +167,6 @@ fun SettingsScreen(
                 RowDivider(); SettingsRow(Icons.Default.NotificationAdd, DS.colors.cyan, stringResource(R.string.settings_dose_reminders), stringResource(R.string.settings_dose_reminders_sub)) { Switch(settings.remindersEnabled, onCheckedChange = {
                     settings.setReminders(it); if (it) requestNotificationPermission(); NotificationScheduler.scheduleAll(context)
                 }) }
-                RowDivider(); SettingsRow(Icons.Default.Alarm, DS.colors.amber, stringResource(R.string.settings_follow_up), stringResource(R.string.settings_follow_up_sub),
-                    onClick = if (billing.isPro) null else onShowPaywall) {
-                    if (billing.isPro) Switch(settings.followUpEnabled, onCheckedChange = { settings.setFollowUp(it); NotificationScheduler.scheduleAll(context) }) else StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
-                }
-                if (billing.isPro && settings.followUpEnabled) {
-                    RowDivider(); SettingsRow(Icons.Default.Timer, DS.colors.amber, stringResource(R.string.settings_follow_up_delay), pluralStringResource(R.plurals.settings_minutes, settings.nudgeDelayMinutes, settings.nudgeDelayMinutes), onClick = null) {
-                        var expanded by remember { mutableStateOf(false) }; Box {
-                            TextButton({ expanded = true }) { Text(stringResource(R.string.settings_minutes_short, settings.nudgeDelayMinutes)) }
-                            DropdownMenu(expanded, { expanded = false }) { listOf(5, 10, 15, 30, 60).forEach { minutes -> DropdownMenuItem({ Text(stringResource(R.string.settings_minutes_short, minutes)) }, { settings.setNudgeDelay(minutes); expanded = false; NotificationScheduler.scheduleAll(context) }) } }
-                        }
-                    }
-                }
-                RowDivider(); SettingsRow(Icons.Default.VisibilityOff, DS.colors.violet, stringResource(R.string.settings_hide_names), stringResource(R.string.settings_hide_names_sub)) {
-                    Switch(settings.hideMedicationNames, onCheckedChange = { settings.updateHideMedicationNames(it); NotificationScheduler.scheduleAll(context) })
-                }
                 RowDivider(); SettingsRow(Icons.Default.MusicNote, DS.colors.cyan, stringResource(R.string.settings_alert_sound), stringResource(alertSoundTitleRes(settings.alertSound)), onClick = { showSound = true })
                 RowDivider(); SettingsRow(Icons.Default.PriorityHigh, DS.colors.violet, stringResource(R.string.settings_urgent), stringResource(R.string.settings_urgent_sub)) { Switch(settings.timeSensitiveEnabled, { settings.setTimeSensitive(it); NotificationScheduler.scheduleAll(context) }) }
                 if (android.os.Build.VERSION.SDK_INT >= 31) { RowDivider(); SettingsRow(Icons.Default.AlarmOn, DS.colors.amber, stringResource(R.string.settings_exact_alarm), stringResource(R.string.settings_exact_alarm_sub), onClick = { runCatching { context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${context.packageName}"))) } }) }
@@ -179,18 +176,6 @@ fun SettingsScreen(
                 SettingsRow(Icons.Default.UploadFile, DS.colors.mint, stringResource(R.string.settings_export), stringResource(R.string.settings_export_sub), onClick = { exporter.launch("MediTick-backup.json") })
                 RowDivider(); SettingsRow(Icons.Default.Download, DS.colors.cyan, stringResource(R.string.settings_import), stringResource(R.string.settings_import_sub), onClick = { importer.launch(arrayOf("application/json", "text/json", "text/plain")) })
                 RowDivider(); SettingsRow(Icons.Default.Delete, DS.colors.coral, stringResource(R.string.settings_erase), stringResource(R.string.settings_erase_sub), onClick = { confirmErase = true })
-            } }
-            item { CommunityCard(onOpen = ::open); Spacer(Modifier.height(14.dp)) }
-            item { SettingsGroup(stringResource(R.string.settings_group_community)) {
-                SettingsRow(Icons.Default.BugReport, DS.colors.coral, stringResource(R.string.settings_feedback), stringResource(R.string.settings_feedback_sub), onClick = { openMail(context.getString(R.string.mail_subject_bug)) })
-                RowDivider(); SettingsRow(Icons.Default.Lightbulb, DS.colors.mint, stringResource(R.string.settings_feature_request), stringResource(R.string.settings_feature_request_sub), onClick = { openMail(context.getString(R.string.mail_subject_feature)) })
-                RowDivider(); SettingsRow(Icons.Default.Star, DS.colors.amber, stringResource(R.string.settings_review), onClick = {
-                    val uri = Uri.parse("market://details?id=${context.packageName}"); runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, uri)) }
-                })
-                RowDivider(); SettingsRow(Icons.Default.Share, DS.colors.cyan, stringResource(R.string.settings_share), onClick = {
-                    val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, context.getString(R.string.settings_share_text))
-                    context.startActivity(Intent.createChooser(send, context.getString(R.string.settings_share)))
-                })
             } }
             item { SettingsGroup(stringResource(R.string.settings_group_about)) {
                 if (AppLinks.isConfigured(AppLinks.WEBSITE)) {
@@ -315,28 +300,6 @@ internal val supportedLanguageTags = listOf(
 /** Chime, Bell and Urgent are part of Pro. */
 internal fun alertSoundRequiresPro(sound: AlertSound): Boolean =
     sound == AlertSound.CHIME || sound == AlertSound.BELL || sound == AlertSound.URGENT
-
-/** The community card: an invitation plus the two places conversations happen. */
-@Composable
-private fun CommunityCard(onOpen: (String) -> Unit) {
-    GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(18.dp)) {
-        Text(stringResource(R.string.settings_community_title), color = DS.colors.ink, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
-        Spacer(Modifier.height(6.dp))
-        Text(
-            stringResource(R.string.settings_community_body),
-            color = DS.colors.ink3, fontSize = 12.5.sp, lineHeight = 18.sp,
-        )
-        Spacer(Modifier.height(14.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            if (AppLinks.isConfigured(AppLinks.FACEBOOK_GROUP)) {
-                Button({ onOpen(AppLinks.FACEBOOK_GROUP) }) { Text(stringResource(R.string.brand_facebook)) }
-            }
-            if (AppLinks.isConfigured(AppLinks.REDDIT)) {
-                OutlinedButton({ onOpen(AppLinks.REDDIT) }) { Text(stringResource(R.string.brand_reddit)) }
-            }
-        }
-    }
-}
 
 /** In-app language override; iOS and Android offer the same eight. */
 @Composable

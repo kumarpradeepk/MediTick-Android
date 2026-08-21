@@ -242,7 +242,10 @@ class DoseAlarmReceiver : BroadcastReceiver() {
         NotificationScheduler.createChannels(context, settings)
         val repository = AppRepository.get(context)
         val med = repository.medication(medicationId) ?: return
-        val visibleName = if (settings.hideMedicationNames) context.getString(R.string.notif_hidden_medication) else med.name
+        // Private notification wording is a Pro entitlement, enforced at the
+        // delivery layer so a stale local preference cannot bypass the gate.
+        val hidesMedicationName = settings.hideMedicationNames && BillingEntitlement.isPro(context)
+        val visibleName = if (hidesMedicationName) context.getString(R.string.notif_hidden_medication) else med.name
         val title = when (kind) {
             NotificationScheduler.KIND_NUDGE, NotificationScheduler.KIND_SNOOZE -> context.getString(R.string.notif_title_still_waiting, visibleName)
             NotificationScheduler.KIND_REFILL -> context.getString(R.string.notif_title_running_low, visibleName)
@@ -254,7 +257,7 @@ class DoseAlarmReceiver : BroadcastReceiver() {
             NotificationScheduler.KIND_REFILL -> med.daysOfStockRemaining?.let {
                 context.resources.getQuantityString(R.plurals.notif_body_refill_days, it, it)
             } ?: context.getString(R.string.notif_body_refill_generic)
-            else -> if (settings.hideMedicationNames) context.getString(R.string.notif_body_hidden)
+            else -> if (hidesMedicationName) context.getString(R.string.notif_body_hidden)
                 else listOfNotNull(med.doseLabel(context), med.instructions.takeIf { it.isNotBlank() }).joinToString(" · ")
         }
         val open = PendingIntent.getActivity(context, 1, Intent(context, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

@@ -9,6 +9,8 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -63,39 +65,43 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 private fun SplashStep(next: () -> Unit) {
     val c = DS.colors
     Column(
-        Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal = 24.dp, vertical = 28.dp),
+        Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.Start,
     ) {
-        Spacer(Modifier.weight(.25f))
-        Box(Modifier.fillMaxWidth().appearFluidly(0), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CapsuleTickMark()
-                Spacer(Modifier.height(19.dp))
-                Row(
-                    Modifier.clip(RoundedCornerShape(50)).background(c.amber.copy(.12f)).padding(horizontal = 14.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Default.Star, null, tint = c.amber, modifier = Modifier.size(11.dp))
-                    Text(stringResource(R.string.onboarding_badge), color = c.amber, fontWeight = FontWeight.ExtraBold, fontSize = 11.sp, letterSpacing = .6.sp)
-                    Icon(Icons.Default.Star, null, tint = c.amber, modifier = Modifier.size(11.dp))
+        BoxWithConstraints(Modifier.fillMaxWidth().weight(1f)) {
+            val viewportHeight = maxHeight
+            Column(
+                Modifier.fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .heightIn(min = viewportHeight)
+                    .padding(vertical = 14.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            ) {
+                Box(Modifier.fillMaxWidth().appearFluidly(0), contentAlignment = Alignment.Center) {
+                    CapsuleTickMark()
+                }
+                Text(
+                    stringResource(R.string.onboarding_headline),
+                    style = MaterialTheme.typography.displayLarge.copy(
+                        brush = c.gradient, fontSize = 40.sp, lineHeight = 43.sp,
+                    ),
+                    modifier = Modifier.appearFluidly(1),
+                )
+                Text(
+                    stringResource(R.string.onboarding_subhead),
+                    color = c.ink2, fontSize = 15.5.sp, lineHeight = 22.sp,
+                    modifier = Modifier.widthIn(max = 330.dp).appearFluidly(2),
+                )
+                Column {
+                    FeatureRow(Icons.Default.AutoAwesome, stringResource(R.string.onboarding_feature_sentence), Modifier.appearFluidly(3))
+                    FeatureRow(Icons.Default.NotificationsActive, stringResource(R.string.onboarding_feature_meals), Modifier.appearFluidly(4))
+                    FeatureRow(Icons.Default.Lock, stringResource(R.string.onboarding_feature_private), Modifier.appearFluidly(5))
                 }
             }
         }
-        Spacer(Modifier.height(30.dp))
-        Text(stringResource(R.string.onboarding_headline), style = MaterialTheme.typography.displayLarge.copy(
-            brush = c.gradient, fontSize = 40.sp, lineHeight = 43.sp),
-            modifier = Modifier.appearFluidly(1),
-        )
         Spacer(Modifier.height(12.dp))
-        Text(stringResource(R.string.onboarding_subhead),
-            color = c.ink2, fontSize = 15.5.sp, lineHeight = 22.sp,
-            modifier = Modifier.widthIn(max = 330.dp).appearFluidly(2))
-        Spacer(Modifier.height(22.dp))
-        FeatureRow(Icons.Default.AutoAwesome, stringResource(R.string.onboarding_feature_sentence), Modifier.appearFluidly(3))
-        FeatureRow(Icons.Default.NotificationsActive, stringResource(R.string.onboarding_feature_meals), Modifier.appearFluidly(4))
-        FeatureRow(Icons.Default.Lock, stringResource(R.string.onboarding_feature_private), Modifier.appearFluidly(5))
-        Spacer(Modifier.weight(1f))
         PrimaryButton(stringResource(R.string.action_get_started), next, Modifier.fillMaxWidth().appearFluidly(6), leading = Icons.Default.ArrowForward)
+        Spacer(Modifier.height(16.dp))
     }
 }
 

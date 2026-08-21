@@ -72,6 +72,7 @@ fun MediTickApp(
     }
 
     val routes = remember { mutableStateListOf<Route>(Route.Main) }
+    var tabName by rememberSaveable { mutableStateOf(MainTab.TODAY.name) }
     val navigate: (Route) -> Unit = { routes += it }
     val back = { if (routes.size > 1) routes.removeAt(routes.lastIndex) }
     BackHandler(enabled = routes.size > 1, onBack = back)
@@ -94,13 +95,17 @@ fun MediTickApp(
     ) { (current, _) ->
         Box(Modifier.fillMaxSize()) {
             when (current) {
-                Route.Main -> MainShell(repository, settings, billing, navigate, requestNotificationPermission)
+                Route.Main -> MainShell(
+                    repository, settings, billing, navigate, requestNotificationPermission,
+                    tab = MainTab.valueOf(tabName),
+                    onTabSelected = { tabName = it.name },
+                )
                 is Route.MedicationForm -> MedicationFormScreen(
                     repository = repository, editingId = current.editingId, prescriptionId = current.prescriptionId,
                     isPro = billing.isPro,
                     aiScanIdentity = billing.scanIdentity,
                     onClose = back, onSaved = back,
-                    onShowPaywall = { back(); navigate(Route.Paywall) },
+                    onShowPaywall = { navigate(Route.Paywall) },
                     startWithScan = current.startWithScan,
                 )
                 is Route.MedicationDetail -> MedicationDetailScreen(
@@ -125,11 +130,10 @@ fun MediTickApp(
 private fun MainShell(
     repository: AppRepository, settings: SettingsStore, billing: BillingManager,
     navigate: (Route) -> Unit, requestNotificationPermission: () -> Unit,
+    tab: MainTab, onTabSelected: (MainTab) -> Unit,
 ) {
-    var tabName by rememberSaveable { mutableStateOf(MainTab.TODAY.name) }
     var showAddChoice by remember { mutableStateOf(false) }
     var showPrescriptionEditor by remember { mutableStateOf(false) }
-    val tab = MainTab.valueOf(tabName)
 
     // One door to the add flow so the paywall gate can never be bypassed by a
     // new entry point — Today's card, the Add New sheet and the dock share it.
@@ -172,7 +176,7 @@ private fun MainShell(
             }
         }
         Dock(
-            selected = tab, onSelect = { tabName = it.name },
+            selected = tab, onSelect = onTabSelected,
             onAdd = { showAddChoice = true },
             modifier = Modifier.align(Alignment.BottomCenter),
         )
