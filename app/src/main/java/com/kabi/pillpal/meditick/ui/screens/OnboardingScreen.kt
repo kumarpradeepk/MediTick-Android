@@ -217,13 +217,32 @@ private fun CapsuleTickMark() {
                 }
             }
 
+            // Each hand pivots about its own bottom edge, then is lifted so
+            // that pivot sits exactly on the dial center — deterministic,
+            // whatever order the layer applies its transforms in.
             // Static short hand, fixed at 10 o'clock.
-            Box(Modifier.size(size).graphicsLayer { rotationZ = staticHandAngle; alpha = entrance }, contentAlignment = Alignment.Center) {
-                DetailedPillHand(staticHandWidth, staticHandLength, Color(0xFFA9DDD4), Modifier.offset(y = -staticHandLength / 2))
+            Box(Modifier.size(size), contentAlignment = Alignment.Center) {
+                DetailedPillHand(
+                    staticHandWidth, staticHandLength, Color(0xFFA9DDD4),
+                    Modifier.graphicsLayer {
+                        alpha = entrance
+                        translationY = -staticHandLength.toPx() / 2
+                        transformOrigin = androidx.compose.ui.graphics.TransformOrigin(0.5f, 1f)
+                        rotationZ = staticHandAngle
+                    },
+                )
             }
             // The ticking second hand.
-            Box(Modifier.size(size).graphicsLayer { rotationZ = handAngle; alpha = entrance }, contentAlignment = Alignment.Center) {
-                DetailedPillHand(handWidth, handLength, Color(0xFFDCEEE9), Modifier.offset(y = -handLength / 2))
+            Box(Modifier.size(size), contentAlignment = Alignment.Center) {
+                DetailedPillHand(
+                    handWidth, handLength, Color(0xFFDCEEE9),
+                    Modifier.graphicsLayer {
+                        alpha = entrance
+                        translationY = -handLength.toPx() / 2
+                        transformOrigin = androidx.compose.ui.graphics.TransformOrigin(0.5f, 1f)
+                        rotationZ = handAngle
+                    },
+                )
             }
             // Center cap.
             Box(

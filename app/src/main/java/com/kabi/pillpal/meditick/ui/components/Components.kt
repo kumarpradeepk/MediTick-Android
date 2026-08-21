@@ -291,10 +291,12 @@ fun MiniDayRing(
     )
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
-            val stroke = 2.5.dp.toPx()
+            val stroke = 2.dp.toPx()
             val inset = stroke / 2
             val arcSize = Size(this.size.width - stroke, this.size.height - stroke)
-            drawArc(c.ringTrack, -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            // Mint-tinted like the big ring, so an empty day reads as a ring
+            // waiting to fill — not a gray outline.
+            drawArc(c.mint.copy(.16f), -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
             if (tint != null && animated > 0f) {
                 drawArc(tint, -90f, 360f * animated, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
             }
