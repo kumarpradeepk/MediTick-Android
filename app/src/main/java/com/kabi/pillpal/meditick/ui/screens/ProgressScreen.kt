@@ -146,7 +146,10 @@ private fun ProgressHero(stats: DoseEngine.Stats, label: String, onClick: () -> 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 ProgressRing(stats.ratio.toFloat(), Modifier.size(108.dp), 13.dp) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(formatPercent((stats.ratio * 100).toInt()), color = DS.colors.ink, fontSize = 25.sp, fontWeight = FontWeight.ExtraBold)
+                        Text(
+                            formatPercent((stats.ratio * 100).toInt()),
+                            style = androidx.compose.ui.text.TextStyle(brush = DS.colors.gradient, fontSize = 25.sp, fontWeight = FontWeight.ExtraBold),
+                        )
                         Text(stringResource(R.string.progress_taken_word), color = DS.colors.ink3, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = .5.sp)
                     }
                 }
@@ -190,7 +193,7 @@ private fun StreakTile(streak: Int, best: Int, modifier: Modifier, onClick: () -
         Spacer(Modifier.height(10.dp))
         Text(stringResource(R.string.progress_metric_streak), color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
         Row(verticalAlignment = Alignment.Bottom) {
-            Text(streak.toString(), color = DS.colors.ink, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
+            Text(streak.toString(), style = androidx.compose.ui.text.TextStyle(brush = DS.colors.gradient, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold))
             Spacer(Modifier.width(5.dp))
             Text(stringResource(R.string.progress_days_word), color = DS.colors.ink3, fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
         }
@@ -205,7 +208,9 @@ private fun StreakTile(streak: Int, best: Int, modifier: Modifier, onClick: () -
 @Composable private fun LegendDot(color: Color, title: String, count: Int) {
     Row(Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(8.dp).clip(CircleShape).background(color)); Spacer(Modifier.width(8.dp))
-        Text(title, color = DS.colors.ink2, fontSize = 12.sp, modifier = Modifier.weight(1f)); Text(count.toString(), color = DS.colors.ink, fontWeight = FontWeight.Bold)
+        Text(title, color = DS.colors.ink2, fontSize = 12.sp, modifier = Modifier.weight(1f))
+        // The count carries its state color — the row reads at a glance.
+        Text(count.toString(), color = if (count > 0) color else DS.colors.ink3, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp)
     }
 }
 
@@ -213,7 +218,7 @@ private fun StreakTile(streak: Int, best: Int, modifier: Modifier, onClick: () -
 private fun MetricTile(icon: androidx.compose.ui.graphics.vector.ImageVector, tint: Color, value: String, title: String, subtitle: String, modifier: Modifier, onClick: () -> Unit) {
     GlassCard(modifier, onClick = onClick, contentPadding = PaddingValues(16.dp)) {
         IconTile(icon, tint, 38.dp); Spacer(Modifier.height(12.dp))
-        Text(value, color = DS.colors.ink, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
+        Text(value, style = androidx.compose.ui.text.TextStyle(brush = DS.colors.gradient, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold))
         Text(title, color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
         Text(subtitle, color = DS.colors.ink3, fontSize = 10.sp)
     }
@@ -232,7 +237,7 @@ private fun InsightCard(data: AppData, stats: DoseEngine.Stats) {
     GradientCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(17.dp), verticalAlignment = Alignment.Top) {
             IconTile(Icons.Default.AutoAwesome, DS.colors.violet, 42.dp); Spacer(Modifier.width(12.dp))
-            Column { SectionLabel(stringResource(R.string.progress_insight_label)); Spacer(Modifier.height(4.dp)); Text(message, color = DS.colors.ink2, fontSize = 13.sp, lineHeight = 19.sp) }
+            Column { SectionLabel(stringResource(R.string.progress_insight_label), color = DS.colors.violet); Spacer(Modifier.height(4.dp)); Text(message, color = DS.colors.ink2, fontSize = 13.sp, lineHeight = 19.sp) }
         }
     }
 }
@@ -253,7 +258,7 @@ internal fun PatternCard(data: AppData, from: Long, to: Long) {
         Row(verticalAlignment = Alignment.Top) {
             IconTile(Icons.Default.Insights, DS.colors.amber, 42.dp); Spacer(Modifier.width(12.dp))
             Column {
-                SectionLabel(stringResource(R.string.progress_patterns_label)); Spacer(Modifier.height(4.dp))
+                SectionLabel(stringResource(R.string.progress_patterns_label), color = DS.colors.amber); Spacer(Modifier.height(4.dp))
                 Text(stringResource(R.string.progress_pattern_hardest, slotName), color = DS.colors.ink, fontWeight = FontWeight.Bold)
                 Text(
                     stringResource(R.string.progress_pattern_detail, pattern.missed, pattern.total, slotName),

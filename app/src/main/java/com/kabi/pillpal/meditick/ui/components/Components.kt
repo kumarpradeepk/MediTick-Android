@@ -106,7 +106,7 @@ fun GradientCard(
             .then(if (onClick != null) Modifier.pressScale(interaction, 0.975f) else Modifier)
             .clip(shape)
             .background(
-                Brush.linearGradient(listOf(c.gradStart.copy(.17f), c.gradEnd.copy(.11f), c.violet.copy(.14f))),
+                Brush.linearGradient(listOf(c.gradStart.copy(.30f), c.gradEnd.copy(.18f), c.violet.copy(.22f))),
             ).border(1.dp, c.line2, shape)
             .then(
                 if (onClick != null) Modifier.clickable(interaction, ripple()) { haptics.tap(); onClick() }
@@ -174,8 +174,8 @@ fun MediTickTextField(
 }
 
 @Composable
-fun SectionLabel(text: String, modifier: Modifier = Modifier) {
-    Text(text.uppercase(), modifier, color = DS.colors.ink3, fontSize = 11.sp,
+fun SectionLabel(text: String, modifier: Modifier = Modifier, color: Color = DS.colors.mint2) {
+    Text(text.uppercase(), modifier, color = color, fontSize = 11.sp,
         fontWeight = FontWeight.Bold, letterSpacing = 1.4.sp)
 }
 
@@ -201,7 +201,11 @@ fun SelectChip(text: String, selected: Boolean, onClick: () -> Unit, modifier: M
 
 @Composable
 fun IconTile(icon: ImageVector, tint: Color, size: Dp = 40.dp) {
-    Box(Modifier.size(size).clip(RoundedCornerShape(size * .34f)).background(tint.copy(.13f)), contentAlignment = Alignment.Center) {
+    val shape = RoundedCornerShape(size * .34f)
+    Box(
+        Modifier.size(size).clip(shape).background(tint.copy(.16f)).border(1.dp, tint.copy(.22f), shape),
+        contentAlignment = Alignment.Center,
+    ) {
         Icon(icon, null, tint = tint, modifier = Modifier.size(size * .48f))
     }
 }
@@ -252,7 +256,7 @@ fun ProgressRing(
             val stroke = lineWidth.toPx()
             val inset = stroke / 2
             val arcSize = Size(size.width - stroke, size.height - stroke)
-            drawArc(c.ringTrack, -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            drawArc(c.mint.copy(.13f), -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
             if (animated > 0f) {
                 // Soft under-glow, then the gradient arc on top.
                 drawArc(c.glow.copy(.28f), -90f, 360f * animated, false, Offset(inset, inset), arcSize,
