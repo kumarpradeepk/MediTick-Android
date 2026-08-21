@@ -302,6 +302,8 @@ fun AppSheet(
 ) {
     androidx.compose.material3.ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        // Open fully expanded — never the half state the user must pull up.
+        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         androidx.compose.foundation.layout.Column(

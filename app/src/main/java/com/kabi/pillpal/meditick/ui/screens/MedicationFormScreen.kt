@@ -623,6 +623,7 @@ private fun AddDoseDialog(presets: DoseTimePresets, onDismiss: () -> Unit, onAdd
     val slotIcons = listOf(Icons.Default.WbSunny, Icons.Default.LightMode, Icons.Default.NightsStay, Icons.Default.Bedtime)
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
@@ -670,6 +671,7 @@ private fun DoseEditorDialog(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp).verticalScroll(rememberScrollState())) {

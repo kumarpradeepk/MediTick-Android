@@ -317,6 +317,7 @@ private fun DoseActionSheet(repository: AppRepository, dose: ScheduledDose, onDi
     var note by remember(resolved.id) { mutableStateOf("") }
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -373,6 +374,7 @@ fun AsNeededSheet(repository: AppRepository, medication: Medication, onDismiss: 
     var note by remember { mutableStateOf("") }
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
