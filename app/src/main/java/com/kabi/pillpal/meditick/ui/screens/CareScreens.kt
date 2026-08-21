@@ -135,6 +135,7 @@ fun CareScreen(
     }
     if (showAddMode) ModalBottomSheet(
         onDismissRequest = { showAddMode = false }, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
@@ -431,6 +432,7 @@ fun PrescriptionDetailScreen(
     )
     if (addMenu) ModalBottomSheet(
         onDismissRequest = { addMenu = false }, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
@@ -445,6 +447,7 @@ fun PrescriptionDetailScreen(
     }
     if (chooseExisting) ModalBottomSheet(
         onDismissRequest = { chooseExisting = false }, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         val standalone = repository.medications.filter { it.prescriptionID == null }

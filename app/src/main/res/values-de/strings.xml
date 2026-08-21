@@ -423,6 +423,17 @@
     <string name="scan_camera_unavailable_title">Kamera nicht verfügbar</string>
     <string name="scan_camera_unavailable_body">Dieses Gerät hat keine nutzbare Kamera — du kannst Medikamente weiterhin per Eingabe hinzufügen.</string>
     <string name="scan_open_settings">Einstellungen öffnen</string>
+    <string name="progress_health_insights">Gesundheits-Insights</string>
+    <string name="progress_taken_word">genommen</string>
+    <string name="progress_took_doses">Du hast %1$d von %2$d geplanten Dosen genommen.</string>
+    <string name="progress_insights_soon">Insights erscheinen nach ein paar Dosen</string>
+    <string name="progress_days_word">Tage</string>
+    <string name="progress_best_days">Bestwert: %1$d Tage</string>
+    <string name="progress_legend_complete">Vollständig</string>
+    <string name="progress_legend_partial">Teilweise</string>
+    <string name="progress_legend_missed">Verpasst</string>
+    <string name="progress_legend_none">Keine Dosen</string>
+    <string name="progress_no_logs_day">Keine Einträge für diesen Tag</string>
     <string name="describe_label">Sag es ganz normal</string>
     <string name="describe_question">Was nimmst du ein?</string>
     <string name="describe_hint">Versuch es mit „Metformin 500mg every morning with food“.</string>

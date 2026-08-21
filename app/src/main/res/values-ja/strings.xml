@@ -402,6 +402,17 @@
     <string name="scan_camera_unavailable_title">カメラを利用できません</string>
     <string name="scan_camera_unavailable_body">この端末には使用できるカメラがありません — 入力で薬を追加できます。</string>
     <string name="scan_open_settings">設定を開く</string>
+    <string name="progress_health_insights">健康インサイト</string>
+    <string name="progress_taken_word">服用済み</string>
+    <string name="progress_took_doses">予定された%2$d回のうち%1$d回服用しました。</string>
+    <string name="progress_insights_soon">数回服用するとインサイトが表示されます</string>
+    <string name="progress_days_word">日</string>
+    <string name="progress_best_days">最高：%1$d日</string>
+    <string name="progress_legend_complete">完了</string>
+    <string name="progress_legend_partial">一部</string>
+    <string name="progress_legend_missed">飲み忘れ</string>
+    <string name="progress_legend_none">服用なし</string>
+    <string name="progress_no_logs_day">この日の記録はありません</string>
     <string name="describe_label">話すように入力</string>
     <string name="describe_question">何を飲んでいますか？</string>
     <string name="describe_hint">例：「Metformin 500mg every morning with food」</string>

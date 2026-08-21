@@ -402,6 +402,17 @@
     <string name="scan_camera_unavailable_title">카메라를 사용할 수 없음</string>
     <string name="scan_camera_unavailable_body">이 기기에는 사용할 수 있는 카메라가 없어요 — 입력으로 약을 추가할 수 있어요.</string>
     <string name="scan_open_settings">설정 열기</string>
+    <string name="progress_health_insights">건강 인사이트</string>
+    <string name="progress_taken_word">복용함</string>
+    <string name="progress_took_doses">예정된 %2$d회 중 %1$d회 복용했어요.</string>
+    <string name="progress_insights_soon">몇 회 복용하면 인사이트가 표시돼요</string>
+    <string name="progress_days_word">일</string>
+    <string name="progress_best_days">최고: %1$d일</string>
+    <string name="progress_legend_complete">완료</string>
+    <string name="progress_legend_partial">부분</string>
+    <string name="progress_legend_missed">놓침</string>
+    <string name="progress_legend_none">복용 없음</string>
+    <string name="progress_no_logs_day">이 날의 기록 없음</string>
     <string name="describe_label">말하듯 적어 보세요</string>
     <string name="describe_question">무엇을 복용하세요?</string>
     <string name="describe_hint">예: ‘Metformin 500mg every morning with food’</string>

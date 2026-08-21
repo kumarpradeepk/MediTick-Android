@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.sp
 import com.kabi.pillpal.meditick.data.AppRepository
 import com.kabi.pillpal.meditick.data.CatalogEntry
 import com.kabi.pillpal.meditick.data.DoseTimePresets
+import com.kabi.pillpal.meditick.data.DrugSuggestion
+import com.kabi.pillpal.meditick.data.DrugSuggestions
 import com.kabi.pillpal.meditick.data.MedicationCatalog
 import com.kabi.pillpal.meditick.data.SettingsStore
 import com.kabi.pillpal.meditick.model.*
@@ -219,6 +221,13 @@ fun MedicationFormScreen(
                             if (ScanQuota.canStart(context, isPro)) showScan = true
                             else { haptics.warning(); onShowPaywall() }
                         },
+                        onSuggestion = { suggestion ->
+                            haptics.tick()
+                            name = suggestion.name
+                            suggestion.strengthText?.let(::parseStrength)?.let { strength = it.first; strengthUnit = it.second }
+                            suggestion.form?.let { form = it }
+                            step = 1
+                        },
                         onParsed = { parsed ->
                         name = parsed.name; parsed.strength?.let { strength = it.first; strengthUnit = it.second }
                         parsed.form?.let { form = it }; doses = parsed.doses
@@ -356,9 +365,37 @@ private data class ParsedDraft(
 )
 
 @Composable
-private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: MedicationCatalog, presets: DoseTimePresets, scanCaption: String, onScan: () -> Unit, onParsed: (ParsedDraft) -> Unit) {
+private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: MedicationCatalog, presets: DoseTimePresets, scanCaption: String, onScan: () -> Unit, onSuggestion: (DrugSuggestion) -> Unit, onParsed: (ParsedDraft) -> Unit) {
     val context = LocalContext.current
     val parsed = remember(text, presets, context) { smartParse(context, text, catalog, presets) }
+
+    // Search-as-you-type: the catalog answers instantly, RxTerms broadens
+    // the list after a debounce when the network allows.
+    val nameQuery = remember(text) {
+        text.trim().split(Regex("""\s+""")).firstOrNull()?.takeIf { token ->
+            token.length >= 2 && token.all { it.isLetter() }
+        }.orEmpty()
+    }
+    val localSuggestions = remember(nameQuery) {
+        if (nameQuery.isEmpty()) emptyList() else DrugSuggestions.local(catalog, nameQuery)
+    }
+    var indexSuggestions by remember { mutableStateOf(listOf<DrugSuggestion>()) }
+    var onlineSuggestions by remember { mutableStateOf(listOf<DrugSuggestion>()) }
+    LaunchedEffect(nameQuery) {
+        indexSuggestions = emptyList()
+        onlineSuggestions = emptyList()
+        if (nameQuery.length < 3) return@LaunchedEffect
+        val seen = localSuggestions.map { it.name.lowercase() }.toMutableSet()
+        // Offline breadth from the bundled 19k-name index, off the UI thread.
+        indexSuggestions = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+            DrugSuggestions.fromIndex(context, nameQuery, seen)
+        }
+        indexSuggestions.forEach { seen.add(it.name.lowercase()) }
+        // Then the network, debounced — purely additive when it answers.
+        kotlinx.coroutines.delay(350)
+        onlineSuggestions = DrugSuggestions.online(nameQuery).filter { it.name.lowercase() !in seen }
+    }
+    val suggestions = (localSuggestions + indexSuggestions + onlineSuggestions).take(6)
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 22.dp)) {
         item {
             SectionLabel(stringResource(R.string.describe_label))
@@ -367,6 +404,40 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
             Spacer(Modifier.height(22.dp))
             MediTickTextField(text, onText, Modifier.fillMaxWidth(), minLines = 4, textStyle = LocalTextStyle.current.copy(fontSize = 18.sp),
                 placeholder = stringResource(R.string.describe_placeholder))
+            AnimatedVisibility(
+                suggestions.isNotEmpty(),
+                enter = expandVertically(spring(dampingRatio = 0.85f, stiffness = 380f)) + fadeIn(tween(200)),
+                exit = shrinkVertically(tween(160)) + fadeOut(tween(120)),
+            ) {
+                Column {
+                    Spacer(Modifier.height(10.dp))
+                    GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
+                        suggestions.forEachIndexed { index, suggestion ->
+                            if (index > 0) RowDivider()
+                            Row(
+                                Modifier.fillMaxWidth().clickable { onSuggestion(suggestion) }
+                                    .padding(horizontal = 15.dp, vertical = 11.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                IconTile(formIcon(suggestion.form ?: MedicationForm.tablet), DS.colors.mint, 36.dp)
+                                Spacer(Modifier.width(12.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(suggestion.name, color = DS.colors.ink, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                                    Text(
+                                        listOfNotNull(
+                                            suggestion.strengthText,
+                                            suggestion.form?.title(context),
+                                            suggestion.detail,
+                                        ).joinToString(" · "),
+                                        color = DS.colors.ink3, fontSize = 12.sp,
+                                    )
+                                }
+                                Icon(Icons.Default.AddCircle, null, tint = DS.colors.mint, modifier = Modifier.size(22.dp))
+                            }
+                        }
+                    }
+                }
+            }
             Spacer(Modifier.height(14.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 listOf(
@@ -623,6 +694,7 @@ private fun AddDoseDialog(presets: DoseTimePresets, onDismiss: () -> Unit, onAdd
     val slotIcons = listOf(Icons.Default.WbSunny, Icons.Default.LightMode, Icons.Default.NightsStay, Icons.Default.Bedtime)
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
@@ -670,6 +742,7 @@ private fun DoseEditorDialog(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 30.dp).verticalScroll(rememberScrollState())) {

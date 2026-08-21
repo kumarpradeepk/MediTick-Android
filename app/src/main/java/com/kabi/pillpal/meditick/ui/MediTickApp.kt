@@ -160,6 +160,7 @@ private fun MainShell(
     }
     if (showAddChoice) ModalBottomSheet(
         onDismissRequest = { showAddChoice = false }, containerColor = DS.colors.bg3,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {

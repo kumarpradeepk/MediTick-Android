@@ -423,6 +423,17 @@
     <string name="scan_camera_unavailable_title">Camera niet beschikbaar</string>
     <string name="scan_camera_unavailable_body">Dit apparaat heeft geen bruikbare camera — je kunt medicijnen nog steeds typend toevoegen.</string>
     <string name="scan_open_settings">Instellingen openen</string>
+    <string name="progress_health_insights">Gezondheidsinzichten</string>
+    <string name="progress_taken_word">genomen</string>
+    <string name="progress_took_doses">Je nam %1$d van %2$d geplande doses.</string>
+    <string name="progress_insights_soon">Inzichten verschijnen na een paar doses</string>
+    <string name="progress_days_word">dagen</string>
+    <string name="progress_best_days">Beste: %1$d dagen</string>
+    <string name="progress_legend_complete">Volledig</string>
+    <string name="progress_legend_partial">Deels</string>
+    <string name="progress_legend_missed">Gemist</string>
+    <string name="progress_legend_none">Geen doses</string>
+    <string name="progress_no_logs_day">Geen logs voor deze dag</string>
     <string name="describe_label">Zeg het gewoon</string>
     <string name="describe_question">Wat neem je in?</string>
     <string name="describe_hint">Probeer ‘Metformin 500mg every morning with food’.</string>

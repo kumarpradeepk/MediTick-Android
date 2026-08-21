@@ -618,6 +618,7 @@ private fun PossibleMatchesSheet(
     val context = LocalContext.current
     ModalBottomSheet(
         onDismissRequest = onDismiss, containerColor = c.bg2,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 26.dp)) {

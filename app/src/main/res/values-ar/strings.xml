@@ -507,6 +507,17 @@
     <string name="scan_camera_unavailable_title">الكاميرا غير متاحة</string>
     <string name="scan_camera_unavailable_body">لا توجد كاميرا صالحة في هذا الجهاز — لا يزال بإمكانك إضافة الأدوية بالكتابة.</string>
     <string name="scan_open_settings">فتح الإعدادات</string>
+    <string name="progress_health_insights">رؤى صحية</string>
+    <string name="progress_taken_word">تم أخذها</string>
+    <string name="progress_took_doses">أخذت %1$d من أصل %2$d جرعة مجدولة.</string>
+    <string name="progress_insights_soon">ستظهر الرؤى بعد بضع جرعات</string>
+    <string name="progress_days_word">أيام</string>
+    <string name="progress_best_days">الأفضل: %1$d أيام</string>
+    <string name="progress_legend_complete">مكتمل</string>
+    <string name="progress_legend_partial">جزئي</string>
+    <string name="progress_legend_missed">فائت</string>
+    <string name="progress_legend_none">بلا جرعات</string>
+    <string name="progress_no_logs_day">لا سجلات لهذا اليوم</string>
     <string name="describe_label">قُلها ببساطة</string>
     <string name="describe_question">ماذا تتناول؟</string>
     <string name="describe_hint">جرّب «Metformin 500mg every morning with food».</string>

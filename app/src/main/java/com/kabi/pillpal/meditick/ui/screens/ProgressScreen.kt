@@ -2,7 +2,9 @@
 
 package com.kabi.pillpal.meditick.ui.screens
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
@@ -10,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -86,6 +89,7 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                         RangeChoice(stringResource(R.string.progress_range_all), allTime, Modifier.weight(1f)) { if (isPro) allTime = true else onRequirePro() }
                     }
                 }
+                item { SectionLabel(stringResource(R.string.progress_health_insights), Modifier.appearFluidly(2)) }
                 item {
                     Box(Modifier.appearFluidly(2)) {
                         ProgressHero(stats, stringResource(if (allTime) R.string.progress_range_label_all else R.string.progress_range_label_week)) { detail = "adherence" }
@@ -93,32 +97,22 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                 }
                 item {
                     Row(Modifier.appearFluidly(3), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        MetricTile(
+                        // On-time: until a few doses are taken there is no rate
+                        // to show — the tile says so, the Doz way.
+                        if (hasTakenLogs) MetricTile(
                             Icons.Default.Timer, DS.colors.cyan,
-                            if (hasTakenLogs) formatPercent((onTime * 100).toInt()) else stringResource(R.string.value_none),
+                            formatPercent((onTime * 100).toInt()),
                             stringResource(R.string.progress_metric_on_time),
                             stringResource(R.string.progress_metric_window, settings.onTimeWindowMinutes),
                             Modifier.weight(1f),
                         ) { detail = "timing" }
-                        MetricTile(
-                            Icons.Default.LocalFireDepartment, DS.colors.amber, streak.toString(),
-                            stringResource(R.string.progress_metric_streak),
-                            stringResource(R.string.progress_metric_best, best),
-                            Modifier.weight(1f),
-                        ) { detail = "streak" }
+                        else InsightsSoonTile(Modifier.weight(1f)) { detail = "timing" }
+                        StreakTile(streak, best, Modifier.weight(1f)) { detail = "streak" }
                     }
                 }
                 item { InsightCard(data, stats) }
                 item { PatternCard(data, if (allTime) DoseEngine.addDays(today, -364) else DoseEngine.addDays(today, -6), today) }
-                item {
-                    SectionLabel(
-                        if (allTime) stringResource(R.string.progress_calendar_all_days)
-                        else stringResource(
-                            R.string.progress_calendar_range,
-                            formatShortDate(DoseEngine.addDays(today, -6)), formatShortDate(today),
-                        ),
-                    )
-                }
+                if (allTime) item { SectionLabel(stringResource(R.string.progress_calendar_all_days)) }
                 if (allTime) item { MonthCard(repository, displayedMonth, selectedDay, { displayedMonth = it }, { selectedDay = it }) }
                 else item { WeekCard(repository, selectedDay) { selectedDay = it } }
                 item { SectionLabel(stringResource(R.string.progress_logs_for_day, formatShortDate(selectedDay))) }
@@ -147,20 +141,62 @@ private fun RangeChoice(text: String, selected: Boolean, modifier: Modifier, onC
 @Composable
 private fun ProgressHero(stats: DoseEngine.Stats, label: String, onClick: () -> Unit) {
     GradientCard(Modifier.fillMaxWidth(), onClick = onClick) {
-        Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
-            ProgressRing(stats.ratio.toFloat(), Modifier.size(120.dp), 14.dp) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(formatPercent((stats.ratio * 100).toInt()), color = DS.colors.ink, fontSize = 27.sp, fontWeight = FontWeight.ExtraBold)
-                    Text(stringResource(R.string.progress_ring_label), color = DS.colors.ink3, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+        Column(Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ProgressRing(stats.ratio.toFloat(), Modifier.size(108.dp), 13.dp) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(formatPercent((stats.ratio * 100).toInt()), color = DS.colors.ink, fontSize = 25.sp, fontWeight = FontWeight.ExtraBold)
+                        Text(stringResource(R.string.progress_taken_word), color = DS.colors.ink3, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = .5.sp)
+                    }
+                }
+                Spacer(Modifier.width(18.dp))
+                Column(Modifier.weight(1f)) {
+                    SectionLabel(label); Spacer(Modifier.height(10.dp))
+                    LegendDot(DS.colors.mint, stringResource(R.string.state_taken), stats.taken)
+                    LegendDot(DS.colors.amber, stringResource(R.string.state_skipped), stats.skipped)
+                    LegendDot(DS.colors.coral, stringResource(R.string.state_missed), stats.missed)
                 }
             }
-            Spacer(Modifier.width(18.dp))
-            Column(Modifier.weight(1f)) {
-                SectionLabel(label); Spacer(Modifier.height(10.dp))
-                LegendDot(DS.colors.mint, stringResource(R.string.state_taken), stats.taken)
-                LegendDot(DS.colors.amber, stringResource(R.string.state_skipped), stats.skipped)
-                LegendDot(DS.colors.coral, stringResource(R.string.state_missed), stats.missed)
-            }
+            Spacer(Modifier.height(12.dp))
+            // The plain-words reading, straight from the reference app.
+            Text(
+                stringResource(R.string.progress_took_doses, stats.taken, stats.scheduled),
+                color = DS.colors.ink2, fontSize = 13.sp,
+            )
+        }
+    }
+}
+
+/** The on-time tile before any dose exists: a promise, not a dash. */
+@Composable
+private fun InsightsSoonTile(modifier: Modifier, onClick: () -> Unit) {
+    GlassCard(modifier, onClick = onClick, contentPadding = PaddingValues(16.dp)) {
+        IconTile(Icons.Default.Timer, DS.colors.cyan, 38.dp)
+        Spacer(Modifier.height(10.dp))
+        Text(stringResource(R.string.progress_metric_on_time), color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+        Spacer(Modifier.height(8.dp))
+        Icon(Icons.Default.AutoAwesome, null, tint = DS.colors.ink3, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.height(6.dp))
+        Text(stringResource(R.string.progress_insights_soon), color = DS.colors.ink3, fontSize = 12.sp, lineHeight = 17.sp)
+    }
+}
+
+/** Current streak, with the best run in mint under an up-right arrow. */
+@Composable
+private fun StreakTile(streak: Int, best: Int, modifier: Modifier, onClick: () -> Unit) {
+    GlassCard(modifier, onClick = onClick, contentPadding = PaddingValues(16.dp)) {
+        IconTile(Icons.Default.LocalFireDepartment, DS.colors.amber, 38.dp)
+        Spacer(Modifier.height(10.dp))
+        Text(stringResource(R.string.progress_metric_streak), color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(streak.toString(), color = DS.colors.ink, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
+            Spacer(Modifier.width(5.dp))
+            Text(stringResource(R.string.progress_days_word), color = DS.colors.ink3, fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.AutoMirrored.Filled.TrendingUp, null, tint = DS.colors.mint, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(4.dp))
+            Text(stringResource(R.string.progress_best_days, best), color = DS.colors.mint, fontWeight = FontWeight.Bold, fontSize = 12.sp)
         }
     }
 }
@@ -227,23 +263,84 @@ internal fun PatternCard(data: AppData, from: Long, to: Long) {
     }
 }
 
+/** A day's four-way legend state, the reference app's reading of a day. */
+@Composable
+private fun dayLegendColor(stats: DoseEngine.Stats): androidx.compose.ui.graphics.Color? = when {
+    stats.scheduled == 0 -> null
+    stats.taken == stats.scheduled -> DS.colors.mint
+    stats.missed > 0 -> DS.colors.coral
+    else -> DS.colors.amber
+}
+
 @Composable
 private fun WeekCard(repository: AppRepository, selected: Long, onSelect: (Long) -> Unit) {
+    val context = LocalContext.current
     val today = DoseEngine.startOfDay(System.currentTimeMillis())
-    GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 14.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            (-6..0).forEach { offset ->
-                val day = DoseEngine.addDays(today, offset); val stats = DoseEngine.stats(repository.doses(day)); val active = day == selected
-                Column(Modifier.width(40.dp).clickable { onSelect(day) }, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(weekdayInitial(day), color = if (active) DS.colors.mint else DS.colors.ink3, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(7.dp))
-                    val color = when { stats.scheduled == 0 -> DS.colors.line2; stats.taken == stats.scheduled -> DS.colors.mint; stats.missed > 0 -> DS.colors.coral; stats.skipped > 0 -> DS.colors.amber; else -> DS.colors.ink3 }
-                    Box(Modifier.size(if (active) 28.dp else 24.dp).clip(CircleShape).background(color.copy(if (active) .23f else .12f)), contentAlignment = Alignment.Center) {
-                        if (stats.scheduled > 0) Text(if (stats.taken == stats.scheduled) "✓" else stats.taken.toString(), color = color, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+    val haptics = rememberHaptics()
+    Column {
+        // The range this strip covers, centered above it.
+        Text(
+            stringResource(
+                R.string.progress_calendar_range,
+                formatShortDate(DoseEngine.addDays(today, -6)), formatShortDate(today),
+            ),
+            color = DS.colors.ink, fontWeight = FontWeight.Bold, fontSize = 15.sp,
+            textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(10.dp))
+        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 14.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                (-6..0).forEach { offset ->
+                    val day = DoseEngine.addDays(today, offset)
+                    val stats = DoseEngine.stats(repository.doses(day))
+                    val active = day == selected
+                    val fill by androidx.compose.animation.animateColorAsState(
+                        if (active) DS.colors.mint else Color.Transparent, tween(200), label = "dayFill",
+                    )
+                    val numberTint by androidx.compose.animation.animateColorAsState(
+                        if (active) DS.colors.onMint else DS.colors.ink, tween(200), label = "dayTint",
+                    )
+                    Column(
+                        Modifier.width(44.dp).clip(RoundedCornerShape(14.dp)).clickable { haptics.tick(); onSelect(day) }.padding(vertical = 4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(weekdayInitial(day).uppercase(), color = if (active) DS.colors.mint else DS.colors.ink3, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = .5.sp)
+                        Spacer(Modifier.height(7.dp))
+                        Box(Modifier.size(34.dp).clip(CircleShape).background(fill), contentAlignment = Alignment.Center) {
+                            Text(SimpleDateFormat("d", Locale.getDefault()).format(Date(day)), color = numberTint, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                        }
+                        Spacer(Modifier.height(5.dp))
+                        // The status dot beneath the day, per the legend.
+                        val dot = dayLegendColor(stats)
+                        if (dot != null) Box(Modifier.size(6.dp).clip(CircleShape).background(dot))
+                        else Box(Modifier.size(6.dp).clip(CircleShape).border(1.dp, DS.colors.line2, CircleShape))
                     }
                 }
             }
         }
+        Spacer(Modifier.height(10.dp))
+        AdherenceLegend()
+    }
+}
+
+/** Complete · Partial · Missed · No doses — the strip's color key. */
+@Composable
+private fun AdherenceLegend() {
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
+    ) {
+        @Composable fun key(color: androidx.compose.ui.graphics.Color?, label: String) {
+            if (color != null) Box(Modifier.size(7.dp).clip(CircleShape).background(color))
+            else Box(Modifier.size(7.dp).clip(CircleShape).border(1.dp, DS.colors.ink3, CircleShape))
+            Spacer(Modifier.width(4.dp))
+            Text(label, color = DS.colors.ink3, fontSize = 11.sp)
+            Spacer(Modifier.width(12.dp))
+        }
+        key(DS.colors.mint, stringResource(R.string.progress_legend_complete))
+        key(DS.colors.amber, stringResource(R.string.progress_legend_partial))
+        key(DS.colors.coral, stringResource(R.string.progress_legend_missed))
+        key(null, stringResource(R.string.progress_legend_none))
     }
 }
 
@@ -424,7 +521,13 @@ private fun DayLogs(repository: AppRepository, doses: List<ScheduledDose>, day: 
     val context = LocalContext.current
     val prnLogs = repository.logs.filter { it.isAsNeeded && DoseEngine.startOfDay(it.actedAt) == day }
     if (doses.isEmpty() && prnLogs.isEmpty()) {
-        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(20.dp)) { Text(stringResource(R.string.progress_nothing_scheduled), color = DS.colors.ink3, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) }
+        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 30.dp)) {
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(Icons.Default.EventBusy, null, tint = DS.colors.ink3, modifier = Modifier.size(30.dp))
+                Spacer(Modifier.height(8.dp))
+                Text(stringResource(R.string.progress_no_logs_day), color = DS.colors.ink3, textAlign = TextAlign.Center)
+            }
+        }
         return
     }
     GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {

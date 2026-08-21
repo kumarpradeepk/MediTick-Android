@@ -495,6 +495,21 @@
     <string name="scan_camera_unavailable_body">This device has no usable camera — you can still add medications by typing.</string>
     <string name="scan_open_settings">Open Settings</string>
 
+    <!-- ============ Progress: Doz Health Insights presentation ============ -->
+    <string name="progress_health_insights">Health Insights</string>
+    <!-- Sits beside the big percentage: "87% taken". -->
+    <string name="progress_taken_word">taken</string>
+    <string name="progress_took_doses">You took %1$d of %2$d scheduled doses.</string>
+    <string name="progress_insights_soon">Insights will appear after a few doses</string>
+    <!-- Sits beside the big streak number: "5 days". -->
+    <string name="progress_days_word">days</string>
+    <string name="progress_best_days">Best: %1$d days</string>
+    <string name="progress_legend_complete">Complete</string>
+    <string name="progress_legend_partial">Partial</string>
+    <string name="progress_legend_missed">Missed</string>
+    <string name="progress_legend_none">No doses</string>
+    <string name="progress_no_logs_day">No logs for this day</string>
+
     <!-- ===================== Medication form: describe ================= -->
     <string name="describe_label">Say it naturally</string>
     <string name="describe_question">What do you take?</string>
