@@ -43,7 +43,12 @@ import com.kabi.pillpal.meditick.ui.theme.DS
 
 private sealed interface Route {
     data object Main : Route
-    data class MedicationForm(val editingId: String? = null, val prescriptionId: String? = null) : Route
+    data class MedicationForm(
+        val editingId: String? = null,
+        val prescriptionId: String? = null,
+        /** Opens Instant Scan straight away instead of the describe step. */
+        val startWithScan: Boolean = false,
+    ) : Route
     data class MedicationDetail(val id: String) : Route
     data class PrescriptionDetail(val id: String) : Route
     data object Paywall : Route
@@ -96,6 +101,7 @@ fun MediTickApp(
                     aiScanAccountID = billing.scanAccountID,
                     onClose = back, onSaved = back,
                     onShowPaywall = { back(); navigate(Route.Paywall) },
+                    startWithScan = current.startWithScan,
                 )
                 is Route.MedicationDetail -> MedicationDetailScreen(
                     repository, current.id, onBack = back,
@@ -124,6 +130,17 @@ private fun MainShell(
     var showAddChoice by remember { mutableStateOf(false) }
     var showPrescriptionEditor by remember { mutableStateOf(false) }
     val tab = MainTab.valueOf(tabName)
+
+    // One door to the add flow so the paywall gate can never be bypassed by a
+    // new entry point — Today's card, the Add New sheet and the dock share it.
+    fun openAddMedication(withScan: Boolean) {
+        showAddChoice = false
+        if (billing.isPro || repository.activeMedications.isEmpty()) {
+            navigate(Route.MedicationForm(startWithScan = withScan))
+        } else {
+            navigate(Route.Paywall)
+        }
+    }
     Box(Modifier.fillMaxSize()) {
         // Tabs cross-fade with a gentle upward settle instead of snapping.
         AnimatedContent(
@@ -138,6 +155,7 @@ private fun MainShell(
                 MainTab.TODAY -> TodayScreen(repository,
                     onAdd = { showAddChoice = true },
                     onMedication = { navigate(Route.MedicationDetail(it)) },
+                    onInstantScan = { openAddMedication(true) },
                 )
                 MainTab.CARE -> CareScreen(repository,
                     onAddMedication = { prescriptionId ->
@@ -158,6 +176,7 @@ private fun MainShell(
             onAdd = { showAddChoice = true },
             modifier = Modifier.align(Alignment.BottomCenter),
         )
+        ToastHost()
     }
     if (showAddChoice) ModalBottomSheet(
         onDismissRequest = { showAddChoice = false }, containerColor = DS.colors.bg3,
@@ -167,13 +186,19 @@ private fun MainShell(
         Column(Modifier.padding(horizontal = 22.dp).padding(bottom = 30.dp)) {
             Text(stringResource(R.string.add_sheet_title), style = MaterialTheme.typography.titleLarge, color = DS.colors.ink, modifier = Modifier.appearFluidly(0))
             Spacer(Modifier.height(14.dp))
-            AddChoiceRow(Icons.Default.Description, DS.colors.violet, stringResource(R.string.add_sheet_prescription), stringResource(R.string.add_sheet_prescription_sub), Modifier.appearFluidly(1)) {
+            InstantScanCard(
+                title = stringResource(R.string.scan_instant_title),
+                subtitle = stringResource(R.string.scan_addsheet_sub),
+                modifier = Modifier.appearFluidly(1),
+                radius = 22.dp, borderWidth = 2.dp,
+            ) { openAddMedication(true) }
+            Spacer(Modifier.height(9.dp))
+            AddChoiceRow(Icons.Default.Description, DS.colors.violet, stringResource(R.string.add_sheet_prescription), stringResource(R.string.add_sheet_prescription_sub), Modifier.appearFluidly(2)) {
                 showAddChoice = false; showPrescriptionEditor = true
             }
             Spacer(Modifier.height(9.dp))
-            AddChoiceRow(Icons.Default.Medication, DS.colors.mint, stringResource(R.string.add_sheet_medication), stringResource(R.string.add_sheet_medication_sub), Modifier.appearFluidly(2)) {
-                showAddChoice = false
-                if (billing.isPro || repository.activeMedications.isEmpty()) navigate(Route.MedicationForm()) else navigate(Route.Paywall)
+            AddChoiceRow(Icons.Default.Medication, DS.colors.mint, stringResource(R.string.add_sheet_medication), stringResource(R.string.add_sheet_medication_sub), Modifier.appearFluidly(3)) {
+                openAddMedication(false)
             }
         }
     }

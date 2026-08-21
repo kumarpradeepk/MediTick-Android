@@ -51,7 +51,10 @@ private enum class DayPart(@StringRes val title: Int) {
 }
 
 @Composable
-fun TodayScreen(repository: AppRepository, onAdd: () -> Unit, onMedication: (String) -> Unit) {
+fun TodayScreen(
+    repository: AppRepository, onAdd: () -> Unit, onMedication: (String) -> Unit,
+    onInstantScan: () -> Unit = {},
+) {
     val snapshot = repository.data
     var selectedDay by remember { mutableLongStateOf(DoseEngine.startOfDay(System.currentTimeMillis())) }
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -74,6 +77,13 @@ fun TodayScreen(repository: AppRepository, onAdd: () -> Unit, onMedication: (Str
                     stringResource(R.string.today_empty_body),
                     stringResource(R.string.today_add_first), onAdd)
                 Spacer(Modifier.height(12.dp)); Text(stringResource(R.string.today_takes_30_seconds), color = DS.colors.ink3, fontSize = 12.sp)
+                Spacer(Modifier.height(28.dp))
+                InstantScanCard(
+                    title = stringResource(R.string.scan_home_title),
+                    subtitle = stringResource(R.string.scan_home_sub),
+                    radius = 26.dp,
+                    onClick = onInstantScan,
+                )
             }
         } else {
             LazyColumn(
@@ -128,6 +138,17 @@ fun TodayScreen(repository: AppRepository, onAdd: () -> Unit, onMedication: (Str
                             }
                         }
                     }
+                }
+                // The Instant Scan door sits at the end of the day's list, just
+                // above the dock — the design's standing invitation.
+                item {
+                    InstantScanCard(
+                        title = stringResource(R.string.scan_home_title),
+                        subtitle = stringResource(R.string.scan_home_sub),
+                        modifier = Modifier.padding(top = 6.dp),
+                        radius = 26.dp,
+                        onClick = onInstantScan,
+                    )
                 }
             }
         }

@@ -380,13 +380,10 @@
     <string name="form_success_view_rx">查看我的处方</string>
     <string name="form_success_add_another">再添加一种药品</string>
     <string name="form_success_add_more_pro">升级 Pro 添加更多</string>
-    <string name="scan_card_title">扫描药品标签</string>
-    <string name="scan_card_caption_pro">将相机对准药盒或药瓶</string>
     <string name="scan_card_caption_free">剩余免费扫描次数：%1$d — 之后需要 Pro</string>
     <string name="scan_card_caption_locked">MediTick Pro 功能</string>
     <string name="scan_position">将标签置于取景框内</string>
     <string name="scan_looking">正在寻找标签…</string>
-    <string name="scan_reading">正在读取标签…</string>
     <string name="scan_identify">立即识别</string>
     <string name="scan_identifying">识别中…</string>
     <string name="scan_matches_title">可能的匹配</string>
@@ -639,9 +636,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">每,每天,两次,一次,每日,服用,随,前,后,早上,晚上,傍晚,中午,睡前,午餐,晚餐,早餐,饭,餐,和</string>
     <string name="scan_identify_ai">使用 AI 识别</string>
     <string name="scan_ai_checks">AI 会核对名称、规格和剂型</string>
-    <string name="scan_stage_capture">正在拍摄最清晰的画面</string>
-    <string name="scan_stage_read">正在读取名称和规格</string>
-    <string name="scan_stage_check">正在核对药品剂型</string>
     <string name="scan_ai_identifying">MediTick AI 正在识别</string>
     <string name="scan_local_identifying">正在读取标签</string>
     <string name="scan_confirm_title">确认药品</string>
@@ -654,4 +648,29 @@
     <string name="scan_ai_limit">你本月已使用 30 次 AI 扫描。额度将在下月重置。</string>
     <string name="scan_ai_fallback">AI 扫描暂时不可用。以下是在设备上找到的最佳匹配。</string>
     <string name="scan_ai_not_configured">AI 扫描尚未配置，将使用设备上的私密识别。</string>
+    <string name="scan_instant_title">即时扫描</string>
+    <string name="scan_badge_new">新</string>
+    <string name="scan_home_title">试试即时扫描</string>
+    <string name="scan_home_sub">对准任意药品标签 — 几秒即可添加</string>
+    <string name="scan_addsheet_sub">AI 读取标签并自动填写全部信息</string>
+    <string name="scan_card_caption_quota">AI 读取标签 · 本月还剩 %1$d/30 次扫描</string>
+    <string name="scan_locked">已锁定标签 — 请保持稳定</string>
+    <string name="scan_check_read">读取标签上的文字</string>
+    <string name="scan_check_form">糖浆？药片？正在判断</string>
+    <string name="scan_check_details">正在整理你的用药信息</string>
+    <string name="scan_phase_1">仔细看看…</string>
+    <string name="scan_phase_2">嗯 — 这是哪种药呢？</string>
+    <string name="scan_phase_3">现在都对上了</string>
+    <string name="scan_phase_4">就快好了…</string>
+    <string name="scan_found">找到了 — %1$s</string>
+    <string name="scan_found_sub">标签匹配度 %1$d%% · 正在准备详细信息</string>
+    <string name="scan_best_match">最佳匹配</string>
+    <string name="scan_match_label">匹配度</string>
+    <string name="scan_use_match">使用此结果</string>
+    <string name="scan_prefilled_banner">已根据扫描自动填写 — 核对后继续</string>
+    <string name="scan_ai_filled">AI 填写</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">已通过即时扫描添加</string>
+    <string name="scan_badge_scanned">已扫描</string>
+    <string name="scan_or_skip_typing">或者不用手动输入</string>
 </resources>

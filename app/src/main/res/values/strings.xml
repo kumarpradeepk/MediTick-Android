@@ -470,21 +470,15 @@
     <string name="form_success_add_more_pro">Add more with Pro</string>
 
     <!-- ===================== Scan to Add ================= -->
-    <string name="scan_card_title">Scan the label</string>
-    <string name="scan_card_caption_pro">AI label recognition · 30 scans per month</string>
     <!-- %1$d free scans remain before the Pro gate. -->
     <string name="scan_card_caption_free">Free scans left: %1$d — then Pro</string>
     <string name="scan_card_caption_locked">A MediTick Pro feature</string>
     <string name="scan_position">Position the label in the frame</string>
     <string name="scan_looking">Looking for a label…</string>
-    <string name="scan_reading">Reading the label…</string>
     <string name="scan_identify">Identify now</string>
     <string name="scan_identify_ai">Identify with AI</string>
     <string name="scan_identifying">Identifying…</string>
     <string name="scan_ai_checks">AI checks the name, strength, and form</string>
-    <string name="scan_stage_capture">Capturing the clearest frame</string>
-    <string name="scan_stage_read">Reading name and strength</string>
-    <string name="scan_stage_check">Checking medication form</string>
     <string name="scan_ai_identifying">MediTick AI is identifying it</string>
     <string name="scan_local_identifying">Reading your label</string>
     <string name="scan_matches_title">Possible Matches</string>
@@ -842,4 +836,29 @@
     <string name="parse_marker_am">am</string>
     <string name="parse_marker_pm">pm</string>
     <string name="parse_stopwords">every,each,twice,once,daily,take,with,before,after,morning,night,evening,noon,midday,bed,bedtime,lunch,dinner,breakfast,meal,meals,the,and</string>
+    <string name="scan_instant_title">Instant Scan</string>
+    <string name="scan_badge_new">NEW</string>
+    <string name="scan_home_title">Try Instant Scan</string>
+    <string name="scan_home_sub">Point at any label — added in seconds</string>
+    <string name="scan_addsheet_sub">AI reads the label &amp; pre-fills everything</string>
+    <string name="scan_card_caption_quota">AI reads the label · %1$d of 30 scans left</string>
+    <string name="scan_locked">Label locked — hold steady</string>
+    <string name="scan_check_read">Reading what the label says</string>
+    <string name="scan_check_form">Syrup? Tablet? Working it out</string>
+    <string name="scan_check_details">Piecing your details together</string>
+    <string name="scan_phase_1">Taking a good look…</string>
+    <string name="scan_phase_2">Hmm — what kind of medicine is this?</string>
+    <string name="scan_phase_3">It all adds up now</string>
+    <string name="scan_phase_4">Almost there…</string>
+    <string name="scan_found">Found it — %1$s</string>
+    <string name="scan_found_sub">%1$d%% label match · preparing your details</string>
+    <string name="scan_best_match">BEST MATCH</string>
+    <string name="scan_match_label">MATCH</string>
+    <string name="scan_use_match">Use this match</string>
+    <string name="scan_prefilled_banner">Pre-filled from your scan — just check &amp; continue</string>
+    <string name="scan_ai_filled">AI FILLED</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">Added from Instant Scan</string>
+    <string name="scan_badge_scanned">SCANNED</string>
+    <string name="scan_or_skip_typing">OR SKIP THE TYPING</string>
 </resources>

@@ -485,13 +485,10 @@
     <string name="form_success_view_rx">عرض وصفتي الطبية</string>
     <string name="form_success_add_another">إضافة دواء آخر</string>
     <string name="form_success_add_more_pro">أضف المزيد مع Pro</string>
-    <string name="scan_card_title">مسح الملصق</string>
-    <string name="scan_card_caption_pro">وجّه الكاميرا نحو العلبة أو الزجاجة</string>
     <string name="scan_card_caption_free">عمليات المسح المجانية المتبقية: %1$d — ثم Pro</string>
     <string name="scan_card_caption_locked">ميزة من MediTick Pro</string>
     <string name="scan_position">ضع الملصق داخل الإطار</string>
     <string name="scan_looking">جارٍ البحث عن ملصق…</string>
-    <string name="scan_reading">جارٍ قراءة الملصق…</string>
     <string name="scan_identify">التعرف الآن</string>
     <string name="scan_identifying">جارٍ التعرف…</string>
     <string name="scan_matches_title">التطابقات المحتملة</string>
@@ -769,9 +766,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">كل,مرتين,مرة,يوميا,يوميًا,تناول,مع,قبل,بعد,صباح,ليل,مساء,ظهر,نوم,غداء,عشاء,إفطار,وجبة,وجبات</string>
     <string name="scan_identify_ai">التعرّف بالذكاء الاصطناعي</string>
     <string name="scan_ai_checks">يتحقق الذكاء الاصطناعي من الاسم والتركيز والشكل</string>
-    <string name="scan_stage_capture">التقاط أوضح صورة</string>
-    <string name="scan_stage_read">قراءة الاسم والتركيز</string>
-    <string name="scan_stage_check">التحقق من شكل الدواء</string>
     <string name="scan_ai_identifying">يتعرّف MediTick AI على الدواء</string>
     <string name="scan_local_identifying">جارٍ قراءة الملصق</string>
     <string name="scan_confirm_title">تأكيد الدواء</string>
@@ -784,4 +778,29 @@
     <string name="scan_ai_limit">استخدمت 30 عملية مسح بالذكاء الاصطناعي هذا الشهر. ستتم إعادة تعيين الحد الشهر المقبل.</string>
     <string name="scan_ai_fallback">المسح بالذكاء الاصطناعي غير متاح مؤقتًا. إليك أفضل النتائج على الجهاز.</string>
     <string name="scan_ai_not_configured">لم يتم إعداد المسح بالذكاء الاصطناعي بعد. سيُستخدم التعرّف الخاص على الجهاز.</string>
+    <string name="scan_instant_title">المسح الفوري</string>
+    <string name="scan_badge_new">جديد</string>
+    <string name="scan_home_title">جرّب المسح الفوري</string>
+    <string name="scan_home_sub">وجّه الكاميرا نحو أي ملصق — تُضاف خلال ثوانٍ</string>
+    <string name="scan_addsheet_sub">الذكاء الاصطناعي يقرأ الملصق ويملأ كل شيء</string>
+    <string name="scan_card_caption_quota">الذكاء الاصطناعي يقرأ الملصق · بقي %1$d من 30 عملية مسح</string>
+    <string name="scan_locked">تم تثبيت الملصق — أبقِ الهاتف ثابتًا</string>
+    <string name="scan_check_read">قراءة ما هو مكتوب على الملصق</string>
+    <string name="scan_check_form">شراب؟ قرص؟ جارٍ التحديد</string>
+    <string name="scan_check_details">تجميع تفاصيل دوائك</string>
+    <string name="scan_phase_1">نلقي نظرة فاحصة…</string>
+    <string name="scan_phase_2">همم — ما نوع هذا الدواء؟</string>
+    <string name="scan_phase_3">الآن اتّضحت الصورة</string>
+    <string name="scan_phase_4">أوشكنا على الانتهاء…</string>
+    <string name="scan_found">وجدناه — %1$s</string>
+    <string name="scan_found_sub">تطابق الملصق %1$d%% · جارٍ تجهيز التفاصيل</string>
+    <string name="scan_best_match">أفضل تطابق</string>
+    <string name="scan_match_label">تطابق</string>
+    <string name="scan_use_match">استخدام هذا التطابق</string>
+    <string name="scan_prefilled_banner">مملوء تلقائيًا من المسح — تحقّق ثم تابع</string>
+    <string name="scan_ai_filled">مُعبّأ بالذكاء الاصطناعي</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">تمت الإضافة عبر المسح الفوري</string>
+    <string name="scan_badge_scanned">ممسوح</string>
+    <string name="scan_or_skip_typing">أو تخطَّ الكتابة</string>
 </resources>

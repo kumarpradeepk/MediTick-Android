@@ -380,13 +380,10 @@
     <string name="form_success_view_rx">Xem đơn thuốc của tôi</string>
     <string name="form_success_add_another">Thêm thuốc khác</string>
     <string name="form_success_add_more_pro">Thêm nhiều hơn với Pro</string>
-    <string name="scan_card_title">Quét nhãn thuốc</string>
-    <string name="scan_card_caption_pro">Hướng camera vào hộp hoặc chai thuốc</string>
     <string name="scan_card_caption_free">Lượt quét miễn phí còn lại: %1$d — sau đó cần Pro</string>
     <string name="scan_card_caption_locked">Tính năng của MediTick Pro</string>
     <string name="scan_position">Đặt nhãn thuốc vào trong khung</string>
     <string name="scan_looking">Đang tìm nhãn…</string>
-    <string name="scan_reading">Đang đọc nhãn…</string>
     <string name="scan_identify">Nhận diện ngay</string>
     <string name="scan_identifying">Đang nhận diện…</string>
     <string name="scan_matches_title">Kết quả có thể khớp</string>
@@ -639,9 +636,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">mỗi,hai lần,một lần,hằng ngày,hàng ngày,uống,cùng,trước,sau,sáng,đêm,tối,trưa,ngủ,bữa trưa,bữa tối,bữa sáng,bữa ăn,và</string>
     <string name="scan_identify_ai">Nhận diện bằng AI</string>
     <string name="scan_ai_checks">AI kiểm tra tên, hàm lượng và dạng thuốc</string>
-    <string name="scan_stage_capture">Đang chụp khung hình rõ nhất</string>
-    <string name="scan_stage_read">Đang đọc tên và hàm lượng</string>
-    <string name="scan_stage_check">Đang kiểm tra dạng thuốc</string>
     <string name="scan_ai_identifying">MediTick AI đang nhận diện</string>
     <string name="scan_local_identifying">Đang đọc nhãn thuốc</string>
     <string name="scan_confirm_title">Xác nhận thuốc</string>
@@ -654,4 +648,29 @@
     <string name="scan_ai_limit">Bạn đã dùng 30 lượt quét AI tháng này. Hạn mức sẽ được đặt lại vào tháng sau.</string>
     <string name="scan_ai_fallback">Quét AI tạm thời không khả dụng. Đây là các kết quả phù hợp nhất trên thiết bị.</string>
     <string name="scan_ai_not_configured">Quét AI chưa được cấu hình. Ứng dụng sẽ dùng nhận diện riêng tư trên thiết bị.</string>
+    <string name="scan_instant_title">Quét tức thì</string>
+    <string name="scan_badge_new">MỚI</string>
+    <string name="scan_home_title">Thử Quét tức thì</string>
+    <string name="scan_home_sub">Hướng vào bất kỳ nhãn thuốc nào — thêm trong vài giây</string>
+    <string name="scan_addsheet_sub">AI đọc nhãn và điền sẵn mọi thứ</string>
+    <string name="scan_card_caption_quota">AI đọc nhãn · còn %1$d/30 lượt quét</string>
+    <string name="scan_locked">Đã khóa nhãn — giữ yên</string>
+    <string name="scan_check_read">Đang đọc nội dung trên nhãn</string>
+    <string name="scan_check_form">Siro? Viên nén? Đang xác định</string>
+    <string name="scan_check_details">Đang ghép thông tin của bạn</string>
+    <string name="scan_phase_1">Đang xem kỹ…</string>
+    <string name="scan_phase_2">Hmm — đây là loại thuốc gì nhỉ?</string>
+    <string name="scan_phase_3">Giờ thì khớp cả rồi</string>
+    <string name="scan_phase_4">Sắp xong rồi…</string>
+    <string name="scan_found">Đã tìm thấy — %1$s</string>
+    <string name="scan_found_sub">Khớp nhãn %1$d%% · đang chuẩn bị thông tin</string>
+    <string name="scan_best_match">KHỚP NHẤT</string>
+    <string name="scan_match_label">ĐỘ KHỚP</string>
+    <string name="scan_use_match">Dùng kết quả này</string>
+    <string name="scan_prefilled_banner">Đã điền sẵn từ bản quét — kiểm tra rồi tiếp tục</string>
+    <string name="scan_ai_filled">AI ĐIỀN</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">Đã thêm bằng Quét tức thì</string>
+    <string name="scan_badge_scanned">ĐÃ QUÉT</string>
+    <string name="scan_or_skip_typing">HOẶC BỎ QUA VIỆC GÕ</string>
 </resources>

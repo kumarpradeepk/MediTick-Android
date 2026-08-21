@@ -443,13 +443,10 @@
     <string name="form_success_view_rx">Посмотреть мой рецепт</string>
     <string name="form_success_add_another">Добавить ещё препарат</string>
     <string name="form_success_add_more_pro">Добавьте больше с Pro</string>
-    <string name="scan_card_title">Сканировать этикетку</string>
-    <string name="scan_card_caption_pro">Наведите камеру на упаковку или флакон</string>
     <string name="scan_card_caption_free">Осталось бесплатных сканирований: %1$d — далее Pro</string>
     <string name="scan_card_caption_locked">Функция MediTick Pro</string>
     <string name="scan_position">Поместите этикетку в рамку</string>
     <string name="scan_looking">Ищем этикетку…</string>
-    <string name="scan_reading">Читаем этикетку…</string>
     <string name="scan_identify">Распознать сейчас</string>
     <string name="scan_identifying">Распознавание…</string>
     <string name="scan_matches_title">Возможные совпадения</string>
@@ -717,9 +714,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">каждый,каждые,два раза,один раз,ежедневно,принимать,принять,с,перед,до,после,утро,ночь,вечер,полдень,сон,обед,ужин,завтрак,еда,еды,и</string>
     <string name="scan_identify_ai">Распознать с помощью ИИ</string>
     <string name="scan_ai_checks">ИИ проверит название, дозировку и форму</string>
-    <string name="scan_stage_capture">Снимаем самый чёткий кадр</string>
-    <string name="scan_stage_read">Читаем название и дозировку</string>
-    <string name="scan_stage_check">Проверяем форму лекарства</string>
     <string name="scan_ai_identifying">MediTick AI распознаёт лекарство</string>
     <string name="scan_local_identifying">Читаем этикетку</string>
     <string name="scan_confirm_title">Подтвердите лекарство</string>
@@ -732,4 +726,29 @@
     <string name="scan_ai_limit">В этом месяце использовано 30 ИИ-сканирований. Лимит обновится в следующем месяце.</string>
     <string name="scan_ai_fallback">ИИ-сканирование временно недоступно. Показаны лучшие совпадения, найденные на устройстве.</string>
     <string name="scan_ai_not_configured">ИИ-сканирование ещё не настроено. Используется приватное распознавание на устройстве.</string>
+    <string name="scan_instant_title">Мгновенное сканирование</string>
+    <string name="scan_badge_new">НОВОЕ</string>
+    <string name="scan_home_title">Попробуйте мгновенное сканирование</string>
+    <string name="scan_home_sub">Наведите на любую этикетку — добавится за секунды</string>
+    <string name="scan_addsheet_sub">ИИ читает этикетку и заполняет все поля</string>
+    <string name="scan_card_caption_quota">ИИ читает этикетку · осталось %1$d из 30 сканирований</string>
+    <string name="scan_locked">Этикетка зафиксирована — держите ровно</string>
+    <string name="scan_check_read">Читаем, что написано на этикетке</string>
+    <string name="scan_check_form">Сироп? Таблетка? Разбираемся</string>
+    <string name="scan_check_details">Собираем данные воедино</string>
+    <string name="scan_phase_1">Присматриваемся…</string>
+    <string name="scan_phase_2">Хмм — что это за лекарство?</string>
+    <string name="scan_phase_3">Теперь всё сходится</string>
+    <string name="scan_phase_4">Почти готово…</string>
+    <string name="scan_found">Нашли — %1$s</string>
+    <string name="scan_found_sub">Совпадение %1$d%% · готовим детали</string>
+    <string name="scan_best_match">ЛУЧШЕЕ СОВПАДЕНИЕ</string>
+    <string name="scan_match_label">СОВПАД.</string>
+    <string name="scan_use_match">Использовать это совпадение</string>
+    <string name="scan_prefilled_banner">Заполнено по результатам сканирования — проверьте и продолжите</string>
+    <string name="scan_ai_filled">ЗАПОЛНЕНО ИИ</string>
+    <string name="scan_ai_filled_short">ИИ</string>
+    <string name="scan_added_toast">Добавлено через мгновенное сканирование</string>
+    <string name="scan_badge_scanned">ОТСКАНИРОВАНО</string>
+    <string name="scan_or_skip_typing">ИЛИ БЕЗ НАБОРА ТЕКСТА</string>
 </resources>

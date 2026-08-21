@@ -401,13 +401,10 @@
     <string name="form_success_view_rx">Mijn recept bekijken</string>
     <string name="form_success_add_another">Nog een medicijn toevoegen</string>
     <string name="form_success_add_more_pro">Voeg meer toe met Pro</string>
-    <string name="scan_card_title">Scan het etiket</string>
-    <string name="scan_card_caption_pro">Richt de camera op het doosje of flesje</string>
     <string name="scan_card_caption_free">Gratis scans over: %1$d — daarna Pro</string>
     <string name="scan_card_caption_locked">Een MediTick Pro-functie</string>
     <string name="scan_position">Plaats het etiket binnen het kader</string>
     <string name="scan_looking">Zoeken naar een etiket…</string>
-    <string name="scan_reading">Etiket wordt gelezen…</string>
     <string name="scan_identify">Nu identificeren</string>
     <string name="scan_identifying">Identificeren…</string>
     <string name="scan_matches_title">Mogelijke matches</string>
@@ -665,9 +662,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">elke,iedere,twee keer,een keer,dagelijks,neem,innemen,met,voor,na,ochtend,nacht,avond,middag,bed,bedtijd,lunch,avondeten,ontbijt,maaltijd,maaltijden,de,het,en</string>
     <string name="scan_identify_ai">Herkennen met AI</string>
     <string name="scan_ai_checks">AI controleert naam, sterkte en vorm</string>
-    <string name="scan_stage_capture">Scherpste beeld vastleggen</string>
-    <string name="scan_stage_read">Naam en sterkte lezen</string>
-    <string name="scan_stage_check">Medicijnvorm controleren</string>
     <string name="scan_ai_identifying">MediTick AI herkent het medicijn</string>
     <string name="scan_local_identifying">Je etiket wordt gelezen</string>
     <string name="scan_confirm_title">Medicijn bevestigen</string>
@@ -680,4 +674,29 @@
     <string name="scan_ai_limit">Je hebt deze maand 30 AI-scans gebruikt. Je tegoed wordt volgende maand vernieuwd.</string>
     <string name="scan_ai_fallback">AI-scan is tijdelijk niet beschikbaar. Dit zijn de beste overeenkomsten op het apparaat.</string>
     <string name="scan_ai_not_configured">AI-scan is nog niet ingesteld. Privéherkenning op het apparaat wordt gebruikt.</string>
+    <string name="scan_instant_title">Direct scannen</string>
+    <string name="scan_badge_new">NIEUW</string>
+    <string name="scan_home_title">Probeer Direct scannen</string>
+    <string name="scan_home_sub">Richt op een etiket — in seconden toegevoegd</string>
+    <string name="scan_addsheet_sub">AI leest het etiket en vult alles in</string>
+    <string name="scan_card_caption_quota">AI leest het etiket · nog %1$d van 30 scans</string>
+    <string name="scan_locked">Etiket vergrendeld — houd stil</string>
+    <string name="scan_check_read">Lezen wat er op het etiket staat</string>
+    <string name="scan_check_form">Siroop? Tablet? Even uitzoeken</string>
+    <string name="scan_check_details">Je gegevens worden samengevoegd</string>
+    <string name="scan_phase_1">Even goed kijken…</string>
+    <string name="scan_phase_2">Hmm — wat voor medicijn is dit?</string>
+    <string name="scan_phase_3">Nu klopt alles</string>
+    <string name="scan_phase_4">Bijna klaar…</string>
+    <string name="scan_found">Gevonden — %1$s</string>
+    <string name="scan_found_sub">%1$d%% overeenkomst · details worden voorbereid</string>
+    <string name="scan_best_match">BESTE MATCH</string>
+    <string name="scan_match_label">MATCH</string>
+    <string name="scan_use_match">Deze match gebruiken</string>
+    <string name="scan_prefilled_banner">Vooraf ingevuld via je scan — controleer en ga verder</string>
+    <string name="scan_ai_filled">DOOR AI INGEVULD</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">Toegevoegd via Direct scannen</string>
+    <string name="scan_badge_scanned">GESCAND</string>
+    <string name="scan_or_skip_typing">OF SLA HET TYPEN OVER</string>
 </resources>

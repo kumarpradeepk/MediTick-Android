@@ -401,13 +401,10 @@
     <string name="form_success_view_rx">Visa mitt recept</string>
     <string name="form_success_add_another">Lägg till ett läkemedel till</string>
     <string name="form_success_add_more_pro">Lägg till fler med Pro</string>
-    <string name="scan_card_title">Skanna etiketten</string>
-    <string name="scan_card_caption_pro">Rikta kameran mot asken eller flaskan</string>
     <string name="scan_card_caption_free">Gratisskanningar kvar: %1$d — sedan Pro</string>
     <string name="scan_card_caption_locked">En MediTick Pro-funktion</string>
     <string name="scan_position">Placera etiketten i ramen</string>
     <string name="scan_looking">Letar efter en etikett…</string>
-    <string name="scan_reading">Läser etiketten…</string>
     <string name="scan_identify">Identifiera nu</string>
     <string name="scan_identifying">Identifierar…</string>
     <string name="scan_matches_title">Möjliga träffar</string>
@@ -665,9 +662,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">varje,två gånger,en gång,dagligen,ta,med,före,efter,morgon,natt,kväll,middag,lunch,läggdags,frukost,måltid,måltider,och</string>
     <string name="scan_identify_ai">Identifiera med AI</string>
     <string name="scan_ai_checks">AI kontrollerar namn, styrka och form</string>
-    <string name="scan_stage_capture">Tar den tydligaste bilden</string>
-    <string name="scan_stage_read">Läser namn och styrka</string>
-    <string name="scan_stage_check">Kontrollerar läkemedelsform</string>
     <string name="scan_ai_identifying">MediTick AI identifierar läkemedlet</string>
     <string name="scan_local_identifying">Läser etiketten</string>
     <string name="scan_confirm_title">Bekräfta läkemedel</string>
@@ -680,4 +674,29 @@
     <string name="scan_ai_limit">Du har använt 30 AI-skanningar den här månaden. Kvoten återställs nästa månad.</string>
     <string name="scan_ai_fallback">AI-skanning är tillfälligt otillgänglig. Här är de bästa träffarna på enheten.</string>
     <string name="scan_ai_not_configured">AI-skanning är inte konfigurerad än. Privat igenkänning på enheten används.</string>
+    <string name="scan_instant_title">Blixtskanning</string>
+    <string name="scan_badge_new">NYTT</string>
+    <string name="scan_home_title">Prova Blixtskanning</string>
+    <string name="scan_home_sub">Rikta mot vilken etikett som helst — tillagd på sekunder</string>
+    <string name="scan_addsheet_sub">AI läser etiketten och fyller i allt</string>
+    <string name="scan_card_caption_quota">AI läser etiketten · %1$d av 30 skanningar kvar</string>
+    <string name="scan_locked">Etikett låst — håll stilla</string>
+    <string name="scan_check_read">Läser vad etiketten säger</string>
+    <string name="scan_check_form">Mixtur? Tablett? Listar ut det</string>
+    <string name="scan_check_details">Sätter ihop dina uppgifter</string>
+    <string name="scan_phase_1">Tittar noga…</string>
+    <string name="scan_phase_2">Hmm — vad för slags medicin är detta?</string>
+    <string name="scan_phase_3">Nu stämmer allt</string>
+    <string name="scan_phase_4">Nästan klart…</string>
+    <string name="scan_found">Hittad — %1$s</string>
+    <string name="scan_found_sub">%1$d%% matchning · förbereder detaljerna</string>
+    <string name="scan_best_match">BÄSTA MATCHNING</string>
+    <string name="scan_match_label">MATCHNING</string>
+    <string name="scan_use_match">Använd denna matchning</string>
+    <string name="scan_prefilled_banner">Förifyllt från din skanning — kontrollera och fortsätt</string>
+    <string name="scan_ai_filled">AI-IFYLLT</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">Tillagd via Blixtskanning</string>
+    <string name="scan_badge_scanned">SKANNAD</string>
+    <string name="scan_or_skip_typing">ELLER HOPPA ÖVER SKRIVANDET</string>
 </resources>

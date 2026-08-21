@@ -4,6 +4,7 @@ package com.kabi.pillpal.meditick.ui.screens
 
 import android.app.TimePickerDialog
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -16,7 +17,9 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -53,6 +58,7 @@ import com.kabi.pillpal.meditick.data.SettingsStore
 import com.kabi.pillpal.meditick.model.*
 import com.kabi.pillpal.meditick.ui.components.*
 import com.kabi.pillpal.meditick.ui.theme.DS
+import kotlinx.coroutines.delay
 import java.util.Calendar
 import java.util.UUID
 
@@ -119,7 +125,7 @@ fun MedicationFormScreen(
     repository: AppRepository, editingId: String?, prescriptionId: String?,
     onClose: () -> Unit, onSaved: () -> Unit,
     isPro: Boolean = true, aiScanAccountID: String = "android-preview-account",
-    onShowPaywall: () -> Unit = {},
+    onShowPaywall: () -> Unit = {}, startWithScan: Boolean = false,
 ) {
     val existing = repository.medication(editingId)
     val context = LocalContext.current
@@ -151,11 +157,19 @@ fun MedicationFormScreen(
     var duplicateName by remember { mutableStateOf<String?>(null) }
     var saved by remember { mutableStateOf<Medication?>(null) }
     var showScan by remember { mutableStateOf(false) }
+    /** True once Instant Scan filled the basics — drives the AI-filled tags. */
+    var prefilledFromScan by remember { mutableStateOf(false) }
+
+    // Entering straight from a Home / Add New "Instant Scan" tap.
+    LaunchedEffect(startWithScan) {
+        if (!startWithScan) return@LaunchedEffect
+        if (ScanQuota.canStart(context, isPro)) showScan = true else onShowPaywall()
+    }
 
     /** Clears the whole draft for "Add another" from the success screen. */
     fun resetForAnother() {
         saved = null; step = 0; describe = ""; name = ""; strength = ""; strengthUnit = "mg"
-        form = MedicationForm.tablet; instructions = ""; trackStock = false
+        form = MedicationForm.tablet; instructions = ""; trackStock = false; prefilledFromScan = false
         stock = prettyNumber(30.0); alertAt = prettyNumber(7.0)
         mode = RhythmMode.EVERY_DAY; weekdays = emptySet(); cycleOn = 21; cycleOff = 7; dayInterval = 2
         doses = listOf(FormDose(time = presets.morning)); amount = prettyNumber(1.0)
@@ -170,12 +184,14 @@ fun MedicationFormScreen(
         ScanToAddScreen(
             isPro = isPro,
             accountID = aiScanAccountID,
-            onClose = { showScan = false },
+            onClose = { showScan = false; if (startWithScan && name.isBlank()) onClose() },
             onMatch = { candidate ->
                 name = candidate.name
                 candidate.strengthText?.let(::parseStrength)?.let { strength = it.first; strengthUnit = it.second }
                 candidate.form?.let { form = it }
+                candidate.note?.takeIf { instructions.isBlank() }?.let { instructions = it }
                 ScanQuota.consume(context, isPro)
+                prefilledFromScan = true
                 showScan = false
                 step = 1
             },
@@ -186,7 +202,11 @@ fun MedicationFormScreen(
         saved?.let { done ->
             SavedCelebration(
                 medication = done, canAddAnother = isPro,
-                onDone = onSaved, onAddAnother = ::resetForAnother,
+                onDone = {
+                    if (done.addedByScan) ToastCenter.say(context.getString(R.string.scan_added_toast))
+                    onSaved()
+                },
+                onAddAnother = ::resetForAnother,
                 onAddMorePro = onShowPaywall,
             )
             return@ScreenBackground
@@ -214,7 +234,7 @@ fun MedicationFormScreen(
                 when (active) {
                     0 -> DescribeStep(describe, { describe = it }, catalog, presets,
                         scanCaption = when {
-                            isPro -> stringResource(R.string.scan_card_caption_pro)
+                            isPro -> stringResource(R.string.scan_card_caption_quota, ScanQuota.aiRemaining(context))
                             ScanQuota.remainingFree(context) > 0 -> stringResource(R.string.scan_card_caption_free, ScanQuota.remainingFree(context))
                             else -> stringResource(R.string.scan_card_caption_locked)
                         },
@@ -237,7 +257,7 @@ fun MedicationFormScreen(
                         parsed.durationDays?.let { durationDays = it; ongoing = false }
                         step = 1
                     })
-                    1 -> BasicsStep(name, { name = it }, suggestions, { entry ->
+                    1 -> BasicsStep(prefilledFromScan, name, { name = it }, suggestions, { entry ->
                         name = entry.name; form = entry.form
                         entry.strengths.firstOrNull()?.let { parseStrength(it) }?.let { strength = it.first; strengthUnit = it.second }
                     }, strength, { strength = it }, strengthUnit, { strengthUnit = it }, form, { form = it }, instructions, { instructions = it },
@@ -278,6 +298,7 @@ fun MedicationFormScreen(
                                 schedule = schedule, prescriptionID = associationId,
                                 instructions = instructions.trim(), inventoryEnabled = trackStock,
                                 stock = stock.toDoubleOrNull() ?: 30.0, refillReminderThreshold = alertAt.toDoubleOrNull() ?: 7.0,
+                                addedByScan = existing?.addedByScan ?: prefilledFromScan,
                             )
                             haptics.success()
                             if (existing == null) { repository.addMedication(medication); saved = medication }
@@ -451,18 +472,21 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
                 }
             }
             Spacer(Modifier.height(14.dp))
-            // Scan to Add — point the camera at the label instead of typing.
-            GlassCard(Modifier.fillMaxWidth(), radius = 20.dp, onClick = onScan, contentPadding = PaddingValues(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconTile(Icons.Default.DocumentScanner, DS.colors.cyan)
-                    Spacer(Modifier.width(14.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(stringResource(R.string.scan_card_title), color = DS.colors.ink, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-                        Text(scanCaption, color = DS.colors.ink3, fontSize = 12.sp)
-                    }
-                    Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink3)
-                }
+            // Instant Scan — point the camera at the label instead of typing.
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(Modifier.weight(1f).height(1.dp).background(DS.colors.line))
+                Text(
+                    stringResource(R.string.scan_or_skip_typing), color = DS.colors.ink3,
+                    fontSize = 11.sp, fontWeight = FontWeight.Black, letterSpacing = 1.5.sp,
+                )
+                Box(Modifier.weight(1f).height(1.dp).background(DS.colors.line))
             }
+            Spacer(Modifier.height(14.dp))
+            InstantScanCard(
+                title = stringResource(R.string.scan_instant_title),
+                subtitle = scanCaption,
+                onClick = onScan,
+            )
             Spacer(Modifier.height(16.dp)); SectionLabel(stringResource(R.string.describe_examples))
             Spacer(Modifier.height(8.dp))
             listOf(
@@ -509,6 +533,7 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
 
 @Composable
 private fun BasicsStep(
+    prefilled: Boolean,
     name: String, onName: (String) -> Unit, suggestions: List<CatalogEntry>, onSuggestion: (CatalogEntry) -> Unit,
     strength: String, onStrength: (String) -> Unit, unit: String, onUnit: (String) -> Unit,
     form: MedicationForm, onForm: (MedicationForm) -> Unit, instructions: String, onInstructions: (String) -> Unit,
@@ -518,7 +543,26 @@ private fun BasicsStep(
     val context = LocalContext.current
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item { SectionLabel(stringResource(R.string.basics_label)); Spacer(Modifier.height(8.dp)); Text(stringResource(R.string.basics_headline), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink) }
-        item { MediTickTextField(name, onName, placeholder = stringResource(R.string.basics_field_name), modifier = Modifier.fillMaxWidth(), singleLine = true) }
+        if (prefilled) item {
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
+                    .background(Brush.linearGradient(listOf(DS.colors.gradStart.copy(alpha = .10f), DS.colors.cyan.copy(alpha = .10f))))
+                    .border(1.dp, DS.colors.mint.copy(alpha = .25f), RoundedCornerShape(14.dp))
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Icon(Icons.Default.AutoAwesome, null, tint = DS.colors.mint, modifier = Modifier.size(13.dp))
+                Text(
+                    stringResource(R.string.scan_prefilled_banner), color = DS.colors.mint,
+                    fontSize = 12.5.sp, fontWeight = FontWeight.SemiBold,
+                )
+            }
+        }
+        item {
+            AIFilledField(prefilled && name.isNotBlank(), stringResource(R.string.scan_ai_filled)) {
+                MediTickTextField(name, onName, placeholder = stringResource(R.string.basics_field_name), modifier = Modifier.fillMaxWidth(), singleLine = true)
+            }
+        }
         item {
             var menu by remember { mutableStateOf(false) }
             Box {
@@ -544,7 +588,9 @@ private fun BasicsStep(
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-                MediTickTextField(strength, { onStrength(it.filter { ch -> ch.isDigit() || ch == '.' }) }, placeholder = stringResource(R.string.basics_field_strength), modifier = Modifier.weight(1f), singleLine = true)
+                AIFilledField(prefilled && strength.isNotBlank(), stringResource(R.string.scan_ai_filled_short), Modifier.weight(1f)) {
+                    MediTickTextField(strength, { onStrength(it.filter { ch -> ch.isDigit() || ch == '.' }) }, placeholder = stringResource(R.string.basics_field_strength), modifier = Modifier.fillMaxWidth(), singleLine = true)
+                }
                 var menu by remember { mutableStateOf(false) }
                 Box {
                     OutlinedButton({ menu = true }, Modifier.height(56.dp)) { Text(unit); Icon(Icons.Default.ExpandMore, null) }
@@ -557,9 +603,23 @@ private fun BasicsStep(
             }
         }
         item { SectionLabel(stringResource(R.string.basics_section_form)); FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-            MedicationForm.pickerOrder.forEach { SelectChip(it.title(context), form == it, { onForm(it) }) }
+            MedicationForm.pickerOrder.forEach { candidate ->
+                Box {
+                    SelectChip(candidate.title(context), form == candidate, { onForm(candidate) })
+                    // The form the scan chose wears the sparkle, like the design.
+                    if (prefilled && form == candidate) Box(
+                        Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-7).dp)
+                            .size(16.dp).clip(CircleShape).background(DS.colors.gradient),
+                        contentAlignment = Alignment.Center,
+                    ) { Icon(Icons.Default.AutoAwesome, null, tint = DS.colors.onMint, modifier = Modifier.size(9.dp)) }
+                }
+            }
         } }
-        item { MediTickTextField(instructions, onInstructions, placeholder = stringResource(R.string.basics_field_instructions), modifier = Modifier.fillMaxWidth(), minLines = 2) }
+        item {
+            AIFilledField(prefilled && instructions.isNotBlank(), stringResource(R.string.scan_ai_filled)) {
+                MediTickTextField(instructions, onInstructions, placeholder = stringResource(R.string.basics_field_instructions), modifier = Modifier.fillMaxWidth(), minLines = 2)
+            }
+        }
         item { GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(15.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconTile(Icons.Default.Inventory2, DS.colors.amber); Spacer(Modifier.width(12.dp))
@@ -571,6 +631,25 @@ private fun BasicsStep(
                 MediTickTextField(alert, { onAlert(it.filter(Char::isDigit)) }, placeholder = stringResource(R.string.basics_field_alert), modifier = Modifier.weight(1f), singleLine = true)
             } }
         } }
+    }
+}
+
+/**
+ * Wraps a field the scan populated: an "AI FILLED" tag riding the top edge and
+ * a mint outline that fades out, so the eye lands on what to verify.
+ */
+@Composable
+private fun AIFilledField(show: Boolean, badge: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    if (!show) { Box(modifier) { content() }; return }
+    var settled by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { delay(1600); settled = true }
+    val highlight by animateColorAsState(
+        if (settled) Color.Transparent else DS.colors.mint.copy(alpha = .45f),
+        tween(1200), label = "aiFieldHighlight",
+    )
+    Box(modifier.border(1.5.dp, highlight, RoundedCornerShape(18.dp))) {
+        content()
+        AIFilledBadge(badge, Modifier.align(Alignment.TopEnd).offset(x = (-14).dp, y = (-8).dp))
     }
 }
 

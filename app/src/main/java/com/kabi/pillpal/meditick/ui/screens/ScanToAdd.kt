@@ -1,6 +1,7 @@
 @file:OptIn(
     androidx.compose.material3.ExperimentalMaterial3Api::class,
     androidx.camera.core.ExperimentalGetImage::class,
+    androidx.compose.foundation.layout.ExperimentalLayoutApi::class,
 )
 
 package com.kabi.pillpal.meditick.ui.screens
@@ -24,7 +25,13 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -32,6 +39,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,18 +51,24 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -81,6 +96,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.UUID
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 //
 // "Scan to Add" — point the camera at a medicine label and MediTick
@@ -412,7 +428,10 @@ private fun compressedScanImage(file: File): ByteArray? {
 
 object ScanQuota {
     const val FREE_SCANS = 3
+    /** The monthly Pro allowance the backend enforces. */
+    const val AI_SCANS = 30
     private const val USED_KEY = "freeScansUsed"
+    private const val AI_REMAINING_KEY = "aiScansRemaining"
 
     private fun prefs(context: Context) = context.getSharedPreferences("meditick.scan", Context.MODE_PRIVATE)
 
@@ -429,11 +448,25 @@ object ScanQuota {
         val store = prefs(context)
         store.edit().putInt(USED_KEY, store.getInt(USED_KEY, 0) + 1).apply()
     }
+
+    /**
+     * The Pro allowance is metered server-side, so the last figure the backend
+     * reported is cached here — the entry cards can name a number before the
+     * first scan of a session instead of showing a blank.
+     */
+    fun aiRemaining(context: Context): Int = prefs(context).getInt(AI_REMAINING_KEY, AI_SCANS)
+
+    fun rememberAIRemaining(context: Context, remaining: Int) {
+        prefs(context).edit().putInt(AI_REMAINING_KEY, remaining.coerceIn(0, AI_SCANS)).apply()
+    }
 }
 
 // MARK: - Scan screen
 
 private enum class ScanState { RUNNING, DENIED, UNAVAILABLE }
+
+/** Where the camera is in the Instant Scan story. */
+private enum class ScanPhase { SEARCHING, LOCKED, ANALYZING, FOUND }
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
@@ -472,13 +505,22 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
     var matches by remember { mutableStateOf(listOf<ScanCandidate>()) }
     var showMatches by remember { mutableStateOf(false) }
     var identifying by remember { mutableStateOf(false) }
+    var finished by remember { mutableStateOf(false) }
     var searchedOnline by remember { mutableStateOf(false) }
     var aiError by remember { mutableStateOf<String?>(null) }
-    var aiRemaining by remember { mutableStateOf<Int?>(null) }
-    var identificationStage by remember { mutableIntStateOf(0) }
+    var aiRemaining by remember { mutableIntStateOf(ScanQuota.aiRemaining(context)) }
+    var checkStage by remember { mutableIntStateOf(0) }
     var stableHits by remember { mutableIntStateOf(0) }
     var torchOn by remember { mutableStateOf(false) }
     var camera by remember { mutableStateOf<androidx.camera.core.Camera?>(null) }
+
+    val phase = when {
+        showMatches -> ScanPhase.FOUND
+        finished -> ScanPhase.FOUND
+        identifying -> ScanPhase.ANALYZING
+        recognizedLines.isNotEmpty() -> ScanPhase.LOCKED
+        else -> ScanPhase.SEARCHING
+    }
 
     fun presentMatches() {
         haptics.tap()
@@ -492,6 +534,23 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
         recognizedLines = emptyList()
         analysisEnabled = true
         aiError = null
+        finished = false
+        checkStage = 0
+    }
+
+    /**
+     * The landing the design asks for: the ring closes, the check draws, and
+     * only then do the results glide up. A failed scan skips the celebration.
+     */
+    fun land(succeeded: Boolean) {
+        identifying = false
+        if (!succeeded) { presentMatches(); return }
+        finished = true
+        haptics.success()
+        scope.launch {
+            delay(1500)
+            presentMatches()
+        }
     }
 
     fun identifyLocally(errorMessage: String? = null) {
@@ -500,16 +559,15 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
             searchedOnline = false
             matches = results.take(4)
             aiError = errorMessage
-            identifying = false
-            presentMatches()
+            land(errorMessage == null && results.isNotEmpty())
         }
     }
 
     fun identifyNow() {
-        if (identifying) return
+        if (identifying || finished) return
         identifying = true
         analysisEnabled = false
-        identificationStage = 0
+        checkStage = 0
         aiError = null
 
         if (!isPro || !AIScanService.isAvailable) {
@@ -528,17 +586,16 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
                         val bytes = withContext(Dispatchers.IO) { compressedScanImage(photo) } ?: throw AIScanService.ScanException()
                         val result = AIScanService.analyze(bytes, recognizedLines.joinToString("\n"), accountID)
                         matches = result.candidates
-                        aiRemaining = result.usage?.remaining
+                        result.usage?.remaining?.let { aiRemaining = it; ScanQuota.rememberAIRemaining(context, it) }
                         searchedOnline = false
                         if (matches.isEmpty()) aiError = context.getString(R.string.scan_ai_no_match)
-                        identifying = false
-                        presentMatches()
+                        land(matches.isNotEmpty())
                     } catch (quota: AIScanService.QuotaException) {
                         aiRemaining = quota.usage?.remaining ?: 0
+                        ScanQuota.rememberAIRemaining(context, aiRemaining)
                         matches = emptyList()
                         aiError = context.getString(R.string.scan_ai_limit)
-                        identifying = false
-                        presentMatches()
+                        land(false)
                     } catch (_: Exception) {
                         identifyLocally(context.getString(R.string.scan_ai_fallback))
                     } finally {
@@ -554,18 +611,19 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
         })
     }
 
+    // The three "what MediTick is doing" rows tick over while the model works.
     LaunchedEffect(identifying) {
         if (!identifying) return@LaunchedEffect
-        while (identifying) {
-            delay(850)
-            identificationStage = (identificationStage + 1).coerceAtMost(2)
+        while (identifying && checkStage < 3) {
+            delay(1200)
+            checkStage += 1
         }
     }
 
     // Auto-present as soon as the reading is stable and confident — the
     // "it just recognized it" moment from the reference flow.
     LaunchedEffect(recognizedLines) {
-        if (isPro || showMatches || identifying) return@LaunchedEffect
+        if (isPro || showMatches || identifying || finished) return@LaunchedEffect
         val local = ScanEngine.candidates(recognizedLines, catalog.all())
         val best = local.firstOrNull()
         if (best == null || best.confidence < 0.8) { stableHits = 0; return@LaunchedEffect }
@@ -573,10 +631,10 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
         if (stableHits < 2) return@LaunchedEffect
         matches = local
         searchedOnline = false
-        presentMatches()
+        land(true)
     }
 
-    Box(Modifier.fillMaxSize().background(Color.Black)) {
+    Box(Modifier.fillMaxSize().background(ScanInk.backdrop)) {
         when (state) {
             ScanState.RUNNING -> {
                 // Camera preview + throttled ML Kit OCR.
@@ -624,8 +682,7 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
                     },
                 )
                 ScanOverlay(
-                    recognizedLines = recognizedLines,
-                    identifying = identifying,
+                    phase = phase,
                     isAI = isPro && AIScanService.isAvailable,
                     cameraReady = camera != null,
                     onIdentify = { haptics.tap(); identifyNow() },
@@ -643,25 +700,33 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
             )
         }
 
-        if (identifying) AIProcessingOverlay(identificationStage, isPro && AIScanService.isAvailable)
+        if (identifying || finished) AnalyzingOverlay(
+            stage = checkStage,
+            finished = finished,
+            isAI = isPro && AIScanService.isAvailable,
+            best = matches.firstOrNull(),
+        )
 
-        // Chrome: close + torch.
+        // Chrome: close · what to do · torch.
         Row(
-            Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 22.dp, vertical = 10.dp),
+            Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            RoundIconButton(Icons.Default.Close, stringResource(R.string.action_close), onClose)
-            if (state == ScanState.RUNNING) {
-                RoundIconButton(
-                    if (torchOn) Icons.Default.FlashOn else Icons.Default.FlashOff,
-                    null,
-                    onClick = { torchOn = !torchOn; camera?.cameraControl?.enableTorch(torchOn) },
-                )
-            }
+            ScanChromeButton(Icons.Default.Close, stringResource(R.string.action_close), onClose)
+            if (!identifying && !finished) Text(
+                stringResource(R.string.scan_position),
+                color = Color.White.copy(.92f), fontSize = 14.sp, fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center, modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+            ) else Spacer(Modifier.weight(1f))
+            if (state == ScanState.RUNNING && !identifying && !finished) ScanChromeButton(
+                if (torchOn) Icons.Default.FlashOn else Icons.Default.FlashOff, null,
+            ) { torchOn = !torchOn; camera?.cameraControl?.enableTorch(torchOn) }
+            else Spacer(Modifier.size(42.dp))
         }
     }
 
-    if (showMatches) PossibleMatchesSheet(
+    if (showMatches) ResultsSheet(
         matches = matches, searchedOnline = searchedOnline,
         isAIResult = matches.firstOrNull()?.source == ScanCandidate.Source.AI,
         aiRemaining = aiRemaining, errorMessage = aiError,
@@ -675,127 +740,590 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
     )
 }
 
+// MARK: - Camera overlay
+
+/** Fixed inks for the camera surface — it is dark in both appearance modes. */
+private object ScanInk {
+    val backdrop = Color(0xFF0A100C)
+    val idle = Color.White.copy(alpha = .65f)
+    val locked = Color(0xFF35D695)
+    val hintIdle = Color.White.copy(alpha = .75f)
+    val hintLocked = Color(0xFF5EE6A8)
+    val paper = Color(0xFFF1F7F2)
+}
+
 @Composable
-private fun ScanOverlay(
-    recognizedLines: List<String>, identifying: Boolean, isAI: Boolean,
-    cameraReady: Boolean, onIdentify: () -> Unit,
-) {
-    val c = DS.colors
-    val transition = rememberInfiniteTransition(label = "scanLine")
-    val linePhase by transition.animateFloat(0f, 1f, infiniteRepeatable(tween(1600), RepeatMode.Reverse), label = "line")
+private fun ScanChromeButton(icon: ImageVector, description: String?, onClick: () -> Unit) {
+    Box(
+        Modifier.size(42.dp).clip(RoundedCornerShape(21.dp))
+            .background(Color.White.copy(.10f))
+            .border(1.dp, Color.White.copy(.16f), RoundedCornerShape(21.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) { Icon(icon, description, tint = Color.White, modifier = Modifier.size(17.dp)) }
+}
+
+@Composable
+private fun ScanOverlay(phase: ScanPhase, isAI: Boolean, cameraReady: Boolean, onIdentify: () -> Unit) {
+    val locked = phase != ScanPhase.SEARCHING
+    val transition = rememberInfiniteTransition(label = "reticle")
+    // Idle corners breathe; a locked frame holds still and sweeps instead.
+    val breathe by transition.animateFloat(
+        1f, 1.04f, infiniteRepeatable(tween(1800), RepeatMode.Reverse), label = "breathe",
+    )
+    val sweep by transition.animateFloat(
+        0f, 1f, infiniteRepeatable(tween(1600, easing = LinearEasing)), label = "sweep",
+    )
+    val cornerColor by animateColorAsState(
+        if (locked) ScanInk.locked else ScanInk.idle, tween(400), label = "corner",
+    )
+
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val frameWidth = maxWidth - 72.dp
-        val frameHeight = frameWidth * 1.25f
-        // Dim everything except the label frame.
-        Canvas(Modifier.fillMaxSize().graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)) {
-            drawRect(Color.Black.copy(.45f))
-            val w = frameWidth.toPx(); val h = frameHeight.toPx()
-            drawRoundRect(
-                Color.Transparent,
-                topLeft = Offset((size.width - w) / 2, (size.height - h) / 2),
-                size = Size(w, h),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(28.dp.toPx()),
-                blendMode = BlendMode.Clear,
-            )
-        }
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+        val frameWidth = (maxWidth - 96.dp).coerceAtMost(252.dp)
+        val frameHeight = frameWidth * 1.355f
+        Box(
+            Modifier.align(Alignment.Center).offset(y = (-42).dp)
+                .size(frameWidth + 14.dp, frameHeight + 14.dp)
+                .graphicsLayer(scaleX = if (locked) 1f else breathe, scaleY = if (locked) 1f else breathe),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                stringResource(R.string.scan_position),
-                color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
-                modifier = Modifier.clip(RoundedCornerShape(50)).background(Color.Black.copy(.45f))
-                    .padding(horizontal = 16.dp, vertical = 9.dp),
+            // The lock ring sits just outside the brackets, so it lives on the
+            // outer box and the reticle is inset within it.
+            if (locked) Box(
+                Modifier.fillMaxSize()
+                    .border(2.dp, ScanInk.locked.copy(alpha = .55f), RoundedCornerShape(20.dp)),
             )
-            Spacer(Modifier.height(18.dp))
-            Box(
-                Modifier.size(frameWidth, frameHeight)
-                    .clip(RoundedCornerShape(28.dp))
-                    .border(3.dp, Color.White.copy(.9f), RoundedCornerShape(28.dp)),
-            ) {
-                // Animated scanning line.
-                Box(
+            Box(Modifier.size(frameWidth, frameHeight)) {
+                Canvas(Modifier.fillMaxSize()) {
+                    val arm = 32.dp.toPx()
+                    val stroke = 3.5.dp.toPx()
+                    val radius = 13.dp.toPx()
+                    drawCornerBrackets(cornerColor, arm, stroke, radius)
+                }
+                // The beam that reads the framed label.
+                if (locked) Box(
                     Modifier.align(Alignment.TopCenter)
-                        .offset(y = 32.dp + (frameHeight - 64.dp) * linePhase)
-                        .width(frameWidth - 44.dp).height(3.dp)
-                        .clip(RoundedCornerShape(2.dp)).background(c.gradient),
+                        .offset(y = (frameHeight - 40.dp) * sweep)
+                        .fillMaxWidth().height(40.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, ScanInk.locked.copy(alpha = .40f), Color.Transparent),
+                            ),
+                            RoundedCornerShape(10.dp),
+                        ),
                 )
             }
-            Spacer(Modifier.height(18.dp))
+        }
+
+        Column(
+            Modifier.align(Alignment.BottomCenter).navigationBarsPadding()
+                .padding(horizontal = 26.dp, vertical = 30.dp).fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
             Text(
-                stringResource(if (recognizedLines.isEmpty()) R.string.scan_looking else R.string.scan_reading),
-                color = Color.White.copy(.85f), fontSize = 13.sp,
+                stringResource(if (locked) R.string.scan_locked else R.string.scan_looking),
+                color = if (locked) ScanInk.hintLocked else ScanInk.hintIdle,
+                fontSize = 13.sp, fontWeight = FontWeight.SemiBold,
             )
-            if (isAI) {
-                Spacer(Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Icon(Icons.Default.AutoAwesome, null, tint = c.mint, modifier = Modifier.size(14.dp))
-                    Text(stringResource(R.string.scan_ai_checks), color = Color.White.copy(.76f), fontSize = 11.5.sp)
+            if (isAI) Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+            ) {
+                Icon(Icons.Default.AutoAwesome, null, tint = ScanInk.hintLocked, modifier = Modifier.size(11.dp))
+                Text(stringResource(R.string.scan_ai_checks), color = Color.White.copy(.5f), fontSize = 11.5.sp)
+            }
+            IdentifyButton(
+                text = stringResource(if (isAI) R.string.scan_identify_ai else R.string.scan_identify),
+                enabled = locked && cameraReady,
+                onClick = onIdentify,
+            )
+        }
+    }
+}
+
+/** The four L-shaped brackets that frame the label. */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCornerBrackets(
+    color: Color, arm: Float, stroke: Float, radius: Float,
+) {
+    val half = stroke / 2f
+    val w = size.width
+    val h = size.height
+    fun corner(x: Float, y: Float, dx: Float, dy: Float) {
+        val path = androidx.compose.ui.graphics.Path().apply {
+            moveTo(x + dx * arm, y + dy * half)
+            lineTo(x + dx * (radius + half), y + dy * half)
+            quadraticTo(x + dx * half, y + dy * half, x + dx * half, y + dy * (radius + half))
+            lineTo(x + dx * half, y + dy * arm)
+        }
+        drawPath(path, color, style = Stroke(stroke, cap = StrokeCap.Round))
+    }
+    corner(0f, 0f, 1f, 1f)
+    corner(w, 0f, -1f, 1f)
+    corner(0f, h, 1f, -1f)
+    corner(w, h, -1f, -1f)
+}
+
+@Composable
+private fun IdentifyButton(text: String, enabled: Boolean, onClick: () -> Unit) {
+    val c = DS.colors
+    val interaction = remember { MutableInteractionSource() }
+    val alpha by animateFloatAsState(if (enabled) 1f else 0.4f, tween(400), label = "identifyAlpha")
+    Box(
+        Modifier.fillMaxWidth().alpha(alpha)
+            .pressScale(interaction, 0.97f)
+            .then(if (enabled) Modifier.auroraBorder(28.dp, 2.5.dp, durationMillis = 1800) else Modifier)
+            .clip(RoundedCornerShape(28.dp))
+            .background(c.gradient)
+            .clickable(interaction, ripple(color = Color.White), enabled = enabled, onClick = onClick)
+            .padding(vertical = 16.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+            Icon(Icons.Default.AutoAwesome, null, tint = c.onMint, modifier = Modifier.size(17.dp))
+            Text(text, color = c.onMint, fontSize = 15.5.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+// MARK: - Analyzing overlay
+
+@Composable
+private fun AnalyzingOverlay(stage: Int, finished: Boolean, isAI: Boolean, best: ScanCandidate?) {
+    val context = LocalContext.current
+    val c = DS.colors
+    val transition = rememberInfiniteTransition(label = "analyzing")
+    val orbit by transition.animateFloat(
+        0f, 360f, infiniteRepeatable(tween(3200, easing = LinearEasing)), label = "orbit",
+    )
+    val shimmer by transition.animateFloat(
+        0f, 1f, infiniteRepeatable(tween(2600, easing = LinearEasing)), label = "shimmer",
+    )
+    // The ring fills over the time a scan usually takes, then snaps closed on
+    // the real answer rather than pretending to finish early.
+    val ring by animateFloatAsState(
+        if (finished) 1f else 0.92f,
+        tween(if (finished) 420 else 4800, easing = FastOutSlowInEasing), label = "ring",
+    )
+    val specimenScale by animateFloatAsState(if (finished) 0.92f else 1f, tween(600), label = "specimen")
+
+    Box(
+        Modifier.fillMaxSize().background(
+            Brush.radialGradient(listOf(Color(0xFF12291E), Color(0xFF0A1710), Color(0xFF060D09))),
+        ),
+    ) {
+        Column(
+            Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 26.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(Modifier.height(48.dp))
+            Box(Modifier.size(224.dp), contentAlignment = Alignment.Center) {
+                Canvas(Modifier.fillMaxSize()) {
+                    val stroke = 5.dp.toPx()
+                    val inset = stroke / 2f + 22.dp.toPx()
+                    drawArc(
+                        color = Color.White.copy(alpha = .09f), startAngle = 0f, sweepAngle = 360f, useCenter = false,
+                        topLeft = Offset(inset, inset),
+                        size = Size(size.width - inset * 2, size.height - inset * 2),
+                        style = Stroke(stroke),
+                    )
+                    drawArc(
+                        brush = Brush.linearGradient(listOf(Color(0xFF35D695), Color(0xFF4CC5E8))),
+                        startAngle = -90f, sweepAngle = 360f * ring, useCenter = false,
+                        topLeft = Offset(inset, inset),
+                        size = Size(size.width - inset * 2, size.height - inset * 2),
+                        style = Stroke(stroke, cap = StrokeCap.Round),
+                    )
+                }
+                if (!finished) Box(Modifier.fillMaxSize().graphicsLayer(rotationZ = orbit)) {
+                    Icon(
+                        Icons.Default.AutoAwesome, null, tint = ScanInk.hintLocked,
+                        modifier = Modifier.align(Alignment.TopCenter).offset(y = 14.dp)
+                            .size(16.dp).graphicsLayer(rotationZ = -orbit),
+                    )
+                }
+                SpecimenCard(finished = finished, scale = specimenScale, best = best)
+                if (finished) FoundSeal()
+            }
+
+            Spacer(Modifier.height(26.dp))
+            Column(
+                Modifier.heightIn(min = 64.dp).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(7.dp),
+            ) {
+                if (finished) {
+                    val what = best?.form?.title(context)?.lowercase()
+                        ?: best?.name
+                        ?: stringResource(R.string.scan_none_title)
+                    Text(
+                        stringResource(R.string.scan_found, what),
+                        color = ScanInk.paper, fontSize = 20.sp, fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
+                    )
+                    Text(
+                        stringResource(
+                            R.string.scan_found_sub,
+                            ((best?.confidence ?: 0.0) * 100).roundToInt().coerceIn(0, 100),
+                        ),
+                        color = ScanInk.hintLocked, fontSize = 13.sp, textAlign = TextAlign.Center,
+                    )
+                } else {
+                    Text(
+                        stringResource(if (isAI) R.string.scan_ai_identifying else R.string.scan_local_identifying),
+                        fontSize = 19.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center,
+                        style = LocalTextStyle.current.copy(brush = shimmerBrush(shimmer)),
+                    )
+                    Text(
+                        stringResource(
+                            listOf(
+                                R.string.scan_phase_1, R.string.scan_phase_2,
+                                R.string.scan_phase_3, R.string.scan_phase_4,
+                            )[stage.coerceIn(0, 3)],
+                        ),
+                        color = ScanInk.paper.copy(alpha = .55f), fontSize = 13.sp, textAlign = TextAlign.Center,
+                    )
                 }
             }
-            Spacer(Modifier.height(14.dp))
-            PrimaryButton(
-                stringResource(if (identifying) R.string.scan_identifying else if (isAI) R.string.scan_identify_ai else R.string.scan_identify),
-                onIdentify,
-                Modifier.padding(horizontal = 80.dp).fillMaxWidth(),
-                enabled = !identifying && cameraReady && (isAI || recognizedLines.isNotEmpty()),
-                leading = if (isAI) Icons.Default.AutoAwesome else Icons.Default.Search,
+
+            Spacer(Modifier.height(18.dp))
+            Column(
+                Modifier.widthIn(max = 270.dp).fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(9.dp),
+            ) {
+                listOf(R.string.scan_check_read, R.string.scan_check_form, R.string.scan_check_details)
+                    .forEachIndexed { index, label ->
+                        CheckRow(
+                            label = stringResource(label),
+                            done = finished || stage > index,
+                            active = !finished && stage == index,
+                        )
+                    }
+            }
+        }
+    }
+}
+
+/** The title's left-to-right sheen while the model is thinking. */
+private fun shimmerBrush(phase: Float): Brush {
+    val span = 900f
+    val start = -span + phase * span * 2
+    return Brush.linearGradient(
+        listOf(ScanInk.paper, Color(0xFF5EE6A8), ScanInk.paper),
+        start = Offset(start, 0f),
+        end = Offset(start + span, 0f),
+    )
+}
+
+/** The frosted card at the centre of the ring, cycling through guesses. */
+@Composable
+private fun SpecimenCard(finished: Boolean, scale: Float, best: ScanCandidate?) {
+    val guesses = remember { listOf(MedicationForm.tablet, MedicationForm.capsule, MedicationForm.powder, MedicationForm.liquid) }
+    var guess by remember { mutableIntStateOf(0) }
+    LaunchedEffect(finished) {
+        while (!finished) {
+            delay(1200)
+            guess = (guess + 1) % guesses.size
+        }
+    }
+    val transition = rememberInfiniteTransition(label = "specimen")
+    val beam by transition.animateFloat(0f, 1f, infiniteRepeatable(tween(1400), RepeatMode.Reverse), label = "specimenBeam")
+    Box(
+        Modifier.size(96.dp, 128.dp).graphicsLayer(scaleX = scale, scaleY = scale)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White.copy(alpha = .06f))
+            .border(1.dp, Color.White.copy(alpha = .14f), RoundedCornerShape(16.dp)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Crossfade(
+            if (finished) (best?.form ?: MedicationForm.other) else guesses[guess],
+            animationSpec = tween(500), label = "guess",
+        ) { form ->
+            Icon(formIcon(form), null, tint = Color(0xFF8FE8C0), modifier = Modifier.size(52.dp))
+        }
+        if (!finished) Box(
+            Modifier.align(Alignment.TopCenter).offset(y = 102.dp * beam)
+                .fillMaxWidth().height(26.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color.Transparent, ScanInk.locked.copy(alpha = .45f), Color.Transparent),
+                    ),
+                ),
+        )
+    }
+}
+
+/** The check that draws itself once the ring closes. */
+@Composable
+private fun FoundSeal() {
+    val c = DS.colors
+    var shown by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { shown = true }
+    val pop by animateFloatAsState(
+        if (shown) 1f else 0.6f,
+        spring(dampingRatio = 0.5f, stiffness = 420f), label = "seal",
+    )
+    val ping by animateFloatAsState(if (shown) 2.1f else 0.6f, tween(1100), label = "ping")
+    val pingAlpha by animateFloatAsState(if (shown) 0f else 0.8f, tween(1100), label = "pingAlpha")
+    Box(Modifier.size(196.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(60.dp).graphicsLayer(scaleX = ping, scaleY = ping, alpha = pingAlpha)
+                .border(2.dp, ScanInk.locked, RoundedCornerShape(50)),
+        )
+        Box(
+            Modifier.size(60.dp).graphicsLayer(scaleX = pop, scaleY = pop)
+                .clip(RoundedCornerShape(50)).background(c.gradient),
+            contentAlignment = Alignment.Center,
+        ) { Icon(Icons.Default.Check, null, tint = c.onMint, modifier = Modifier.size(30.dp)) }
+    }
+}
+
+@Composable
+private fun CheckRow(label: String, done: Boolean, active: Boolean) {
+    val transition = rememberInfiniteTransition(label = "checkRow")
+    val pulse by transition.animateFloat(0.75f, 1f, infiniteRepeatable(tween(1100), RepeatMode.Reverse), label = "pulse")
+    val alpha by animateFloatAsState(if (done || active) 1f else 0.45f, tween(500), label = "rowAlpha")
+    Row(
+        Modifier.fillMaxWidth().alpha(alpha),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        when {
+            done -> Box(
+                Modifier.size(20.dp).clip(RoundedCornerShape(8.dp)).background(ScanInk.locked.copy(alpha = .16f)),
+                contentAlignment = Alignment.Center,
+            ) { Icon(Icons.Default.Check, null, tint = ScanInk.hintLocked, modifier = Modifier.size(11.dp)) }
+            active -> Box(
+                Modifier.size(20.dp).alpha(pulse)
+                    .border(2.dp, ScanInk.locked, RoundedCornerShape(8.dp)),
+            )
+            else -> Box(
+                Modifier.size(20.dp).border(2.dp, Color.White.copy(alpha = .18f), RoundedCornerShape(8.dp)),
+            )
+        }
+        Text(
+            label, fontSize = 13.sp, fontWeight = FontWeight.SemiBold,
+            color = when {
+                done -> Color(0xFFB9CEC0)
+                active -> ScanInk.paper
+                else -> ScanInk.paper.copy(alpha = .4f)
+            },
+        )
+    }
+}
+
+// MARK: - Results sheet
+
+@Composable
+private fun ResultsSheet(
+    matches: List<ScanCandidate>, searchedOnline: Boolean,
+    isAIResult: Boolean, aiRemaining: Int, errorMessage: String?,
+    onPick: (ScanCandidate) -> Unit, onTryAgain: () -> Unit, onDismiss: () -> Unit,
+) {
+    val c = DS.colors
+    ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = c.bg2,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp), dragHandle = { SheetDragHandle() },
+    ) {
+        Column(Modifier.fillMaxWidth().padding(bottom = 22.dp)) {
+            Column(
+                Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(top = 6.dp, bottom = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Box(
+                    Modifier.size(40.dp).clip(RoundedCornerShape(16.dp))
+                        .background(c.mint.copy(alpha = .12f)).appearFluidly(0),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        if (matches.isEmpty()) Icons.Default.CenterFocusWeak else Icons.Default.Check,
+                        null, tint = if (matches.isEmpty()) c.ink3 else c.mint, modifier = Modifier.size(19.dp),
+                    )
+                }
+                Text(
+                    stringResource(if (matches.isEmpty()) R.string.scan_no_confident else R.string.scan_confirm_title),
+                    color = c.ink, fontSize = 21.sp, fontWeight = FontWeight.Black,
+                    textAlign = TextAlign.Center, modifier = Modifier.appearFluidly(1),
+                )
+                Text(
+                    stringResource(if (isAIResult) R.string.scan_ai_verify else R.string.scan_verify),
+                    color = c.ink3, fontSize = 13.sp, textAlign = TextAlign.Center,
+                )
+            }
+
+            if (matches.isEmpty()) {
+                Column(
+                    Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 26.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Icon(Icons.Default.HelpOutline, null, tint = c.ink3, modifier = Modifier.size(34.dp))
+                    Spacer(Modifier.height(8.dp))
+                    Text(stringResource(R.string.scan_none_title), color = c.ink, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        stringResource(if (searchedOnline) R.string.scan_none_online else R.string.scan_none_local),
+                        color = c.ink2, fontSize = 13.sp, textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                    )
+                }
+            } else {
+                Column(
+                    Modifier.verticalScroll(rememberScrollState()).weight(1f, fill = false)
+                        .padding(horizontal = 18.dp).padding(top = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    BestMatchCard(matches.first()) { onPick(matches.first()) }
+                    matches.drop(1).forEachIndexed { index, candidate ->
+                        RunnerUpRow(candidate, Modifier.appearFluidly(2 + index)) { onPick(candidate) }
+                    }
+                }
+            }
+
+            Column(
+                Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(top = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                errorMessage?.let {
+                    Text(it, color = c.coral, fontSize = 12.5.sp, textAlign = TextAlign.Center)
+                } ?: run {
+                    if (isAIResult) Text(
+                        stringResource(R.string.scan_ai_remaining, aiRemaining),
+                        color = c.ink3, fontSize = 11.5.sp, textAlign = TextAlign.Center,
+                    )
+                }
+                GhostButton(stringResource(R.string.scan_try_again), onTryAgain, Modifier.fillMaxWidth())
+            }
+        }
+    }
+}
+
+/** The hero result: aurora ring, confidence bar, verification chips, CTA. */
+@Composable
+private fun BestMatchCard(candidate: ScanCandidate, onPick: () -> Unit) {
+    val c = DS.colors
+    val context = LocalContext.current
+    val interaction = remember { MutableInteractionSource() }
+    val haptics = rememberHaptics()
+    val percent = (candidate.confidence * 100).roundToInt().coerceIn(0, 100)
+    var grown by remember { mutableStateOf(false) }
+    LaunchedEffect(candidate.id) { delay(300); grown = true }
+    val bar by animateFloatAsState(if (grown) percent / 100f else 0f, tween(900), label = "confidence")
+
+    Box(Modifier.fillMaxWidth().padding(top = 10.dp)) {
+        Column(
+            Modifier.fillMaxWidth().pressScale(interaction, 0.985f)
+                .auroraBorder(24.dp, 2.5.dp)
+                .clip(RoundedCornerShape(24.dp)).background(c.bg3)
+                .clickable(interaction, ripple()) { haptics.tap(); onPick() }
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(
+                Modifier.fillMaxWidth().padding(top = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(13.dp),
+            ) {
+                IconTile(formIcon(candidate.form ?: MedicationForm.other), c.cyan, 50.dp)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text(candidate.name, color = c.ink, fontSize = 17.sp, fontWeight = FontWeight.Black)
+                    Text(
+                        listOfNotNull(
+                            candidate.strengthText, candidate.form?.title(context),
+                            stringResource(
+                                when (candidate.source) {
+                                    ScanCandidate.Source.CATALOG -> R.string.scan_source_catalog
+                                    ScanCandidate.Source.RXNORM -> R.string.scan_source_rxnorm
+                                    ScanCandidate.Source.AI -> R.string.scan_source_ai
+                                },
+                            ),
+                        ).joinToString(" · "),
+                        color = c.ink3, fontSize = 12.5.sp,
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("$percent%", color = c.mint, fontSize = 18.sp, fontWeight = FontWeight.Black)
+                    Text(
+                        stringResource(R.string.scan_match_label),
+                        color = c.ink3, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp,
+                    )
+                }
+            }
+            Box(Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(50)).background(c.glass2)) {
+                Box(Modifier.fillMaxWidth(bar).fillMaxHeight().clip(RoundedCornerShape(50)).background(c.gradient))
+            }
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                candidate.category?.let { ResultChip(it.uppercase(), c.cyan, c.cyan.copy(alpha = .1f), bold = true) }
+                candidate.detail?.let {
+                    ResultChip(stringResource(R.string.scan_matched_alias, it), c.ink2, c.glass2)
+                }
+                candidate.form?.let { ResultChip(it.title(context), c.ink2, c.glass2) }
+            }
+            candidate.note?.let {
+                Text(it, color = c.ink2, fontSize = 12.5.sp, lineHeight = 18.sp)
+            }
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(50)).background(c.gradient).padding(vertical = 13.dp),
+                horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    stringResource(R.string.scan_use_match),
+                    color = c.onMint, fontSize = 14.5.sp, fontWeight = FontWeight.Bold,
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(Icons.Default.ArrowForward, null, tint = c.onMint, modifier = Modifier.size(14.dp))
+            }
+        }
+        // Rides the top edge of the card, like the design's floating tag.
+        Row(
+            Modifier.align(Alignment.TopStart).offset(x = 16.dp)
+                .clip(RoundedCornerShape(50)).background(c.gradient)
+                .padding(horizontal = 10.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+        ) {
+            Icon(Icons.Default.AutoAwesome, null, tint = c.onMint, modifier = Modifier.size(9.dp))
+            Text(
+                stringResource(R.string.scan_best_match),
+                color = c.onMint, fontSize = 9.5.sp, fontWeight = FontWeight.Black, letterSpacing = 0.6.sp,
             )
         }
     }
 }
 
 @Composable
-private fun AIProcessingOverlay(stage: Int, isAI: Boolean) {
-    val c = DS.colors
-    val transition = rememberInfiniteTransition(label = "aiProcessing")
-    val spin by transition.animateFloat(0f, 360f, infiniteRepeatable(tween(2600)), label = "spin")
-    val labels = listOf(
-        stringResource(R.string.scan_stage_capture),
-        stringResource(R.string.scan_stage_read),
-        stringResource(R.string.scan_stage_check),
+private fun ResultChip(text: String, ink: Color, background: Color, bold: Boolean = false) {
+    Text(
+        text, color = ink, fontSize = 10.sp,
+        fontWeight = if (bold) FontWeight.Black else FontWeight.Bold,
+        letterSpacing = if (bold) 0.5.sp else 0.sp,
+        modifier = Modifier.clip(RoundedCornerShape(50)).background(background)
+            .padding(horizontal = 10.dp, vertical = 5.dp),
     )
-    Box(
-        Modifier.fillMaxSize().background(Color.Black.copy(.58f)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Surface(
-            color = Color(0xEF14211F),
-            shape = RoundedCornerShape(30.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(.14f)),
-            modifier = Modifier.padding(horizontal = 34.dp).fillMaxWidth(),
-        ) {
-            Column(
-                Modifier.padding(horizontal = 28.dp, vertical = 30.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(Modifier.size(118.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        progress = { .72f }, color = c.mint, trackColor = Color.White.copy(.10f),
-                        strokeWidth = 5.dp, modifier = Modifier.size(92.dp).graphicsLayer(rotationZ = spin),
-                    )
-                    Icon(
-                        if (isAI) Icons.Default.AutoAwesome else Icons.Default.DocumentScanner,
-                        null, tint = c.mint, modifier = Modifier.size(34.dp),
-                    )
-                }
-                Text(
-                    stringResource(if (isAI) R.string.scan_ai_identifying else R.string.scan_local_identifying),
-                    color = Color.White, fontWeight = FontWeight.Bold, fontSize = 19.sp,
-                )
-                Spacer(Modifier.height(7.dp))
-                Text(labels[stage.coerceIn(0, 2)], color = Color.White.copy(.72f), fontSize = 13.5.sp)
-                Spacer(Modifier.height(18.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    repeat(3) { index ->
-                        Box(
-                            Modifier.width(if (index == stage) 28.dp else 8.dp).height(8.dp)
-                                .clip(RoundedCornerShape(50)).background(if (index <= stage) c.mint else Color.White.copy(.18f)),
-                        )
-                    }
+}
+
+@Composable
+private fun RunnerUpRow(candidate: ScanCandidate, modifier: Modifier = Modifier, onPick: () -> Unit) {
+    val c = DS.colors
+    val percent = (candidate.confidence * 100).roundToInt().coerceIn(0, 100)
+    var grown by remember { mutableStateOf(false) }
+    LaunchedEffect(candidate.id) { delay(450); grown = true }
+    val bar by animateFloatAsState(if (grown) percent / 100f else 0f, tween(900), label = "runnerUp")
+    GlassCard(modifier.fillMaxWidth(), radius = 20.dp, onClick = onPick, contentPadding = PaddingValues(horizontal = 15.dp, vertical = 13.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(13.dp)) {
+            IconTile(formIcon(candidate.form ?: MedicationForm.other), c.ink3, 42.dp)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(candidate.name, color = c.ink, fontSize = 14.5.sp, fontWeight = FontWeight.Bold)
+                candidate.note?.let { Text(it, color = c.ink3, fontSize = 11.5.sp, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+                Box(Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(50)).background(c.glass2)) {
+                    Box(Modifier.fillMaxWidth(bar).fillMaxHeight().clip(RoundedCornerShape(50)).background(c.ink3.copy(alpha = .55f)))
                 }
             }
+            Text("$percent%", color = c.ink3, fontSize = 13.sp, fontWeight = FontWeight.Black)
         }
     }
 }
@@ -821,109 +1349,6 @@ private fun PermissionScreen(title: String, message: String, showsSettingsButton
                     )
                 }
             }, Modifier.padding(horizontal = 20.dp).fillMaxWidth())
-        }
-    }
-}
-
-// MARK: - Possible Matches sheet
-
-@Composable
-private fun PossibleMatchesSheet(
-    matches: List<ScanCandidate>, searchedOnline: Boolean,
-    isAIResult: Boolean, aiRemaining: Int?, errorMessage: String?,
-    onPick: (ScanCandidate) -> Unit, onTryAgain: () -> Unit, onDismiss: () -> Unit,
-) {
-    val c = DS.colors
-    val context = LocalContext.current
-    ModalBottomSheet(
-        onDismissRequest = onDismiss, containerColor = c.bg2,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
-    ) {
-        Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 26.dp)) {
-            Icon(
-                if (matches.isEmpty()) Icons.Default.CenterFocusWeak else Icons.Default.Verified,
-                null, tint = if (matches.isEmpty()) c.ink3 else c.mint,
-                modifier = Modifier.size(30.dp).align(Alignment.CenterHorizontally).appearFluidly(0),
-            )
-            Spacer(Modifier.height(5.dp))
-            Text(
-                stringResource(if (matches.isEmpty()) R.string.scan_no_confident else R.string.scan_confirm_title),
-                style = MaterialTheme.typography.headlineMedium, color = c.ink,
-                textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().appearFluidly(0),
-            )
-            Text(
-                stringResource(if (isAIResult) R.string.scan_ai_verify else R.string.scan_verify),
-                color = c.ink2, fontSize = 12.5.sp, textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(16.dp))
-            if (matches.isEmpty()) {
-                Column(Modifier.fillMaxWidth().padding(vertical = 26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.HelpOutline, null, tint = c.ink3, modifier = Modifier.size(34.dp))
-                    Spacer(Modifier.height(8.dp))
-                    Text(stringResource(R.string.scan_none_title), color = c.ink, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        stringResource(if (searchedOnline) R.string.scan_none_online else R.string.scan_none_local),
-                        color = c.ink2, fontSize = 13.sp, textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 20.dp),
-                    )
-                }
-            } else {
-                Column(Modifier.verticalScroll(rememberScrollState()).weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    matches.forEachIndexed { index, candidate ->
-                        GlassCard(
-                            Modifier.fillMaxWidth().appearFluidly(1 + index), radius = 20.dp,
-                            onClick = { onPick(candidate) }, contentPadding = PaddingValues(16.dp),
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                IconTile(formIcon(candidate.form ?: MedicationForm.other), c.mint)
-                                Spacer(Modifier.width(14.dp))
-                                Column(Modifier.weight(1f)) {
-                                    Text(candidate.name, color = c.ink, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                    Text(
-                                        listOfNotNull(
-                                            candidate.strengthText, candidate.form?.title(context),
-                                            stringResource(when (candidate.source) {
-                                                ScanCandidate.Source.CATALOG -> R.string.scan_source_catalog
-                                                ScanCandidate.Source.RXNORM -> R.string.scan_source_rxnorm
-                                                ScanCandidate.Source.AI -> R.string.scan_source_ai
-                                            }),
-                                        ).joinToString(" · "),
-                                        color = c.ink2, fontSize = 13.sp,
-                                    )
-                                    candidate.detail?.let {
-                                        Text(stringResource(R.string.scan_matched_alias, it), color = c.ink3, fontSize = 11.5.sp)
-                                    }
-                                    candidate.category?.let {
-                                        Text(it.uppercase(), color = c.cyan, fontWeight = FontWeight.Bold, fontSize = 10.5.sp)
-                                    }
-                                    candidate.note?.let {
-                                        Text(it, color = c.ink2, fontSize = 12.sp)
-                                    }
-                                }
-                                Icon(Icons.Default.ChevronRight, null, tint = c.ink3)
-                            }
-                        }
-                    }
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-            errorMessage?.let {
-                Text(it, color = c.coral, fontSize = 12.5.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-                Spacer(Modifier.height(8.dp))
-            } ?: run {
-                if (isAIResult && aiRemaining != null) {
-                    Text(
-                        stringResource(R.string.scan_ai_remaining, aiRemaining),
-                        color = c.ink3, fontSize = 11.5.sp, textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Spacer(Modifier.height(8.dp))
-                }
-            }
-            GhostButton(stringResource(R.string.scan_try_again), onTryAgain, Modifier.fillMaxWidth())
         }
     }
 }

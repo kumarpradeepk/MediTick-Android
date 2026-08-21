@@ -26,7 +26,8 @@ data class MediTickColors(
     val mint: Color, val mint2: Color, val cyan: Color,
     val gradStart: Color, val gradEnd: Color, val onMint: Color, val glow: Color,
     val violet: Color, val amber: Color, val coral: Color,
-    val dockBg: Color, val ringTrack: Color, val cardShadow: Color, val isDark: Boolean,
+    val dockBg: Color, val ringTrack: Color, val cardShadow: Color,
+    val toastBg: Color, val toastInk: Color, val isDark: Boolean,
 ) {
     val gradient get() = Brush.linearGradient(listOf(gradStart, gradEnd))
     val verticalGradient get() = Brush.verticalGradient(listOf(gradStart, gradEnd))
@@ -112,6 +113,8 @@ private fun palette(accent: AccentId, dark: Boolean): MediTickColors {
         // rule as the iOS card shadow. Kept faint: the glass fills are
         // translucent, so a strong shadow bleeds through as a smudge.
         cardShadow = if (dark) Color.Transparent else c(0x2E102017),
+        toastBg = c(if (dark) 0xFFE9F5EC else 0xFF16241B),
+        toastInk = c(if (dark) 0xFF0B1311 else 0xFFEFF7F0),
         isDark = dark,
     )
 }
