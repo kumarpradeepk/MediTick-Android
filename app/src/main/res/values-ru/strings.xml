@@ -465,6 +465,17 @@
     <string name="scan_camera_unavailable_title">Камера недоступна</string>
     <string name="scan_camera_unavailable_body">На этом устройстве нет работающей камеры — вы всё равно можете добавлять препараты вручную.</string>
     <string name="scan_open_settings">Открыть настройки</string>
+    <string name="progress_health_insights">Аналитика здоровья</string>
+    <string name="progress_taken_word">принято</string>
+    <string name="progress_took_doses">Вы приняли %1$d из %2$d запланированных доз.</string>
+    <string name="progress_insights_soon">Аналитика появится после нескольких доз</string>
+    <string name="progress_days_word">дней</string>
+    <string name="progress_best_days">Рекорд: %1$d дн.</string>
+    <string name="progress_legend_complete">Полностью</string>
+    <string name="progress_legend_partial">Частично</string>
+    <string name="progress_legend_missed">Пропущено</string>
+    <string name="progress_legend_none">Нет доз</string>
+    <string name="progress_no_logs_day">Нет записей за этот день</string>
     <string name="describe_label">Скажите своими словами</string>
     <string name="describe_question">Что вы принимаете?</string>
     <string name="describe_hint">Попробуйте «Metformin 500mg every morning with food».</string>

@@ -402,6 +402,17 @@
     <string name="scan_camera_unavailable_title">相机不可用</string>
     <string name="scan_camera_unavailable_body">此设备没有可用的相机——你仍可以通过输入添加药品。</string>
     <string name="scan_open_settings">打开设置</string>
+    <string name="progress_health_insights">健康洞察</string>
+    <string name="progress_taken_word">已服用</string>
+    <string name="progress_took_doses">您已服用%2$d剂中的%1$d剂。</string>
+    <string name="progress_insights_soon">服用几剂后将显示洞察</string>
+    <string name="progress_days_word">天</string>
+    <string name="progress_best_days">最佳：%1$d天</string>
+    <string name="progress_legend_complete">全部完成</string>
+    <string name="progress_legend_partial">部分完成</string>
+    <string name="progress_legend_missed">已错过</string>
+    <string name="progress_legend_none">无剂量</string>
+    <string name="progress_no_logs_day">这一天没有记录</string>
     <string name="describe_label">用平常的话说</string>
     <string name="describe_question">你在服用什么？</string>
     <string name="describe_hint">试试“Metformin 500mg every morning with food”。</string>

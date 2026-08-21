@@ -402,6 +402,17 @@
     <string name="scan_camera_unavailable_title">Camera không khả dụng</string>
     <string name="scan_camera_unavailable_body">Thiết bị này không có camera dùng được — bạn vẫn có thể thêm thuốc bằng cách nhập.</string>
     <string name="scan_open_settings">Mở Cài đặt</string>
+    <string name="progress_health_insights">Thông tin sức khỏe</string>
+    <string name="progress_taken_word">đã uống</string>
+    <string name="progress_took_doses">Bạn đã uống %1$d trong %2$d liều theo lịch.</string>
+    <string name="progress_insights_soon">Thông tin sẽ hiện sau vài liều</string>
+    <string name="progress_days_word">ngày</string>
+    <string name="progress_best_days">Tốt nhất: %1$d ngày</string>
+    <string name="progress_legend_complete">Hoàn thành</string>
+    <string name="progress_legend_partial">Một phần</string>
+    <string name="progress_legend_missed">Bỏ lỡ</string>
+    <string name="progress_legend_none">Không có liều</string>
+    <string name="progress_no_logs_day">Không có nhật ký cho ngày này</string>
     <string name="describe_label">Cứ nói tự nhiên</string>
     <string name="describe_question">Bạn đang uống gì?</string>
     <string name="describe_hint">Thử “Metformin 500mg every morning with food”.</string>

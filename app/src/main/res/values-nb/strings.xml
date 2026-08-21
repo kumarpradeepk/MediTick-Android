@@ -423,6 +423,17 @@
     <string name="scan_camera_unavailable_title">Kamera utilgjengelig</string>
     <string name="scan_camera_unavailable_body">Denne enheten har ikke et brukbart kamera — du kan fortsatt legge til medisiner ved å skrive.</string>
     <string name="scan_open_settings">Åpne Innstillinger</string>
+    <string name="progress_health_insights">Helseinnsikt</string>
+    <string name="progress_taken_word">tatt</string>
+    <string name="progress_took_doses">Du tok %1$d av %2$d planlagte doser.</string>
+    <string name="progress_insights_soon">Innsikt vises etter noen doser</string>
+    <string name="progress_days_word">dager</string>
+    <string name="progress_best_days">Beste: %1$d dager</string>
+    <string name="progress_legend_complete">Fullført</string>
+    <string name="progress_legend_partial">Delvis</string>
+    <string name="progress_legend_missed">Glemt</string>
+    <string name="progress_legend_none">Ingen doser</string>
+    <string name="progress_no_logs_day">Ingen logger denne dagen</string>
     <string name="describe_label">Si det med egne ord</string>
     <string name="describe_question">Hva tar du?</string>
     <string name="describe_hint">Prøv «Metformin 500mg every morning with food».</string>
