@@ -663,4 +663,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">vormittags</string>
     <string name="parse_marker_pm" tools:ignore="Typos">nachmittags,abends</string>
     <string name="parse_stopwords" tools:ignore="Typos">jede,jeden,zweimal,einmal,täglich,nimm,mit,vor,nach,morgen,nacht,abend,mittag,bett,schlafenszeit,mittagessen,abendessen,frühstück,mahlzeit,mahlzeiten,und,der,die,das</string>
+    <string name="scan_identify_ai">Mit KI erkennen</string>
+    <string name="scan_ai_checks">KI prüft Name, Stärke und Form</string>
+    <string name="scan_stage_capture">Bestes Bild wird aufgenommen</string>
+    <string name="scan_stage_read">Name und Stärke werden gelesen</string>
+    <string name="scan_stage_check">Darreichungsform wird geprüft</string>
+    <string name="scan_ai_identifying">MediTick AI erkennt das Medikament</string>
+    <string name="scan_local_identifying">Etikett wird gelesen</string>
+    <string name="scan_confirm_title">Medikament bestätigen</string>
+    <string name="scan_no_confident">Keine sichere Übereinstimmung</string>
+    <string name="scan_ai_verify">KI-Vorschlag – Etikett vor dem Speichern prüfen</string>
+    <string name="scan_verify">Etikett prüfen, bevor du fortfährst</string>
+    <string name="scan_source_ai">KI-Etikettenscan</string>
+    <string name="scan_ai_remaining">Noch %1$d von 30 KI-Scans in diesem Monat</string>
+    <string name="scan_ai_no_match">Die KI konnte kein Medikamentenetikett lesen. Näher herangehen, Spiegelungen vermeiden und erneut versuchen.</string>
+    <string name="scan_ai_limit">Du hast diesen Monat 30 KI-Scans verwendet. Dein Kontingent wird nächsten Monat zurückgesetzt.</string>
+    <string name="scan_ai_fallback">Der KI-Scan ist vorübergehend nicht verfügbar. Stattdessen werden die besten Treffer auf dem Gerät angezeigt.</string>
+    <string name="scan_ai_not_configured">Der KI-Scan ist noch nicht konfiguriert. Private Erkennung auf dem Gerät wird verwendet.</string>
 </resources>

@@ -637,4 +637,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">sáng</string>
     <string name="parse_marker_pm" tools:ignore="Typos">chiều,tối</string>
     <string name="parse_stopwords" tools:ignore="Typos">mỗi,hai lần,một lần,hằng ngày,hàng ngày,uống,cùng,trước,sau,sáng,đêm,tối,trưa,ngủ,bữa trưa,bữa tối,bữa sáng,bữa ăn,và</string>
+    <string name="scan_identify_ai">Nhận diện bằng AI</string>
+    <string name="scan_ai_checks">AI kiểm tra tên, hàm lượng và dạng thuốc</string>
+    <string name="scan_stage_capture">Đang chụp khung hình rõ nhất</string>
+    <string name="scan_stage_read">Đang đọc tên và hàm lượng</string>
+    <string name="scan_stage_check">Đang kiểm tra dạng thuốc</string>
+    <string name="scan_ai_identifying">MediTick AI đang nhận diện</string>
+    <string name="scan_local_identifying">Đang đọc nhãn thuốc</string>
+    <string name="scan_confirm_title">Xác nhận thuốc</string>
+    <string name="scan_no_confident">Không có kết quả đáng tin cậy</string>
+    <string name="scan_ai_verify">Gợi ý của AI — kiểm tra nhãn trước khi lưu</string>
+    <string name="scan_verify">Kiểm tra nhãn trước khi tiếp tục</string>
+    <string name="scan_source_ai">Quét nhãn bằng AI</string>
+    <string name="scan_ai_remaining">Còn %1$d trong số 30 lượt quét AI tháng này</string>
+    <string name="scan_ai_no_match">AI không đọc được nhãn thuốc. Hãy đưa máy lại gần, tránh ánh sáng chói và thử lại.</string>
+    <string name="scan_ai_limit">Bạn đã dùng 30 lượt quét AI tháng này. Hạn mức sẽ được đặt lại vào tháng sau.</string>
+    <string name="scan_ai_fallback">Quét AI tạm thời không khả dụng. Đây là các kết quả phù hợp nhất trên thiết bị.</string>
+    <string name="scan_ai_not_configured">Quét AI chưa được cấu hình. Ứng dụng sẽ dùng nhận diện riêng tư trên thiết bị.</string>
 </resources>

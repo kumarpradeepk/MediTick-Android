@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import com.android.billingclient.api.*
 import com.kabi.pillpal.meditick.R
 import com.kabi.pillpal.meditick.notifications.NotificationScheduler
+import java.security.MessageDigest
+import java.util.UUID
 
 data class BillingPlan(
     val id: String, val title: String, val subtitle: String, val price: String,
@@ -24,6 +26,11 @@ class BillingManager private constructor(private val context: Context) : Purchas
         .build()
 
     var isPro by mutableStateOf(prefs.getBoolean("is_pro", false)); private set
+    var scanAccountID by mutableStateOf(
+        prefs.getString("scan_account_id", null) ?: "android-install-${UUID.randomUUID()}".also {
+            prefs.edit().putString("scan_account_id", it).apply()
+        },
+    ); private set
     var plans by mutableStateOf<List<BillingPlan>>(emptyList()); private set
     var isLoading by mutableStateOf(false); private set
     var lastMessage by mutableStateOf<String?>(null); private set
@@ -121,7 +128,15 @@ class BillingManager private constructor(private val context: Context) : Purchas
             client.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()) { }
         }
         isPro = active.isNotEmpty()
-        prefs.edit().putBoolean("is_pro", isPro).apply()
+        if (active.isNotEmpty()) {
+            // A one-way hash ties server-side AI quota to the restored Play
+            // purchase without transmitting or persisting the purchase token.
+            val material = active.map { it.purchaseToken }.sorted().joinToString(":")
+            val digest = MessageDigest.getInstance("SHA-256").digest(material.toByteArray())
+                .joinToString("") { "%02x".format(it) }
+            scanAccountID = "play-${digest.take(48)}"
+        }
+        prefs.edit().putBoolean("is_pro", isPro).putString("scan_account_id", scanAccountID).apply()
         NotificationScheduler.scheduleAll(context)
         if (isPro) lastMessage = context.getString(R.string.billing_pro_unlocked)
     }

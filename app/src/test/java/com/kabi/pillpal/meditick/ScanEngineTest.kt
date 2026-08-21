@@ -4,6 +4,7 @@ import com.kabi.pillpal.meditick.data.CatalogEntry
 import com.kabi.pillpal.meditick.model.MedicationForm
 import com.kabi.pillpal.meditick.ui.screens.ScanCandidate
 import com.kabi.pillpal.meditick.ui.screens.ScanEngine
+import com.kabi.pillpal.meditick.ui.screens.parseStrength
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -38,6 +39,10 @@ class ScanEngineTest {
 
     @Test fun canonicalizesIUUnit() {
         assertEquals(listOf("1000 IU"), ScanEngine.strengths("Vitamin D3 1000IU softgels"))
+    }
+
+    @Test fun preservesLiquidConcentrationForPrefill() {
+        assertEquals("100" to "mg/5 mL", parseStrength("100 mg/5 mL"))
     }
 
     // MARK: Form detection

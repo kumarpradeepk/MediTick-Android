@@ -637,4 +637,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">오전</string>
     <string name="parse_marker_pm" tools:ignore="Typos">오후</string>
     <string name="parse_stopwords" tools:ignore="Typos">매일,매,2회,1회,복용,함께,전,후,아침,밤,저녁,점심,취침,식사,끼니</string>
+    <string name="scan_identify_ai">AI로 식별</string>
+    <string name="scan_ai_checks">AI가 이름, 함량, 제형을 확인합니다</string>
+    <string name="scan_stage_capture">가장 선명한 화면을 촬영하는 중</string>
+    <string name="scan_stage_read">이름과 함량을 읽는 중</string>
+    <string name="scan_stage_check">약의 제형을 확인하는 중</string>
+    <string name="scan_ai_identifying">MediTick AI가 식별하고 있습니다</string>
+    <string name="scan_local_identifying">라벨을 읽고 있습니다</string>
+    <string name="scan_confirm_title">약 확인</string>
+    <string name="scan_no_confident">신뢰할 만한 일치 항목 없음</string>
+    <string name="scan_ai_verify">AI 제안 — 저장하기 전에 라벨을 확인하세요</string>
+    <string name="scan_verify">계속하기 전에 라벨을 확인하세요</string>
+    <string name="scan_source_ai">AI 라벨 스캔</string>
+    <string name="scan_ai_remaining">이번 달 AI 스캔 30회 중 %1$d회 남음</string>
+    <string name="scan_ai_no_match">AI가 약 라벨을 읽지 못했습니다. 더 가까이에서 빛 반사를 피해 다시 시도하세요.</string>
+    <string name="scan_ai_limit">이번 달 AI 스캔 30회를 모두 사용했습니다. 다음 달에 초기화됩니다.</string>
+    <string name="scan_ai_fallback">AI 스캔을 일시적으로 사용할 수 없습니다. 기기에서 찾은 최적의 일치 항목을 표시합니다.</string>
+    <string name="scan_ai_not_configured">AI 스캔이 아직 설정되지 않았습니다. 기기 내 비공개 인식을 사용합니다.</string>
 </resources>

@@ -637,4 +637,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">上午,早上</string>
     <string name="parse_marker_pm" tools:ignore="Typos">下午,晚上</string>
     <string name="parse_stopwords" tools:ignore="Typos">每,每天,兩次,一次,每日,服用,隨,前,後,早上,晚上,傍晚,中午,睡前,午餐,晚餐,早餐,飯,餐,和</string>
+    <string name="scan_identify_ai">使用 AI 辨識</string>
+    <string name="scan_ai_checks">AI 會核對名稱、規格和劑型</string>
+    <string name="scan_stage_capture">正在拍攝最清晰的畫面</string>
+    <string name="scan_stage_read">正在讀取名稱和規格</string>
+    <string name="scan_stage_check">正在核對藥品劑型</string>
+    <string name="scan_ai_identifying">MediTick AI 正在辨識</string>
+    <string name="scan_local_identifying">正在讀取標籤</string>
+    <string name="scan_confirm_title">確認藥品</string>
+    <string name="scan_no_confident">未找到可靠的相符項目</string>
+    <string name="scan_ai_verify">AI 建議 — 儲存前請核對標籤</string>
+    <string name="scan_verify">繼續前請核對標籤</string>
+    <string name="scan_source_ai">AI 標籤掃描</string>
+    <string name="scan_ai_remaining">本月 30 次 AI 掃描還剩 %1$d 次</string>
+    <string name="scan_ai_no_match">AI 無法讀取藥品標籤。請靠近一些、避開反光後再試一次。</string>
+    <string name="scan_ai_limit">你本月已使用 30 次 AI 掃描。額度將於下月重設。</string>
+    <string name="scan_ai_fallback">AI 掃描暫時無法使用。以下是在裝置上找到的最佳相符項目。</string>
+    <string name="scan_ai_not_configured">AI 掃描尚未設定，將使用裝置上的私密辨識。</string>
 </resources>

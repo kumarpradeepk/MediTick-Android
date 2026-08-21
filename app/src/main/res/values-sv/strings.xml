@@ -663,4 +663,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">fm,förmiddag</string>
     <string name="parse_marker_pm" tools:ignore="Typos">em,eftermiddag</string>
     <string name="parse_stopwords" tools:ignore="Typos">varje,två gånger,en gång,dagligen,ta,med,före,efter,morgon,natt,kväll,middag,lunch,läggdags,frukost,måltid,måltider,och</string>
+    <string name="scan_identify_ai">Identifiera med AI</string>
+    <string name="scan_ai_checks">AI kontrollerar namn, styrka och form</string>
+    <string name="scan_stage_capture">Tar den tydligaste bilden</string>
+    <string name="scan_stage_read">Läser namn och styrka</string>
+    <string name="scan_stage_check">Kontrollerar läkemedelsform</string>
+    <string name="scan_ai_identifying">MediTick AI identifierar läkemedlet</string>
+    <string name="scan_local_identifying">Läser etiketten</string>
+    <string name="scan_confirm_title">Bekräfta läkemedel</string>
+    <string name="scan_no_confident">Ingen säker träff</string>
+    <string name="scan_ai_verify">AI-förslag – kontrollera etiketten innan du sparar</string>
+    <string name="scan_verify">Kontrollera etiketten innan du fortsätter</string>
+    <string name="scan_source_ai">AI-etikettskanning</string>
+    <string name="scan_ai_remaining">%1$d av 30 AI-skanningar kvar den här månaden</string>
+    <string name="scan_ai_no_match">AI kunde inte läsa en läkemedelsetikett. Gå närmare, undvik blänk och försök igen.</string>
+    <string name="scan_ai_limit">Du har använt 30 AI-skanningar den här månaden. Kvoten återställs nästa månad.</string>
+    <string name="scan_ai_fallback">AI-skanning är tillfälligt otillgänglig. Här är de bästa träffarna på enheten.</string>
+    <string name="scan_ai_not_configured">AI-skanning är inte konfigurerad än. Privat igenkänning på enheten används.</string>
 </resources>

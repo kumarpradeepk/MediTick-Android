@@ -767,4 +767,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">صباحا,صباحًا</string>
     <string name="parse_marker_pm" tools:ignore="Typos">مساءً,مساءا</string>
     <string name="parse_stopwords" tools:ignore="Typos">كل,مرتين,مرة,يوميا,يوميًا,تناول,مع,قبل,بعد,صباح,ليل,مساء,ظهر,نوم,غداء,عشاء,إفطار,وجبة,وجبات</string>
+    <string name="scan_identify_ai">التعرّف بالذكاء الاصطناعي</string>
+    <string name="scan_ai_checks">يتحقق الذكاء الاصطناعي من الاسم والتركيز والشكل</string>
+    <string name="scan_stage_capture">التقاط أوضح صورة</string>
+    <string name="scan_stage_read">قراءة الاسم والتركيز</string>
+    <string name="scan_stage_check">التحقق من شكل الدواء</string>
+    <string name="scan_ai_identifying">يتعرّف MediTick AI على الدواء</string>
+    <string name="scan_local_identifying">جارٍ قراءة الملصق</string>
+    <string name="scan_confirm_title">تأكيد الدواء</string>
+    <string name="scan_no_confident">لا توجد مطابقة موثوقة</string>
+    <string name="scan_ai_verify">اقتراح بالذكاء الاصطناعي — تحقق من الملصق قبل الحفظ</string>
+    <string name="scan_verify">تحقق من الملصق قبل المتابعة</string>
+    <string name="scan_source_ai">مسح الملصق بالذكاء الاصطناعي</string>
+    <string name="scan_ai_remaining">متبقٍ %1$d من 30 عملية مسح بالذكاء الاصطناعي هذا الشهر</string>
+    <string name="scan_ai_no_match">تعذر على الذكاء الاصطناعي قراءة ملصق الدواء. اقترب أكثر وتجنب الوهج وحاول مجددًا.</string>
+    <string name="scan_ai_limit">استخدمت 30 عملية مسح بالذكاء الاصطناعي هذا الشهر. ستتم إعادة تعيين الحد الشهر المقبل.</string>
+    <string name="scan_ai_fallback">المسح بالذكاء الاصطناعي غير متاح مؤقتًا. إليك أفضل النتائج على الجهاز.</string>
+    <string name="scan_ai_not_configured">لم يتم إعداد المسح بالذكاء الاصطناعي بعد. سيُستخدم التعرّف الخاص على الجهاز.</string>
 </resources>

@@ -689,4 +689,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">del mattino</string>
     <string name="parse_marker_pm" tools:ignore="Typos">del pomeriggio,di sera</string>
     <string name="parse_stopwords" tools:ignore="Typos">ogni,due volte,una volta,quotidiano,giornaliero,prendi,prendere,con,prima,dopo,mattina,notte,sera,mezzogiorno,letto,pranzo,cena,colazione,pasto,pasti,il,la,i,le,e</string>
+    <string name="scan_identify_ai">Identifica con l’IA</string>
+    <string name="scan_ai_checks">L’IA controlla nome, dosaggio e forma</string>
+    <string name="scan_stage_capture">Acquisizione dell’immagine più nitida</string>
+    <string name="scan_stage_read">Lettura di nome e dosaggio</string>
+    <string name="scan_stage_check">Controllo della forma del farmaco</string>
+    <string name="scan_ai_identifying">MediTick AI sta identificando il farmaco</string>
+    <string name="scan_local_identifying">Lettura dell’etichetta</string>
+    <string name="scan_confirm_title">Conferma farmaco</string>
+    <string name="scan_no_confident">Nessuna corrispondenza affidabile</string>
+    <string name="scan_ai_verify">Suggerimento IA — controlla l’etichetta prima di salvare</string>
+    <string name="scan_verify">Controlla l’etichetta prima di continuare</string>
+    <string name="scan_source_ai">Scansione etichetta con IA</string>
+    <string name="scan_ai_remaining">%1$d scansioni IA su 30 rimaste questo mese</string>
+    <string name="scan_ai_no_match">L’IA non è riuscita a leggere l’etichetta di un farmaco. Avvicinati, evita i riflessi e riprova.</string>
+    <string name="scan_ai_limit">Hai usato 30 scansioni IA questo mese. La disponibilità si azzera il mese prossimo.</string>
+    <string name="scan_ai_fallback">La scansione IA non è temporaneamente disponibile. Ecco le migliori corrispondenze sul dispositivo.</string>
+    <string name="scan_ai_not_configured">La scansione IA non è ancora configurata. Verrà usato il riconoscimento privato sul dispositivo.</string>
 </resources>

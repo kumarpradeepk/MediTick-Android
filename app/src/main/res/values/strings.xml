@@ -471,7 +471,7 @@
 
     <!-- ===================== Scan to Add ================= -->
     <string name="scan_card_title">Scan the label</string>
-    <string name="scan_card_caption_pro">Point the camera at the box or bottle</string>
+    <string name="scan_card_caption_pro">AI label recognition · 30 scans per month</string>
     <!-- %1$d free scans remain before the Pro gate. -->
     <string name="scan_card_caption_free">Free scans left: %1$d — then Pro</string>
     <string name="scan_card_caption_locked">A MediTick Pro feature</string>
@@ -479,12 +479,29 @@
     <string name="scan_looking">Looking for a label…</string>
     <string name="scan_reading">Reading the label…</string>
     <string name="scan_identify">Identify now</string>
+    <string name="scan_identify_ai">Identify with AI</string>
     <string name="scan_identifying">Identifying…</string>
+    <string name="scan_ai_checks">AI checks the name, strength, and form</string>
+    <string name="scan_stage_capture">Capturing the clearest frame</string>
+    <string name="scan_stage_read">Reading name and strength</string>
+    <string name="scan_stage_check">Checking medication form</string>
+    <string name="scan_ai_identifying">MediTick AI is identifying it</string>
+    <string name="scan_local_identifying">Reading your label</string>
     <string name="scan_matches_title">Possible Matches</string>
+    <string name="scan_confirm_title">Confirm medication</string>
+    <string name="scan_no_confident">No confident match</string>
+    <string name="scan_ai_verify">AI suggestion — check the label before saving</string>
+    <string name="scan_verify">Check the label before continuing</string>
     <!-- %1$s is the brand alias that matched, e.g. "NyQuil". -->
     <string name="scan_matched_alias">Matched “%1$s”</string>
     <string name="scan_source_catalog">Catalog match</string>
     <string name="scan_source_rxnorm">RxNorm match</string>
+    <string name="scan_source_ai">AI label scan</string>
+    <string name="scan_ai_remaining">%1$d of 30 AI scans left this month</string>
+    <string name="scan_ai_no_match">AI couldn’t read a medication label. Move closer, avoid glare, and try again.</string>
+    <string name="scan_ai_limit">You’ve used 30 AI scans this month. Your allowance resets next month.</string>
+    <string name="scan_ai_fallback">AI scan is temporarily unavailable. Here are the best on-device matches instead.</string>
+    <string name="scan_ai_not_configured">AI scan isn’t configured yet. Using private on-device recognition.</string>
     <string name="scan_none_title">No match yet</string>
     <string name="scan_none_local">Keep the medication name inside the frame and hold steady.</string>
     <string name="scan_none_online">Couldn\'t identify this label — try moving closer, or add it by typing.</string>

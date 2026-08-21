@@ -663,4 +663,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">\'s ochtends,voormiddag</string>
     <string name="parse_marker_pm" tools:ignore="Typos">\'s middags,\'s avonds</string>
     <string name="parse_stopwords" tools:ignore="Typos">elke,iedere,twee keer,een keer,dagelijks,neem,innemen,met,voor,na,ochtend,nacht,avond,middag,bed,bedtijd,lunch,avondeten,ontbijt,maaltijd,maaltijden,de,het,en</string>
+    <string name="scan_identify_ai">Herkennen met AI</string>
+    <string name="scan_ai_checks">AI controleert naam, sterkte en vorm</string>
+    <string name="scan_stage_capture">Scherpste beeld vastleggen</string>
+    <string name="scan_stage_read">Naam en sterkte lezen</string>
+    <string name="scan_stage_check">Medicijnvorm controleren</string>
+    <string name="scan_ai_identifying">MediTick AI herkent het medicijn</string>
+    <string name="scan_local_identifying">Je etiket wordt gelezen</string>
+    <string name="scan_confirm_title">Medicijn bevestigen</string>
+    <string name="scan_no_confident">Geen betrouwbare overeenkomst</string>
+    <string name="scan_ai_verify">AI-suggestie — controleer het etiket vóór opslaan</string>
+    <string name="scan_verify">Controleer het etiket voordat je doorgaat</string>
+    <string name="scan_source_ai">AI-etiketscan</string>
+    <string name="scan_ai_remaining">Nog %1$d van 30 AI-scans deze maand</string>
+    <string name="scan_ai_no_match">AI kon geen medicijnetiket lezen. Ga dichterbij, vermijd schittering en probeer opnieuw.</string>
+    <string name="scan_ai_limit">Je hebt deze maand 30 AI-scans gebruikt. Je tegoed wordt volgende maand vernieuwd.</string>
+    <string name="scan_ai_fallback">AI-scan is tijdelijk niet beschikbaar. Dit zijn de beste overeenkomsten op het apparaat.</string>
+    <string name="scan_ai_not_configured">AI-scan is nog niet ingesteld. Privéherkenning op het apparaat wordt gebruikt.</string>
 </resources>

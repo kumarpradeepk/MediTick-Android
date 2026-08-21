@@ -689,4 +689,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">da manhã</string>
     <string name="parse_marker_pm" tools:ignore="Typos">da tarde,da noite</string>
     <string name="parse_stopwords" tools:ignore="Typos">cada,duas vezes,uma vez,diário,diariamente,tome,tomar,com,antes,depois,manhã,noite,tarde,meio-dia,cama,dormir,almoço,jantar,café da manhã,refeição,refeições,o,a,os,as,e</string>
+    <string name="scan_identify_ai">Identificar com IA</string>
+    <string name="scan_ai_checks">A IA verifica nome, concentração e forma</string>
+    <string name="scan_stage_capture">Capturando a imagem mais nítida</string>
+    <string name="scan_stage_read">Lendo nome e concentração</string>
+    <string name="scan_stage_check">Verificando a forma do medicamento</string>
+    <string name="scan_ai_identifying">O MediTick AI está identificando</string>
+    <string name="scan_local_identifying">Lendo o rótulo</string>
+    <string name="scan_confirm_title">Confirmar medicamento</string>
+    <string name="scan_no_confident">Nenhuma correspondência confiável</string>
+    <string name="scan_ai_verify">Sugestão da IA — confira o rótulo antes de salvar</string>
+    <string name="scan_verify">Confira o rótulo antes de continuar</string>
+    <string name="scan_source_ai">Leitura de rótulo por IA</string>
+    <string name="scan_ai_remaining">Restam %1$d de 30 leituras por IA neste mês</string>
+    <string name="scan_ai_no_match">A IA não conseguiu ler um rótulo de medicamento. Aproxime-se, evite reflexos e tente novamente.</string>
+    <string name="scan_ai_limit">Você usou 30 leituras por IA neste mês. Seu limite será renovado no próximo mês.</string>
+    <string name="scan_ai_fallback">A leitura por IA está temporariamente indisponível. Veja as melhores correspondências no dispositivo.</string>
+    <string name="scan_ai_not_configured">A leitura por IA ainda não está configurada. O reconhecimento privado no dispositivo será usado.</string>
 </resources>

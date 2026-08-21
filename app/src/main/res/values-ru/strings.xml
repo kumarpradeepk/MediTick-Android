@@ -715,4 +715,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">утра</string>
     <string name="parse_marker_pm" tools:ignore="Typos">вечера</string>
     <string name="parse_stopwords" tools:ignore="Typos">каждый,каждые,два раза,один раз,ежедневно,принимать,принять,с,перед,до,после,утро,ночь,вечер,полдень,сон,обед,ужин,завтрак,еда,еды,и</string>
+    <string name="scan_identify_ai">Распознать с помощью ИИ</string>
+    <string name="scan_ai_checks">ИИ проверит название, дозировку и форму</string>
+    <string name="scan_stage_capture">Снимаем самый чёткий кадр</string>
+    <string name="scan_stage_read">Читаем название и дозировку</string>
+    <string name="scan_stage_check">Проверяем форму лекарства</string>
+    <string name="scan_ai_identifying">MediTick AI распознаёт лекарство</string>
+    <string name="scan_local_identifying">Читаем этикетку</string>
+    <string name="scan_confirm_title">Подтвердите лекарство</string>
+    <string name="scan_no_confident">Нет надёжного совпадения</string>
+    <string name="scan_ai_verify">Предложение ИИ — проверьте этикетку перед сохранением</string>
+    <string name="scan_verify">Проверьте этикетку, прежде чем продолжить</string>
+    <string name="scan_source_ai">ИИ-сканирование этикетки</string>
+    <string name="scan_ai_remaining">В этом месяце осталось %1$d из 30 ИИ-сканирований</string>
+    <string name="scan_ai_no_match">ИИ не смог прочитать этикетку лекарства. Поднесите ближе, избегайте бликов и повторите попытку.</string>
+    <string name="scan_ai_limit">В этом месяце использовано 30 ИИ-сканирований. Лимит обновится в следующем месяце.</string>
+    <string name="scan_ai_fallback">ИИ-сканирование временно недоступно. Показаны лучшие совпадения, найденные на устройстве.</string>
+    <string name="scan_ai_not_configured">ИИ-сканирование ещё не настроено. Используется приватное распознавание на устройстве.</string>
 </resources>

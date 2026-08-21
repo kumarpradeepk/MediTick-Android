@@ -1,6 +1,6 @@
 # MediTick for Android
 
-Native Android counterpart to the MediTick iOS app. The app is built with Jetpack Compose and uses the same private, offline-first model as iOS: no account, no health-data server, and one portable JSON snapshot.
+Native Android counterpart to the MediTick iOS app. The app is built with Jetpack Compose and uses the same private, offline-first model as iOS: no login, no health-data database, and one portable JSON snapshot. The optional Pro label scanner sends only the current label frame for transient recognition.
 
 ## Before release: fill in `AppLinks.kt`
 
@@ -53,6 +53,19 @@ Create these products in Play Console for the Android package `com.kabi.pillpal.
 Attach active base plans/offers to the subscriptions. The paywall reads localized prices directly from Google Play, acknowledges completed purchases, restores active subscriptions and lifetime ownership, and persists a last-known entitlement for offline gating.
 
 Billing product details are unavailable in a sideload-only emulator. Test purchases with a Play Console internal-testing build and a licensed tester account.
+
+## AI medication scan
+
+Free users receive 3 private on-device ML Kit OCR/catalog scans. Pro uses a downsampled label photo with the MediTick Claude proxy and is capped server-side at 30 AI attempts per UTC month. Results still require confirmation and only prefill label facts; the app never invents dosing instructions.
+
+Set these in the gitignored `local.properties` for local builds, or provide the matching environment variables in CI:
+
+```properties
+ai.scan.endpoint=https://YOUR-WORKER/v1/medication/scan
+ai.scan.clientToken=YOUR_CLIENT_TOKEN
+```
+
+The Anthropic API key must exist only in the worker secret store. Without these settings, Pro falls back to on-device recognition. Android currently has no login system, so Pro quota is tied to a one-way hash of the restored Google Play purchase identity (with an install-scoped fallback before billing refresh); see `../services/ai-scan-worker/README.md` for deployment and production auth/Play Integrity hardening.
 
 ## Reminder behavior
 

@@ -14,6 +14,15 @@ val keystoreProperties = Properties().apply {
     if (file.exists()) file.inputStream().use { load(it) }
 }
 val hasReleaseSigning = keystoreProperties.getProperty("storeFile") != null
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+fun quotedBuildConfig(value: String): String = "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
+val aiScanEndpoint = providers.environmentVariable("AI_SCAN_ENDPOINT").orNull
+    ?: localProperties.getProperty("ai.scan.endpoint", "")
+val aiScanClientToken = providers.environmentVariable("AI_SCAN_CLIENT_TOKEN").orNull
+    ?: localProperties.getProperty("ai.scan.clientToken", "")
 
 android {
     namespace = "com.kabi.pillpal.meditick"
@@ -25,6 +34,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "AI_SCAN_ENDPOINT", quotedBuildConfig(aiScanEndpoint))
+        buildConfigField("String", "AI_SCAN_CLIENT_TOKEN", quotedBuildConfig(aiScanClientToken))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

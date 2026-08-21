@@ -689,4 +689,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">a.m.,de la mañana</string>
     <string name="parse_marker_pm" tools:ignore="Typos">p.m.,de la tarde,de la noche</string>
     <string name="parse_stopwords" tools:ignore="Typos">cada,dos veces,una vez,diario,diariamente,toma,tomar,con,antes,después,mañana,noche,tarde,mediodía,cama,dormir,almuerzo,cena,desayuno,comida,comidas,el,la,los,las,y</string>
+    <string name="scan_identify_ai">Identificar con IA</string>
+    <string name="scan_ai_checks">La IA comprueba el nombre, la concentración y la forma</string>
+    <string name="scan_stage_capture">Capturando la imagen más nítida</string>
+    <string name="scan_stage_read">Leyendo el nombre y la concentración</string>
+    <string name="scan_stage_check">Comprobando la forma del medicamento</string>
+    <string name="scan_ai_identifying">MediTick AI lo está identificando</string>
+    <string name="scan_local_identifying">Leyendo la etiqueta</string>
+    <string name="scan_confirm_title">Confirmar medicamento</string>
+    <string name="scan_no_confident">No hay una coincidencia fiable</string>
+    <string name="scan_ai_verify">Sugerencia de IA: comprueba la etiqueta antes de guardar</string>
+    <string name="scan_verify">Comprueba la etiqueta antes de continuar</string>
+    <string name="scan_source_ai">Escaneo de etiqueta con IA</string>
+    <string name="scan_ai_remaining">Quedan %1$d de 30 escaneos con IA este mes</string>
+    <string name="scan_ai_no_match">La IA no pudo leer una etiqueta de medicamento. Acércate, evita los reflejos e inténtalo de nuevo.</string>
+    <string name="scan_ai_limit">Has usado 30 escaneos con IA este mes. El límite se restablece el próximo mes.</string>
+    <string name="scan_ai_fallback">El escaneo con IA no está disponible temporalmente. Se muestran las mejores coincidencias del dispositivo.</string>
+    <string name="scan_ai_not_configured">El escaneo con IA aún no está configurado. Se usará el reconocimiento privado del dispositivo.</string>
 </resources>

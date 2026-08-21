@@ -118,7 +118,8 @@ private fun sundayFirstInitials(): List<String> {
 fun MedicationFormScreen(
     repository: AppRepository, editingId: String?, prescriptionId: String?,
     onClose: () -> Unit, onSaved: () -> Unit,
-    isPro: Boolean = true, onShowPaywall: () -> Unit = {},
+    isPro: Boolean = true, aiScanAccountID: String = "android-preview-account",
+    onShowPaywall: () -> Unit = {},
 ) {
     val existing = repository.medication(editingId)
     val context = LocalContext.current
@@ -167,6 +168,8 @@ fun MedicationFormScreen(
         // Full-screen scanner; a picked match prefills the basics and jumps
         // past the describe step, exactly like iOS.
         ScanToAddScreen(
+            isPro = isPro,
+            accountID = aiScanAccountID,
             onClose = { showScan = false },
             onMatch = { candidate ->
                 name = candidate.name
@@ -545,7 +548,11 @@ private fun BasicsStep(
                 var menu by remember { mutableStateOf(false) }
                 Box {
                     OutlinedButton({ menu = true }, Modifier.height(56.dp)) { Text(unit); Icon(Icons.Default.ExpandMore, null) }
-                    DropdownMenu(menu, { menu = false }) { StrengthUnit.all.forEach { DropdownMenuItem({ Text(it) }, { onUnit(it); menu = false }) } }
+                    DropdownMenu(menu, { menu = false }) {
+                        (StrengthUnit.all + unit).distinctBy { it.lowercase() }.forEach {
+                            DropdownMenuItem({ Text(it) }, { onUnit(it); menu = false })
+                        }
+                    }
                 }
             }
         }
@@ -955,7 +962,16 @@ private fun smartParse(
     return ParsedDraft(name, strengthToken ?: entry?.strengths?.singleOrNull()?.let(::parseStrength), entry?.form, doses, duration)
 }
 
-private fun parseStrength(raw: String): Pair<String, String>? {
+internal fun parseStrength(raw: String): Pair<String, String>? {
+    val concentration = Regex(
+        """^(\d+(?:\.\d+)?)\s*(mcg|mg|g|iu)\s*/\s*(\d+(?:\.\d+)?)\s*(ml|l)$""",
+        RegexOption.IGNORE_CASE,
+    ).find(raw.trim())
+    if (concentration != null) {
+        val numerator = concentration.groupValues[2].let { if (it.equals("iu", true)) "IU" else it.lowercase() }
+        val volume = concentration.groupValues[4].let { if (it.equals("ml", true)) "mL" else "L" }
+        return concentration.groupValues[1] to "$numerator/${concentration.groupValues[3]} $volume"
+    }
     val match = Regex("(\\d+(?:\\.\\d+)?)\\s*(mcg|mg|g|ml|iu|%)", RegexOption.IGNORE_CASE).find(raw) ?: return null
     return match.groupValues[1] to match.groupValues[2].let { if (it.equals("iu", true)) "IU" else it.lowercase() }
 }

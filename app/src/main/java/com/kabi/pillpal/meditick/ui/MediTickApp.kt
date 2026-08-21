@@ -93,6 +93,7 @@ fun MediTickApp(
                 is Route.MedicationForm -> MedicationFormScreen(
                     repository = repository, editingId = current.editingId, prescriptionId = current.prescriptionId,
                     isPro = billing.isPro,
+                    aiScanAccountID = billing.scanAccountID,
                     onClose = back, onSaved = back,
                     onShowPaywall = { back(); navigate(Route.Paywall) },
                 )

@@ -9,13 +9,18 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.SystemClock
 import android.provider.Settings
+import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -57,6 +62,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.kabi.pillpal.meditick.R
+import com.kabi.pillpal.meditick.BuildConfig
 import com.kabi.pillpal.meditick.data.CatalogEntry
 import com.kabi.pillpal.meditick.data.MedicationCatalog
 import com.kabi.pillpal.meditick.model.MedicationForm
@@ -64,8 +70,12 @@ import com.kabi.pillpal.meditick.ui.components.*
 import com.kabi.pillpal.meditick.ui.theme.DS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -77,11 +87,8 @@ import kotlin.math.abs
 // identifies the medication, mirroring the iOS ScanToAdd feature:
 //  1. On-device OCR (ML Kit) fuzzy-matched against the bundled catalog —
 //     free, offline, nothing leaves the device.
-//  2. RxNorm approximateTerm (free NLM web service) as a text-only network
-//     fallback when the local catalog has no confident answer.
-// (iOS additionally offers an opt-in "deep scan" behind a configurable
-// backend endpoint; with no endpoint configured the UI is hidden — the
-// same effective behavior as here.)
+//  2. Pro sends one downsampled label frame through the MediTick backend to
+//     Claude vision. The backend owns the model key and monthly quota.
 //
 
 // MARK: - Candidate model
@@ -97,8 +104,10 @@ data class ScanCandidate(
     /** 0…1 — how sure the matcher is. */
     val confidence: Double,
     val source: Source,
+    val category: String? = null,
+    val note: String? = null,
 ) {
-    enum class Source { CATALOG, RXNORM }
+    enum class Source { CATALOG, RXNORM, AI }
 }
 
 // MARK: - Matching engine (pure, unit-testable — the twin of iOS ScanEngine)
@@ -315,7 +324,91 @@ object RxNormService {
     }
 }
 
-// MARK: - Scan metering (free tier gets a taste, Pro gets unlimited)
+// MARK: - Server-backed Claude vision recognition (Pro)
+
+object AIScanService {
+    val isAvailable: Boolean
+        get() = BuildConfig.AI_SCAN_ENDPOINT.isNotBlank() && BuildConfig.AI_SCAN_CLIENT_TOKEN.isNotBlank()
+
+    data class Usage(val used: Int, val limit: Int, val remaining: Int, val resetsAt: String)
+    data class Result(val candidates: List<ScanCandidate>, val usage: Usage?)
+    class QuotaException(val usage: Usage?) : Exception()
+    class ScanException : Exception()
+
+    suspend fun analyze(image: ByteArray, hintText: String, accountId: String): Result = withContext(Dispatchers.IO) {
+        if (!isAvailable) throw ScanException()
+        val connection = URL(BuildConfig.AI_SCAN_ENDPOINT).openConnection() as HttpURLConnection
+        try {
+            connection.requestMethod = "POST"
+            connection.connectTimeout = 12_000
+            connection.readTimeout = 30_000
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("Authorization", "Bearer ${BuildConfig.AI_SCAN_CLIENT_TOKEN}")
+            val body = JSONObject()
+                .put("image_base64", Base64.encodeToString(image, Base64.NO_WRAP))
+                .put("media_type", "image/jpeg")
+                .put("hint_text", hintText.take(1500))
+                .put("account_id", accountId)
+                .toString()
+            connection.outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
+
+            val status = connection.responseCode
+            val responseText = (if (status in 200..299) connection.inputStream else connection.errorStream)
+                ?.bufferedReader()?.use { it.readText() }.orEmpty()
+            val root = runCatching { JSONObject(responseText) }.getOrNull()
+            val usage = root?.optJSONObject("usage")?.let(::parseUsage)
+            if (status == 429) throw QuotaException(usage)
+            if (status != 200 || root == null) throw ScanException()
+
+            val raw = root.optJSONArray("candidates") ?: JSONArray()
+            val candidates = buildList {
+                for (index in 0 until minOf(raw.length(), 3)) {
+                    val item = raw.optJSONObject(index) ?: continue
+                    val name = item.optString("name").trim()
+                    if (name.isEmpty()) continue
+                    val generic = item.optString("generic").trim().ifEmpty { null }
+                    val form = MedicationForm.entries.firstOrNull { it.name == item.optString("form").lowercase() }
+                    add(ScanCandidate(
+                        name = name,
+                        detail = generic?.takeUnless { it.equals(name, ignoreCase = true) },
+                        strengthText = item.optString("strength").trim().ifEmpty { null },
+                        form = form ?: MedicationForm.other,
+                        confidence = item.optDouble("confidence", .9).coerceIn(0.0, 1.0),
+                        source = ScanCandidate.Source.AI,
+                        category = item.optString("category").trim().ifEmpty { null },
+                        note = item.optString("note").trim().ifEmpty { null },
+                    ))
+                }
+            }
+            Result(candidates, usage)
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun parseUsage(raw: JSONObject) = Usage(
+        used = raw.optInt("used"),
+        limit = raw.optInt("limit", 30),
+        remaining = raw.optInt("remaining"),
+        resetsAt = raw.optString("resets_at"),
+    )
+}
+
+private fun compressedScanImage(file: File): ByteArray? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(file.path, bounds)
+    var sample = 1
+    while (maxOf(bounds.outWidth / sample, bounds.outHeight / sample) > 1400) sample *= 2
+    val bitmap = BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inSampleSize = sample }) ?: return null
+    return ByteArrayOutputStream().use { output ->
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 72, output)
+        bitmap.recycle()
+        output.toByteArray()
+    }
+}
+
+// MARK: - Free on-device scan metering (Pro AI quota is enforced server-side)
 
 object ScanQuota {
     const val FREE_SCANS = 3
@@ -344,12 +437,13 @@ private enum class ScanState { RUNNING, DENIED, UNAVAILABLE }
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
-fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
+fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val haptics = rememberHaptics()
     val scope = rememberCoroutineScope()
     val catalog = remember { MedicationCatalog.get(context) }
+    val imageCapture = remember { ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build() }
 
     var state by remember {
         mutableStateOf(
@@ -379,6 +473,9 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
     var showMatches by remember { mutableStateOf(false) }
     var identifying by remember { mutableStateOf(false) }
     var searchedOnline by remember { mutableStateOf(false) }
+    var aiError by remember { mutableStateOf<String?>(null) }
+    var aiRemaining by remember { mutableStateOf<Int?>(null) }
+    var identificationStage by remember { mutableIntStateOf(0) }
     var stableHits by remember { mutableIntStateOf(0) }
     var torchOn by remember { mutableStateOf(false) }
     var camera by remember { mutableStateOf<androidx.camera.core.Camera?>(null) }
@@ -394,30 +491,81 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
         lineVotes.clear()
         recognizedLines = emptyList()
         analysisEnabled = true
+        aiError = null
+    }
+
+    fun identifyLocally(errorMessage: String? = null) {
+        scope.launch {
+            val results = ScanEngine.candidates(recognizedLines, catalog.all())
+            searchedOnline = false
+            matches = results.take(4)
+            aiError = errorMessage
+            identifying = false
+            presentMatches()
+        }
     }
 
     fun identifyNow() {
         if (identifying) return
         identifying = true
-        scope.launch {
-            val lines = recognizedLines
-            var results = ScanEngine.candidates(lines, catalog.all())
-            if (results.firstOrNull()?.let { it.confidence < 0.7 } != false) {
-                val online = RxNormService.approximateMatches(ScanEngine.onlineQuery(lines))
-                searchedOnline = true
-                val existing = results.map { it.name.lowercase() }.toSet()
-                results = results + online.filter { it.name.lowercase() !in existing }
-            } else searchedOnline = false
-            matches = results.take(4)
-            identifying = false
-            presentMatches()
+        analysisEnabled = false
+        identificationStage = 0
+        aiError = null
+
+        if (!isPro || !AIScanService.isAvailable) {
+            identifyLocally(
+                if (isPro) context.getString(R.string.scan_ai_not_configured) else null,
+            )
+            return
+        }
+
+        val photo = File.createTempFile("meditick-scan-", ".jpg", context.cacheDir)
+        val options = ImageCapture.OutputFileOptions.Builder(photo).build()
+        imageCapture.takePicture(options, ContextCompat.getMainExecutor(context), object : ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                scope.launch {
+                    try {
+                        val bytes = withContext(Dispatchers.IO) { compressedScanImage(photo) } ?: throw AIScanService.ScanException()
+                        val result = AIScanService.analyze(bytes, recognizedLines.joinToString("\n"), accountID)
+                        matches = result.candidates
+                        aiRemaining = result.usage?.remaining
+                        searchedOnline = false
+                        if (matches.isEmpty()) aiError = context.getString(R.string.scan_ai_no_match)
+                        identifying = false
+                        presentMatches()
+                    } catch (quota: AIScanService.QuotaException) {
+                        aiRemaining = quota.usage?.remaining ?: 0
+                        matches = emptyList()
+                        aiError = context.getString(R.string.scan_ai_limit)
+                        identifying = false
+                        presentMatches()
+                    } catch (_: Exception) {
+                        identifyLocally(context.getString(R.string.scan_ai_fallback))
+                    } finally {
+                        photo.delete()
+                    }
+                }
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                photo.delete()
+                identifyLocally(context.getString(R.string.scan_ai_fallback))
+            }
+        })
+    }
+
+    LaunchedEffect(identifying) {
+        if (!identifying) return@LaunchedEffect
+        while (identifying) {
+            delay(850)
+            identificationStage = (identificationStage + 1).coerceAtMost(2)
         }
     }
 
     // Auto-present as soon as the reading is stable and confident — the
     // "it just recognized it" moment from the reference flow.
     LaunchedEffect(recognizedLines) {
-        if (showMatches || identifying) return@LaunchedEffect
+        if (isPro || showMatches || identifying) return@LaunchedEffect
         val local = ScanEngine.candidates(recognizedLines, catalog.all())
         val best = local.firstOrNull()
         if (best == null || best.confidence < 0.8) { stableHits = 0; return@LaunchedEffect }
@@ -469,7 +617,7 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
                                 val provider = providerFuture.get()
                                 val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
                                 provider.unbindAll()
-                                camera = provider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, analysis)
+                                camera = provider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, analysis, imageCapture)
                             }.onFailure { state = ScanState.UNAVAILABLE }
                         }, ContextCompat.getMainExecutor(ctx))
                         previewView
@@ -478,6 +626,8 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
                 ScanOverlay(
                     recognizedLines = recognizedLines,
                     identifying = identifying,
+                    isAI = isPro && AIScanService.isAvailable,
+                    cameraReady = camera != null,
                     onIdentify = { haptics.tap(); identifyNow() },
                 )
             }
@@ -492,6 +642,8 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
                 showsSettingsButton = false,
             )
         }
+
+        if (identifying) AIProcessingOverlay(identificationStage, isPro && AIScanService.isAvailable)
 
         // Chrome: close + torch.
         Row(
@@ -511,6 +663,8 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
 
     if (showMatches) PossibleMatchesSheet(
         matches = matches, searchedOnline = searchedOnline,
+        isAIResult = matches.firstOrNull()?.source == ScanCandidate.Source.AI,
+        aiRemaining = aiRemaining, errorMessage = aiError,
         onPick = { candidate ->
             haptics.success()
             showMatches = false
@@ -522,7 +676,10 @@ fun ScanToAddScreen(onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
 }
 
 @Composable
-private fun ScanOverlay(recognizedLines: List<String>, identifying: Boolean, onIdentify: () -> Unit) {
+private fun ScanOverlay(
+    recognizedLines: List<String>, identifying: Boolean, isAI: Boolean,
+    cameraReady: Boolean, onIdentify: () -> Unit,
+) {
     val c = DS.colors
     val transition = rememberInfiniteTransition(label = "scanLine")
     val linePhase by transition.animateFloat(0f, 1f, infiniteRepeatable(tween(1600), RepeatMode.Reverse), label = "line")
@@ -570,14 +727,75 @@ private fun ScanOverlay(recognizedLines: List<String>, identifying: Boolean, onI
                 stringResource(if (recognizedLines.isEmpty()) R.string.scan_looking else R.string.scan_reading),
                 color = Color.White.copy(.85f), fontSize = 13.sp,
             )
+            if (isAI) {
+                Spacer(Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Default.AutoAwesome, null, tint = c.mint, modifier = Modifier.size(14.dp))
+                    Text(stringResource(R.string.scan_ai_checks), color = Color.White.copy(.76f), fontSize = 11.5.sp)
+                }
+            }
             Spacer(Modifier.height(14.dp))
             PrimaryButton(
-                stringResource(if (identifying) R.string.scan_identifying else R.string.scan_identify),
+                stringResource(if (identifying) R.string.scan_identifying else if (isAI) R.string.scan_identify_ai else R.string.scan_identify),
                 onIdentify,
                 Modifier.padding(horizontal = 80.dp).fillMaxWidth(),
-                enabled = !identifying && recognizedLines.isNotEmpty(),
-                leading = Icons.Default.Search,
+                enabled = !identifying && cameraReady && (isAI || recognizedLines.isNotEmpty()),
+                leading = if (isAI) Icons.Default.AutoAwesome else Icons.Default.Search,
             )
+        }
+    }
+}
+
+@Composable
+private fun AIProcessingOverlay(stage: Int, isAI: Boolean) {
+    val c = DS.colors
+    val transition = rememberInfiniteTransition(label = "aiProcessing")
+    val spin by transition.animateFloat(0f, 360f, infiniteRepeatable(tween(2600)), label = "spin")
+    val labels = listOf(
+        stringResource(R.string.scan_stage_capture),
+        stringResource(R.string.scan_stage_read),
+        stringResource(R.string.scan_stage_check),
+    )
+    Box(
+        Modifier.fillMaxSize().background(Color.Black.copy(.58f)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Surface(
+            color = Color(0xEF14211F),
+            shape = RoundedCornerShape(30.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(.14f)),
+            modifier = Modifier.padding(horizontal = 34.dp).fillMaxWidth(),
+        ) {
+            Column(
+                Modifier.padding(horizontal = 28.dp, vertical = 30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(Modifier.size(118.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(
+                        progress = { .72f }, color = c.mint, trackColor = Color.White.copy(.10f),
+                        strokeWidth = 5.dp, modifier = Modifier.size(92.dp).graphicsLayer(rotationZ = spin),
+                    )
+                    Icon(
+                        if (isAI) Icons.Default.AutoAwesome else Icons.Default.DocumentScanner,
+                        null, tint = c.mint, modifier = Modifier.size(34.dp),
+                    )
+                }
+                Text(
+                    stringResource(if (isAI) R.string.scan_ai_identifying else R.string.scan_local_identifying),
+                    color = Color.White, fontWeight = FontWeight.Bold, fontSize = 19.sp,
+                )
+                Spacer(Modifier.height(7.dp))
+                Text(labels[stage.coerceIn(0, 2)], color = Color.White.copy(.72f), fontSize = 13.5.sp)
+                Spacer(Modifier.height(18.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                    repeat(3) { index ->
+                        Box(
+                            Modifier.width(if (index == stage) 28.dp else 8.dp).height(8.dp)
+                                .clip(RoundedCornerShape(50)).background(if (index <= stage) c.mint else Color.White.copy(.18f)),
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -612,6 +830,7 @@ private fun PermissionScreen(title: String, message: String, showsSettingsButton
 @Composable
 private fun PossibleMatchesSheet(
     matches: List<ScanCandidate>, searchedOnline: Boolean,
+    isAIResult: Boolean, aiRemaining: Int?, errorMessage: String?,
     onPick: (ScanCandidate) -> Unit, onTryAgain: () -> Unit, onDismiss: () -> Unit,
 ) {
     val c = DS.colors
@@ -622,10 +841,21 @@ private fun PossibleMatchesSheet(
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
     ) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 22.dp).padding(bottom = 26.dp)) {
+            Icon(
+                if (matches.isEmpty()) Icons.Default.CenterFocusWeak else Icons.Default.Verified,
+                null, tint = if (matches.isEmpty()) c.ink3 else c.mint,
+                modifier = Modifier.size(30.dp).align(Alignment.CenterHorizontally).appearFluidly(0),
+            )
+            Spacer(Modifier.height(5.dp))
             Text(
-                stringResource(R.string.scan_matches_title),
+                stringResource(if (matches.isEmpty()) R.string.scan_no_confident else R.string.scan_confirm_title),
                 style = MaterialTheme.typography.headlineMedium, color = c.ink,
                 textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().appearFluidly(0),
+            )
+            Text(
+                stringResource(if (isAIResult) R.string.scan_ai_verify else R.string.scan_verify),
+                color = c.ink2, fontSize = 12.5.sp, textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(16.dp))
             if (matches.isEmpty()) {
@@ -655,15 +885,22 @@ private fun PossibleMatchesSheet(
                                     Text(
                                         listOfNotNull(
                                             candidate.strengthText, candidate.form?.title(context),
-                                            stringResource(
-                                                if (candidate.source == ScanCandidate.Source.CATALOG) R.string.scan_source_catalog
-                                                else R.string.scan_source_rxnorm,
-                                            ),
+                                            stringResource(when (candidate.source) {
+                                                ScanCandidate.Source.CATALOG -> R.string.scan_source_catalog
+                                                ScanCandidate.Source.RXNORM -> R.string.scan_source_rxnorm
+                                                ScanCandidate.Source.AI -> R.string.scan_source_ai
+                                            }),
                                         ).joinToString(" · "),
                                         color = c.ink2, fontSize = 13.sp,
                                     )
                                     candidate.detail?.let {
                                         Text(stringResource(R.string.scan_matched_alias, it), color = c.ink3, fontSize = 11.5.sp)
+                                    }
+                                    candidate.category?.let {
+                                        Text(it.uppercase(), color = c.cyan, fontWeight = FontWeight.Bold, fontSize = 10.5.sp)
+                                    }
+                                    candidate.note?.let {
+                                        Text(it, color = c.ink2, fontSize = 12.sp)
                                     }
                                 }
                                 Icon(Icons.Default.ChevronRight, null, tint = c.ink3)
@@ -673,6 +910,19 @@ private fun PossibleMatchesSheet(
                 }
             }
             Spacer(Modifier.height(16.dp))
+            errorMessage?.let {
+                Text(it, color = c.coral, fontSize = 12.5.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                Spacer(Modifier.height(8.dp))
+            } ?: run {
+                if (isAIResult && aiRemaining != null) {
+                    Text(
+                        stringResource(R.string.scan_ai_remaining, aiRemaining),
+                        color = c.ink3, fontSize = 11.5.sp, textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+            }
             GhostButton(stringResource(R.string.scan_try_again), onTryAgain, Modifier.fillMaxWidth())
         }
     }

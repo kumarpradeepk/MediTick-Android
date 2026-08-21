@@ -637,4 +637,21 @@
     <string name="parse_marker_am" tools:ignore="Typos">午前</string>
     <string name="parse_marker_pm" tools:ignore="Typos">午後</string>
     <string name="parse_stopwords" tools:ignore="Typos">毎日,毎,2回,1回,服用,飲む,一緒,前,後,朝,夜,夕方,昼,就寝,昼食,夕食,朝食,食事</string>
+    <string name="scan_identify_ai">AIで識別</string>
+    <string name="scan_ai_checks">AIが名前、強度、剤形を確認します</string>
+    <string name="scan_stage_capture">最も鮮明な画像を撮影中</string>
+    <string name="scan_stage_read">名前と強度を読み取り中</string>
+    <string name="scan_stage_check">薬の剤形を確認中</string>
+    <string name="scan_ai_identifying">MediTick AIが識別しています</string>
+    <string name="scan_local_identifying">ラベルを読み取っています</string>
+    <string name="scan_confirm_title">薬を確認</string>
+    <string name="scan_no_confident">確かな一致がありません</string>
+    <string name="scan_ai_verify">AIの候補 — 保存前にラベルを確認してください</string>
+    <string name="scan_verify">続行する前にラベルを確認してください</string>
+    <string name="scan_source_ai">AIラベルスキャン</string>
+    <string name="scan_ai_remaining">今月のAIスキャンは30回中あと%1$d回</string>
+    <string name="scan_ai_no_match">AIが薬のラベルを読み取れませんでした。近づき、反射を避けてもう一度お試しください。</string>
+    <string name="scan_ai_limit">今月はAIスキャンを30回使用しました。来月リセットされます。</string>
+    <string name="scan_ai_fallback">AIスキャンは一時的に利用できません。端末上の最適な候補を表示します。</string>
+    <string name="scan_ai_not_configured">AIスキャンはまだ設定されていません。端末上のプライベート認識を使用します。</string>
 </resources>
