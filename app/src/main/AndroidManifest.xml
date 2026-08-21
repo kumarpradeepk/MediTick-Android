@@ -19,7 +19,7 @@
         android:icon="@drawable/meditick_icon"
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
-        android:roundIcon="@drawable/meditick_icon"
+        android:roundIcon="@drawable/meditick_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediTickPillTimerReminder"
         tools:targetApi="36">

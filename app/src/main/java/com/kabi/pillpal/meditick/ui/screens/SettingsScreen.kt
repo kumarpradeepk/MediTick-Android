@@ -50,7 +50,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     var message by remember { mutableStateOf<String?>(null) }
     fun openMail(subject: String) {
-        val uri = Uri.parse("mailto:?subject=${Uri.encode(subject)}")
+        val uri = Uri.parse("mailto:tinkersmithstudio@gmail.com?subject=${Uri.encode(subject)}")
         runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, uri)) }
     }
     /** Opens an external destination; a missing browser must never crash Settings. */
@@ -143,7 +143,13 @@ fun SettingsScreen(
             item { SettingsGroup(stringResource(R.string.settings_group_notifications)) {
                 SettingsRow(Icons.Default.Notifications, DS.colors.mint, stringResource(R.string.settings_notif_permission), stringResource(R.string.settings_notif_permission_sub), onClick = requestNotificationPermission)
                 RowDivider(); SettingsRow(Icons.Default.Settings, DS.colors.cyan, stringResource(R.string.settings_notif_status), stringResource(R.string.settings_notif_status_sub), onClick = {
-                    context.startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName))
+                    val intent = if (android.os.Build.VERSION.SDK_INT >= 26) {
+                        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                            .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    } else {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))
+                    }
+                    runCatching { context.startActivity(intent) }
                 })
                 RowDivider(); SettingsRow(Icons.Default.NotificationAdd, DS.colors.cyan, stringResource(R.string.settings_dose_reminders), stringResource(R.string.settings_dose_reminders_sub)) { Switch(settings.remindersEnabled, onCheckedChange = {
                     settings.setReminders(it); if (it) requestNotificationPermission(); NotificationScheduler.scheduleAll(context)
