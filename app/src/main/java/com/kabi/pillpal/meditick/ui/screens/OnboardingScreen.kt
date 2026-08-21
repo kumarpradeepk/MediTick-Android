@@ -8,7 +8,9 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -17,12 +19,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import com.kabi.pillpal.meditick.R
 import androidx.compose.ui.text.TextStyle
@@ -103,104 +109,170 @@ private fun FeatureRow(icon: androidx.compose.ui.graphics.vector.ImageVector, te
 }
 
 /**
- * The "Capsule Tick" brand mark, ported from the iOS boot splash: the two
- * capsule arms of the checkmark draw themselves in over the tick ring, the
- * glow blooms, then a small second hand keeps ticking — each advance lands
- * with a springy overshoot and a CLOCK_TICK haptic, so the mark feels like
- * a watch, not a static icon.
+ * The app icon, alive on the very first screen — a 1:1 port of the iOS
+ * `AnimatedAppMark`: a clean vector dial with exactly two capsule pill
+ * hands, one fixed at 10 o'clock and one that ticks once a second with a
+ * springy overshoot, a breathing glow, a light sweep every few seconds,
+ * and the "Tick" in the wordmark vibrating in sync with each tick.
  */
 @Composable
 private fun CapsuleTickMark() {
     val c = DS.colors
     val haptics = rememberHaptics()
+    val density = LocalDensity.current
 
-    val detailsAlpha = remember { Animatable(0f) }
-    val mintProgress = remember { Animatable(0f) }   // short arm
-    val whiteProgress = remember { Animatable(0f) }  // long arm
-    val glow = remember { Animatable(0f) }
-    // The hand's absolute angle in degrees; advanced discretely each second.
-    val handAngle = remember { Animatable(0f) }
+    val size = 108.dp
+    val handLength = size * 0.32f
+    val handWidth = size * 0.095f
+    val staticHandLength = size * 0.24f
+    val staticHandWidth = size * 0.105f
+    // 10 o'clock — matches the short left arm of the app's own checkmark.
+    val staticHandAngle = -60f
 
-    val transition = rememberInfiniteTransition(label = "mark")
-    val breathe by transition.animateFloat(.97f, 1.03f, infiniteRepeatable(tween(2600), RepeatMode.Reverse), label = "breathe")
-
+    var appeared by remember { mutableStateOf(false) }
+    var tickCount by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
-        // Draw-on timeline, matching the iOS splash beats.
-        delay(120)
-        detailsAlpha.animateTo(1f, tween(280))
-        mintProgress.animateTo(1f, tween(280, easing = FastOutSlowInEasing))
-        whiteProgress.animateTo(1f, tween(440, easing = FastOutSlowInEasing))
-        glow.animateTo(0.8f, tween(320))
-        haptics.success()
-        // Then the watch starts: one springy 6° tick per second.
+        appeared = true
+        // The clock: advance the second hand — and the "Tick" vibrate —
+        // once a second for as long as this screen is on screen.
         while (true) {
             delay(1000)
+            tickCount += 1
             haptics.tick()
-            handAngle.animateTo(
-                handAngle.value + 6f,
-                spring(dampingRatio = 0.32f, stiffness = 700f),
-            )
         }
     }
 
+    // Entrance: scale up from 0.6 with a soft spring, like the iOS mark.
+    val entrance by animateFloatAsState(if (appeared) 1f else 0f, spring(dampingRatio = 0.68f, stiffness = 80f), label = "entrance")
+
+    val transition = rememberInfiniteTransition(label = "mark")
+    // Breathing: glow swells and brightens on a slow 3.2s cycle.
+    val breathe by transition.animateFloat(0f, 1f, infiniteRepeatable(tween(3200, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "breathe")
+    // Light sweep across the tile every 2.6s.
+    val shimmerPhase by transition.animateFloat(
+        -1f, 1.4f,
+        infiniteRepeatable(tween(2600, easing = LinearEasing), RepeatMode.Restart, StartOffset(900)),
+        label = "shimmer",
+    )
+
+    // The second hand lands with an overshoot (iOS interpolatingSpring
+    // stiffness 260 / damping 14 ≈ damping ratio 0.43).
+    val handAngle by animateFloatAsState(tickCount * 6f, spring(dampingRatio = 0.43f, stiffness = 260f), label = "hand")
+    // Drives the "Tick" shake; settles back to center each full unit.
+    val shake by animateFloatAsState(tickCount.toFloat(), tween(320, easing = FastOutSlowInEasing), label = "shake")
+
+    val tileShape = RoundedCornerShape(size * 0.34f)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.size(140.dp), contentAlignment = Alignment.Center) {
-            Canvas(Modifier.size(140.dp).graphicsLayer { scaleX = breathe; scaleY = breathe }) {
-                drawCircle(brush = Brush.radialGradient(listOf(c.glow.copy(.42f * glow.value.coerceAtLeast(.3f)), Color.Transparent)))
+        Box(Modifier.size(size * 1.4f), contentAlignment = Alignment.Center) {
+            // Breathing glow bloom behind the tile.
+            Canvas(
+                Modifier.size(size * 2.05f).graphicsLayer {
+                    val s = .92f + .16f * breathe
+                    scaleX = s; scaleY = s
+                    alpha = (.55f + .35f * breathe) * entrance
+                },
+            ) {
+                drawCircle(Brush.radialGradient(listOf(c.glow.copy(.4f), Color.Transparent)))
             }
-            Canvas(Modifier.size(112.dp)) {
-                val s = size.width
-                val center = Offset(s / 2, s / 2)
-                // Gradient tile.
-                drawRoundRect(c.gradient, cornerRadius = CornerRadius(s * .3f))
 
-                // Tick ring — majors brighter, like the icon.
-                repeat(12) { index ->
-                    val angle = Math.toRadians(index * 30.0 - 90.0)
-                    val major = index % 3 == 0
-                    val r1 = s * .36f; val r2 = s * .42f
-                    drawLine(
-                        Color.White.copy((if (major) .55f else .22f) * detailsAlpha.value),
-                        Offset(center.x + cos(angle).toFloat() * r1, center.y + sin(angle).toFloat() * r1),
-                        Offset(center.x + cos(angle).toFloat() * r2, center.y + sin(angle).toFloat() * r2),
-                        strokeWidth = if (major) s * .028f else s * .018f, cap = StrokeCap.Round,
-                    )
-                }
-
-                // The ticking second hand, behind the checkmark.
-                run {
-                    val a = Math.toRadians(handAngle.value.toDouble() - 90)
-                    drawLine(
-                        Color.White.copy(.4f * detailsAlpha.value), center,
-                        Offset(center.x + cos(a).toFloat() * s * .33f, center.y + sin(a).toFloat() * s * .33f),
-                        strokeWidth = s * .03f, cap = StrokeCap.Round,
-                    )
-                }
-
-                // Checkmark arms in icon-space (240×240), drawn on by progress.
-                fun iconPoint(x: Float, y: Float) = Offset(x / 240f * s, y / 240f * s)
-                fun arm(from: Offset, to: Offset, progress: Float, color: Color) {
-                    if (progress <= 0f) return
-                    val end = Offset(from.x + (to.x - from.x) * progress, from.y + (to.y - from.y) * progress)
-                    // Soft drop shadow first, then the capsule stroke.
-                    drawLine(Color(0x57021E1A), from + Offset(s * .017f, s * .025f), end + Offset(s * .017f, s * .025f),
-                        strokeWidth = s * .18f, cap = StrokeCap.Round)
-                    drawLine(color, from, end, strokeWidth = s * .18f, cap = StrokeCap.Round)
-                }
-                arm(iconPoint(66f, 128f), iconPoint(102f, 164f), mintProgress.value, Color(0xFFA9DDD4))
-                arm(iconPoint(102f, 164f), iconPoint(172f, 84f), whiteProgress.value, Color(0xFFF4FAF9))
-
-                // Cap gleam once the draw completes.
-                if (whiteProgress.value >= 1f) {
-                    drawCircle(Color.White.copy(.9f * glow.value), s * .026f, iconPoint(168f, 79f))
+            // Tile + dial + shimmer, breathing gently and springing in.
+            Box(
+                Modifier.size(size).graphicsLayer {
+                    val s = (1f + .03f * breathe) * (0.6f + 0.4f * entrance)
+                    scaleX = s; scaleY = s
+                    alpha = entrance
+                },
+            ) {
+                Canvas(Modifier.size(size).clip(tileShape)) {
+                    val s = this.size.width
+                    val center = Offset(s / 2, s / 2)
+                    drawRoundRect(c.gradient, cornerRadius = CornerRadius(s * .34f))
+                    // Tick ring — majors brighter, exactly the iOS spacing.
+                    repeat(12) { index ->
+                        val angle = Math.toRadians(index * 30.0 - 90.0)
+                        val major = index % 3 == 0
+                        val half = (if (major) 9f else 6f) / 2f * density.density
+                        val r = s * .4f
+                        val dir = Offset(cos(angle).toFloat(), sin(angle).toFloat())
+                        drawLine(
+                            Color.White.copy(if (major) .55f else .22f),
+                            center + dir * (r - half), center + dir * (r + half),
+                            strokeWidth = (if (major) 3.4f else 2.2f) * density.density, cap = StrokeCap.Round,
+                        )
+                    }
+                    // Faint inner circle.
+                    drawCircle(Color.White.copy(.18f), radius = s * .4f, center = center, style = Stroke(1f * density.density))
+                    // Light sweep: a tilted soft white bar gliding across.
+                    rotate(24f, center) {
+                        val x = center.x + shimmerPhase * s * 1.6f
+                        drawRect(
+                            Brush.horizontalGradient(
+                                listOf(Color.Transparent, Color.White.copy(.55f), Color.Transparent),
+                                startX = x - s * .25f, endX = x + s * .25f,
+                            ),
+                            topLeft = Offset(x - s * .25f, -s * .4f),
+                            size = androidx.compose.ui.geometry.Size(s * .5f, s * 1.8f),
+                        )
+                    }
                 }
             }
+
+            // Static short hand, fixed at 10 o'clock.
+            Box(Modifier.size(size).graphicsLayer { rotationZ = staticHandAngle; alpha = entrance }, contentAlignment = Alignment.Center) {
+                DetailedPillHand(staticHandWidth, staticHandLength, Color(0xFFA9DDD4), Modifier.offset(y = -staticHandLength / 2))
+            }
+            // The ticking second hand.
+            Box(Modifier.size(size).graphicsLayer { rotationZ = handAngle; alpha = entrance }, contentAlignment = Alignment.Center) {
+                DetailedPillHand(handWidth, handLength, Color(0xFFDCEEE9), Modifier.offset(y = -handLength / 2))
+            }
+            // Center cap.
+            Box(
+                Modifier.size(handWidth * 1.3f).graphicsLayer { alpha = entrance }
+                    .shadow(2.dp, CircleShape, ambientColor = Color.Black.copy(.2f), spotColor = Color.Black.copy(.2f))
+                    .clip(CircleShape).background(Color.White)
+                    .border(1.5.dp, c.mint, CircleShape),
+            )
         }
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(12.dp))
         Row {
             Text("Medi", color = c.ink, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp)
-            Text("Tick", style = TextStyle(brush = c.gradient, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp))
+            Text(
+                "Tick", style = TextStyle(brush = c.gradient, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp),
+                modifier = Modifier.graphicsLayer {
+                    // Quick horizontal vibrate, in sync with each tick.
+                    translationX = 3.dp.toPx() * sin(shake * Math.PI.toFloat() * 3f)
+                },
+            )
         }
+    }
+}
+
+/**
+ * Capsule detailing shared by both hands, matching the iOS `detailedPill`:
+ * a white-to-pale-tint body, a soft shaded underside, a center seam like a
+ * real capsule's join, and a gloss highlight — so they read as pills, not
+ * flat bars.
+ */
+@Composable
+private fun DetailedPillHand(width: androidx.compose.ui.unit.Dp, length: androidx.compose.ui.unit.Dp, tint: Color, modifier: Modifier = Modifier) {
+    Box(
+        modifier.size(width = width, height = length)
+            .shadow(2.dp, RoundedCornerShape(50), ambientColor = Color.Black.copy(.26f), spotColor = Color.Black.copy(.26f))
+            .clip(RoundedCornerShape(50))
+            .background(Brush.verticalGradient(listOf(Color.White, tint)))
+            .border(0.75.dp, Color.Black.copy(.13f), RoundedCornerShape(50)),
+    ) {
+        // Shaded underside for roundness.
+        Box(Modifier.matchParentSize().background(Brush.verticalGradient(0.5f to Color.Transparent, 1f to Color.Black.copy(.12f))))
+        // Center seam.
+        Box(Modifier.align(Alignment.Center).size(width = width, height = 1.3.dp).background(Color.Black.copy(.18f)))
+        // Gloss highlight, top-left.
+        Box(
+            Modifier.align(Alignment.TopCenter)
+                .offset(x = -width * .15f, y = length * .1f)
+                .size(width = width * .4f, height = length * .4f)
+                .clip(RoundedCornerShape(50)).background(Color.White.copy(.7f)),
+        )
     }
 }
 

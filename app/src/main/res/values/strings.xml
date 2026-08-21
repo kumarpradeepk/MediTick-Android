@@ -469,6 +469,32 @@
     <string name="form_success_add_another">Add another medication</string>
     <string name="form_success_add_more_pro">Add more with Pro</string>
 
+    <!-- ===================== Scan to Add ================= -->
+    <string name="scan_card_title">Scan the label</string>
+    <string name="scan_card_caption_pro">Point the camera at the box or bottle</string>
+    <!-- %1$d free scans remain before the Pro gate. -->
+    <string name="scan_card_caption_free">Free scans left: %1$d — then Pro</string>
+    <string name="scan_card_caption_locked">A MediTick Pro feature</string>
+    <string name="scan_position">Position the label in the frame</string>
+    <string name="scan_looking">Looking for a label…</string>
+    <string name="scan_reading">Reading the label…</string>
+    <string name="scan_identify">Identify now</string>
+    <string name="scan_identifying">Identifying…</string>
+    <string name="scan_matches_title">Possible Matches</string>
+    <!-- %1$s is the brand alias that matched, e.g. "NyQuil". -->
+    <string name="scan_matched_alias">Matched “%1$s”</string>
+    <string name="scan_source_catalog">Catalog match</string>
+    <string name="scan_source_rxnorm">RxNorm match</string>
+    <string name="scan_none_title">No match yet</string>
+    <string name="scan_none_local">Keep the medication name inside the frame and hold steady.</string>
+    <string name="scan_none_online">Couldn\'t identify this label — try moving closer, or add it by typing.</string>
+    <string name="scan_try_again">None of these — try again</string>
+    <string name="scan_camera_needed_title">Camera access needed</string>
+    <string name="scan_camera_needed_body">Allow camera access in Settings to scan medication labels.</string>
+    <string name="scan_camera_unavailable_title">Camera unavailable</string>
+    <string name="scan_camera_unavailable_body">This device has no usable camera — you can still add medications by typing.</string>
+    <string name="scan_open_settings">Open Settings</string>
+
     <!-- ===================== Medication form: describe ================= -->
     <string name="describe_label">Say it naturally</string>
     <string name="describe_question">What do you take?</string>

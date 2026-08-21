@@ -84,6 +84,12 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation("com.android.billingclient:billing-ktx:9.1.0")
+    // Scan to Add: CameraX preview/analysis + on-device ML Kit OCR.
+    implementation("androidx.camera:camera-core:1.4.1")
+    implementation("androidx.camera:camera-camera2:1.4.1")
+    implementation("androidx.camera:camera-lifecycle:1.4.1")
+    implementation("androidx.camera:camera-view:1.4.1")
+    implementation("com.google.mlkit:text-recognition:16.0.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.9.5")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

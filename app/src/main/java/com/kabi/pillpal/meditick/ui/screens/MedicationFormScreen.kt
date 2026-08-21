@@ -147,6 +147,7 @@ fun MedicationFormScreen(
     var durationDays by remember { mutableIntStateOf(existing?.schedule?.endDate?.let { ((it - existing.schedule.startDate) / 86_400_000L).toInt().coerceAtLeast(1) } ?: 14) }
     var duplicateName by remember { mutableStateOf<String?>(null) }
     var saved by remember { mutableStateOf<Medication?>(null) }
+    var showScan by remember { mutableStateOf(false) }
 
     /** Clears the whole draft for "Add another" from the success screen. */
     fun resetForAnother() {
@@ -160,6 +161,22 @@ fun MedicationFormScreen(
     }
 
     val suggestions = remember(name) { catalog.search(name) }
+    if (showScan) {
+        // Full-screen scanner; a picked match prefills the basics and jumps
+        // past the describe step, exactly like iOS.
+        ScanToAddScreen(
+            onClose = { showScan = false },
+            onMatch = { candidate ->
+                name = candidate.name
+                candidate.strengthText?.let(::parseStrength)?.let { strength = it.first; strengthUnit = it.second }
+                candidate.form?.let { form = it }
+                ScanQuota.consume(context, isPro)
+                showScan = false
+                step = 1
+            },
+        )
+        return
+    }
     ScreenBackground {
         saved?.let { done ->
             SavedCelebration(
@@ -190,7 +207,19 @@ fun MedicationFormScreen(
                 label = "formStep",
             ) { active ->
                 when (active) {
-                    0 -> DescribeStep(describe, { describe = it }, catalog, presets, onParsed = { parsed ->
+                    0 -> DescribeStep(describe, { describe = it }, catalog, presets,
+                        scanCaption = when {
+                            isPro -> stringResource(R.string.scan_card_caption_pro)
+                            ScanQuota.remainingFree(context) > 0 -> stringResource(R.string.scan_card_caption_free, ScanQuota.remainingFree(context))
+                            else -> stringResource(R.string.scan_card_caption_locked)
+                        },
+                        onScan = {
+                            // Free users get a few real scans before the gate —
+                            // the feature is experienced, not just advertised.
+                            if (ScanQuota.canStart(context, isPro)) showScan = true
+                            else { haptics.warning(); onShowPaywall() }
+                        },
+                        onParsed = { parsed ->
                         name = parsed.name; parsed.strength?.let { strength = it.first; strengthUnit = it.second }
                         parsed.form?.let { form = it }; doses = parsed.doses
                         parsed.durationDays?.let { durationDays = it; ongoing = false }
@@ -322,7 +351,7 @@ private data class ParsedDraft(
 )
 
 @Composable
-private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: MedicationCatalog, presets: DoseTimePresets, onParsed: (ParsedDraft) -> Unit) {
+private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: MedicationCatalog, presets: DoseTimePresets, scanCaption: String, onScan: () -> Unit, onParsed: (ParsedDraft) -> Unit) {
     val context = LocalContext.current
     val parsed = remember(text, presets, context) { smartParse(context, text, catalog, presets) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 22.dp)) {
@@ -331,8 +360,8 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
             Spacer(Modifier.height(8.dp)); Text(stringResource(R.string.describe_question), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink)
             Spacer(Modifier.height(7.dp)); Text(stringResource(R.string.describe_hint), color = DS.colors.ink2)
             Spacer(Modifier.height(22.dp))
-            OutlinedTextField(text, onText, Modifier.fillMaxWidth(), minLines = 4, textStyle = LocalTextStyle.current.copy(fontSize = 18.sp),
-                placeholder = { Text(stringResource(R.string.describe_placeholder)) })
+            MediTickTextField(text, onText, Modifier.fillMaxWidth(), minLines = 4, textStyle = LocalTextStyle.current.copy(fontSize = 18.sp),
+                placeholder = stringResource(R.string.describe_placeholder))
             Spacer(Modifier.height(14.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 listOf(
@@ -340,6 +369,19 @@ private fun DescribeStep(text: String, onText: (String) -> Unit, catalog: Medica
                     R.string.describe_chip_after, R.string.describe_chip_9pm, R.string.describe_chip_500mg,
                 ).map { stringResource(it) }.forEach { chip ->
                     SelectChip(chip, false, { onText((text.trim() + " " + chip).trim()) })
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+            // Scan to Add — point the camera at the label instead of typing.
+            GlassCard(Modifier.fillMaxWidth(), radius = 20.dp, onClick = onScan, contentPadding = PaddingValues(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconTile(Icons.Default.DocumentScanner, DS.colors.cyan)
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.scan_card_title), color = DS.colors.ink, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                        Text(scanCaption, color = DS.colors.ink3, fontSize = 12.sp)
+                    }
+                    Icon(Icons.Default.ChevronRight, null, tint = DS.colors.ink3)
                 }
             }
             Spacer(Modifier.height(16.dp)); SectionLabel(stringResource(R.string.describe_examples))
@@ -397,7 +439,7 @@ private fun BasicsStep(
     val context = LocalContext.current
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 22.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item { SectionLabel(stringResource(R.string.basics_label)); Spacer(Modifier.height(8.dp)); Text(stringResource(R.string.basics_headline), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink) }
-        item { OutlinedTextField(name, onName, label = { Text(stringResource(R.string.basics_field_name)) }, modifier = Modifier.fillMaxWidth(), singleLine = true) }
+        item { MediTickTextField(name, onName, placeholder = stringResource(R.string.basics_field_name), modifier = Modifier.fillMaxWidth(), singleLine = true) }
         item {
             var menu by remember { mutableStateOf(false) }
             Box {
@@ -423,7 +465,7 @@ private fun BasicsStep(
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-                OutlinedTextField(strength, { onStrength(it.filter { ch -> ch.isDigit() || ch == '.' }) }, label = { Text(stringResource(R.string.basics_field_strength)) }, modifier = Modifier.weight(1f), singleLine = true)
+                MediTickTextField(strength, { onStrength(it.filter { ch -> ch.isDigit() || ch == '.' }) }, placeholder = stringResource(R.string.basics_field_strength), modifier = Modifier.weight(1f), singleLine = true)
                 var menu by remember { mutableStateOf(false) }
                 Box {
                     OutlinedButton({ menu = true }, Modifier.height(56.dp)) { Text(unit); Icon(Icons.Default.ExpandMore, null) }
@@ -434,7 +476,7 @@ private fun BasicsStep(
         item { SectionLabel(stringResource(R.string.basics_section_form)); FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
             MedicationForm.pickerOrder.forEach { SelectChip(it.title(context), form == it, { onForm(it) }) }
         } }
-        item { OutlinedTextField(instructions, onInstructions, label = { Text(stringResource(R.string.basics_field_instructions)) }, modifier = Modifier.fillMaxWidth(), minLines = 2) }
+        item { MediTickTextField(instructions, onInstructions, placeholder = stringResource(R.string.basics_field_instructions), modifier = Modifier.fillMaxWidth(), minLines = 2) }
         item { GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(15.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconTile(Icons.Default.Inventory2, DS.colors.amber); Spacer(Modifier.width(12.dp))
@@ -442,8 +484,8 @@ private fun BasicsStep(
                 Switch(track, onTrack)
             }
             if (track) { Spacer(Modifier.height(12.dp)); Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-                OutlinedTextField(stock, { onStock(it.filter(Char::isDigit)) }, label = { Text(stringResource(R.string.basics_field_stock)) }, modifier = Modifier.weight(1f), singleLine = true)
-                OutlinedTextField(alert, { onAlert(it.filter(Char::isDigit)) }, label = { Text(stringResource(R.string.basics_field_alert)) }, modifier = Modifier.weight(1f), singleLine = true)
+                MediTickTextField(stock, { onStock(it.filter(Char::isDigit)) }, placeholder = stringResource(R.string.basics_field_stock), modifier = Modifier.weight(1f), singleLine = true)
+                MediTickTextField(alert, { onAlert(it.filter(Char::isDigit)) }, placeholder = stringResource(R.string.basics_field_alert), modifier = Modifier.weight(1f), singleLine = true)
             } }
         } }
     }
@@ -477,7 +519,7 @@ private fun RhythmStep(
             }
         }
         if (mode == RhythmMode.CYCLIC) item { NumberPair(stringResource(R.string.rhythm_days_on), cycleOn, onCycleOn, stringResource(R.string.rhythm_days_off), cycleOff, onCycleOff) }
-        if (mode == RhythmMode.INTERVAL) item { OutlinedTextField(dayInterval.toString(), { onDayInterval(it.toIntOrNull()?.coerceIn(2, 365) ?: 2) }, label = { Text(stringResource(R.string.rhythm_repeat_every)) }, modifier = Modifier.fillMaxWidth(), singleLine = true) }
+        if (mode == RhythmMode.INTERVAL) item { MediTickTextField(dayInterval.toString(), { onDayInterval(it.toIntOrNull()?.coerceIn(2, 365) ?: 2) }, placeholder = stringResource(R.string.rhythm_repeat_every), modifier = Modifier.fillMaxWidth(), singleLine = true) }
         if (mode != RhythmMode.AS_NEEDED) {
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -522,7 +564,7 @@ private fun RhythmStep(
             }
         }
         if (mode == RhythmMode.AS_NEEDED) item {
-            OutlinedTextField(amount, { onAmount(it.filter { ch -> ch.isDigit() || ch == '.' }) }, label = { Text(stringResource(R.string.rhythm_amount_per_dose)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            MediTickTextField(amount, { onAmount(it.filter { ch -> ch.isDigit() || ch == '.' }) }, placeholder = stringResource(R.string.rhythm_amount_per_dose), modifier = Modifier.fillMaxWidth(), singleLine = true)
         }
         if (mode != RhythmMode.AS_NEEDED) item {
             GhostButton(
@@ -708,8 +750,8 @@ private fun DoseEditorDialog(
 
 @Composable private fun NumberPair(a: String, av: Int, setA: (Int) -> Unit, b: String, bv: Int, setB: (Int) -> Unit) {
     Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-        OutlinedTextField(av.toString(), { setA(it.toIntOrNull()?.coerceIn(1, 90) ?: 1) }, label = { Text(a) }, modifier = Modifier.weight(1f), singleLine = true)
-        OutlinedTextField(bv.toString(), { setB(it.toIntOrNull()?.coerceIn(1, 90) ?: 1) }, label = { Text(b) }, modifier = Modifier.weight(1f), singleLine = true)
+        MediTickTextField(av.toString(), { setA(it.toIntOrNull()?.coerceIn(1, 90) ?: 1) }, placeholder = a, modifier = Modifier.weight(1f), singleLine = true)
+        MediTickTextField(bv.toString(), { setB(it.toIntOrNull()?.coerceIn(1, 90) ?: 1) }, placeholder = b, modifier = Modifier.weight(1f), singleLine = true)
     }
 }
 

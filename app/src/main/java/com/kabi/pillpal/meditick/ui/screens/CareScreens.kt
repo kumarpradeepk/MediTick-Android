@@ -284,7 +284,7 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
         confirmButton = { TextButton({ repository.archiveMedication(med.id, true); confirmArchive = false }) { Text(stringResource(R.string.rx_action_archive)) } },
         dismissButton = { TextButton({ confirmArchive = false }) { Text(stringResource(R.string.action_cancel)) } })
     if (showRefill) AlertDialog(onDismissRequest = { showRefill = false }, title = { Text(stringResource(R.string.refill_title)) },
-        text = { OutlinedTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, label = { Text(stringResource(R.string.refill_units_label)) }) },
+        text = { MediTickTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, placeholder = stringResource(R.string.refill_units_label), singleLine = true) },
         confirmButton = { TextButton({ repository.refillStock(med.id, refillAmount.toDoubleOrNull() ?: 0.0); showRefill = false }) { Text(stringResource(R.string.action_add)) } },
         dismissButton = { TextButton({ showRefill = false }) { Text(stringResource(R.string.action_cancel)) } })
     logDose?.let { dose -> LogDoseDialog(repository, dose, { logDose = null }) }
@@ -481,11 +481,11 @@ fun PrescriptionEditor(
     var updateLinkedDates by remember(existing?.id) { mutableStateOf(true) }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(if (existing == null) R.string.rx_editor_new else R.string.rx_editor_edit)) },
         text = { LazyColumn(Modifier.heightIn(max = 520.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            item { OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.rx_field_plan_name)) }, singleLine = true) }
-            item { OutlinedTextField(condition, { condition = it }, label = { Text(stringResource(R.string.rx_field_condition)) }, singleLine = true) }
-            item { OutlinedTextField(prescriber, { prescriber = it }, label = { Text(stringResource(R.string.rx_field_prescriber)) }, singleLine = true) }
-            item { OutlinedTextField(facility, { facility = it }, label = { Text(stringResource(R.string.rx_field_facility)) }, singleLine = true) }
-            item { OutlinedTextField(contact, { contact = it }, label = { Text(stringResource(R.string.rx_field_contact)) }, singleLine = true) }
+            item { MediTickTextField(name, { name = it }, placeholder = stringResource(R.string.rx_field_plan_name), singleLine = true) }
+            item { MediTickTextField(condition, { condition = it }, placeholder = stringResource(R.string.rx_field_condition), singleLine = true) }
+            item { MediTickTextField(prescriber, { prescriber = it }, placeholder = stringResource(R.string.rx_field_prescriber), singleLine = true) }
+            item { MediTickTextField(facility, { facility = it }, placeholder = stringResource(R.string.rx_field_facility), singleLine = true) }
+            item { MediTickTextField(contact, { contact = it }, placeholder = stringResource(R.string.rx_field_contact), singleLine = true) }
             item { OutlinedButton({ showDatePicker(context, startDate) { startDate = it; if (endDate < it) endDate = it } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_start, formatMediumDate(startDate))) } }
             item { Row(verticalAlignment = Alignment.CenterVertically) { Text(stringResource(R.string.rx_ongoing), Modifier.weight(1f)); Switch(ongoing, { ongoing = it }) } }
             if (!ongoing) item { OutlinedButton({ showDatePicker(context, endDate) { endDate = it.coerceAtLeast(startDate) } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_end, formatMediumDate(endDate))) } }
@@ -498,7 +498,7 @@ fun PrescriptionEditor(
                     Switch(updateLinkedDates, { updateLinkedDates = it })
                 }
             }
-            item { OutlinedTextField(notes, { notes = it }, label = { Text(stringResource(R.string.rx_field_notes)) }, minLines = 2) }
+            item { MediTickTextField(notes, { notes = it }, placeholder = stringResource(R.string.rx_field_notes), minLines = 2) }
         } },
         confirmButton = { TextButton({ if (name.isNotBlank()) onSave((existing ?: Prescription()).copy(name = name.trim(), condition = condition.trim(), prescriber = prescriber.trim(), facility = facility.trim(), contact = contact.trim(), startDate = startDate, endDate = if (ongoing) null else endDate, notes = notes.trim()), updateLinkedDates) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.action_save)) } },
         dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } })
