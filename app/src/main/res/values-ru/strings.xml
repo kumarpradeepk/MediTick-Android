@@ -721,9 +721,9 @@
     <string name="scan_ai_verify">Предложение ИИ — проверьте этикетку перед сохранением</string>
     <string name="scan_verify">Проверьте этикетку, прежде чем продолжить</string>
     <string name="scan_source_ai">ИИ-сканирование этикетки</string>
-    <string name="scan_ai_remaining">В этом месяце осталось %1$d из 30 ИИ-сканирований</string>
+    <string name="scan_ai_remaining">Осталось %1$d из 100 ИИ-сканирований этой подписки Pro</string>
     <string name="scan_ai_no_match">ИИ не смог прочитать этикетку лекарства. Поднесите ближе, избегайте бликов и повторите попытку.</string>
-    <string name="scan_ai_limit">В этом месяце использовано 30 ИИ-сканирований. Лимит обновится в следующем месяце.</string>
+    <string name="scan_ai_limit">Вы использовали все 100 ИИ-сканирований этой подписки Pro.</string>
     <string name="scan_ai_fallback">ИИ-сканирование временно недоступно. Показаны лучшие совпадения, найденные на устройстве.</string>
     <string name="scan_ai_not_configured">ИИ-сканирование ещё не настроено. Используется приватное распознавание на устройстве.</string>
     <string name="scan_instant_title">Мгновенное сканирование</string>
@@ -731,7 +731,7 @@
     <string name="scan_home_title">Попробуйте мгновенное сканирование</string>
     <string name="scan_home_sub">Наведите на любую этикетку — добавится за секунды</string>
     <string name="scan_addsheet_sub">ИИ читает этикетку и заполняет все поля</string>
-    <string name="scan_card_caption_quota">ИИ читает этикетку · осталось %1$d из 30 сканирований</string>
+    <string name="scan_card_caption_quota">ИИ читает этикетку · осталось %1$d из 100 сканирований</string>
     <string name="scan_locked">Этикетка зафиксирована — держите ровно</string>
     <string name="scan_check_read">Читаем, что написано на этикетке</string>
     <string name="scan_check_form">Сироп? Таблетка? Разбираемся</string>

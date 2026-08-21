@@ -643,9 +643,9 @@
     <string name="scan_ai_verify">AI 제안 — 저장하기 전에 라벨을 확인하세요</string>
     <string name="scan_verify">계속하기 전에 라벨을 확인하세요</string>
     <string name="scan_source_ai">AI 라벨 스캔</string>
-    <string name="scan_ai_remaining">이번 달 AI 스캔 30회 중 %1$d회 남음</string>
+    <string name="scan_ai_remaining">이 Pro 구독의 AI 스캔 100회 중 %1$d회 남음</string>
     <string name="scan_ai_no_match">AI가 약 라벨을 읽지 못했습니다. 더 가까이에서 빛 반사를 피해 다시 시도하세요.</string>
-    <string name="scan_ai_limit">이번 달 AI 스캔 30회를 모두 사용했습니다. 다음 달에 초기화됩니다.</string>
+    <string name="scan_ai_limit">이 Pro 구독에 포함된 AI 스캔 100회를 모두 사용했습니다.</string>
     <string name="scan_ai_fallback">AI 스캔을 일시적으로 사용할 수 없습니다. 기기에서 찾은 최적의 일치 항목을 표시합니다.</string>
     <string name="scan_ai_not_configured">AI 스캔이 아직 설정되지 않았습니다. 기기 내 비공개 인식을 사용합니다.</string>
     <string name="scan_instant_title">인스턴트 스캔</string>
@@ -653,7 +653,7 @@
     <string name="scan_home_title">인스턴트 스캔 사용해 보기</string>
     <string name="scan_home_sub">아무 라벨이나 비추세요 — 몇 초면 추가됩니다</string>
     <string name="scan_addsheet_sub">AI가 라벨을 읽고 모두 자동으로 채웁니다</string>
-    <string name="scan_card_caption_quota">AI가 라벨을 읽습니다 · 30회 중 %1$d회 남음</string>
+    <string name="scan_card_caption_quota">AI가 라벨을 읽습니다 · 100회 중 %1$d회 남음</string>
     <string name="scan_locked">라벨 인식됨 — 그대로 유지하세요</string>
     <string name="scan_check_read">라벨 내용을 읽는 중</string>
     <string name="scan_check_form">시럽? 정제? 확인하는 중</string>

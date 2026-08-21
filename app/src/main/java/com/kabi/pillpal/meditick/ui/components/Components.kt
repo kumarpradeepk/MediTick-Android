@@ -27,8 +27,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -212,6 +214,11 @@ fun MedicationIcon(medication: Medication, size: Dp = 42.dp) {
     IconTile(formIcon(medication.form), tint, size)
 }
 
+/** Floating-dock height, device navigation inset, and a readable final gap. */
+@Composable
+fun mainDockContentPadding(): Dp =
+    96.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+
 @Composable
 fun SlotIcon(time: Long, size: Dp = 36.dp) {
     val tod = TimeOfDay.fromEpoch(time)
@@ -225,14 +232,32 @@ fun SlotIcon(time: Long, size: Dp = 36.dp) {
 }
 
 fun formIcon(form: MedicationForm): ImageVector = when (form) {
-    MedicationForm.pill, MedicationForm.tablet, MedicationForm.capsule, MedicationForm.gummy -> Icons.Default.Medication
-    MedicationForm.liquid, MedicationForm.drops -> Icons.Default.WaterDrop
+    MedicationForm.pill, MedicationForm.capsule -> CapsuleMedicationIcon
+    MedicationForm.tablet -> Icons.Default.Circle
+    MedicationForm.gummy -> Icons.Default.Cookie
+    MedicationForm.liquid -> Icons.Default.LocalDrink
+    MedicationForm.drops -> Icons.Default.WaterDrop
     MedicationForm.injection -> Icons.Default.Vaccines
     MedicationForm.inhaler, MedicationForm.spray -> Icons.Default.Air
     MedicationForm.cream -> Icons.Default.BackHand
     MedicationForm.patch -> Icons.Default.Healing
     MedicationForm.powder -> Icons.Default.Grain
     MedicationForm.other -> Icons.Default.MedicalServices
+}
+
+/** Material's `Medication` glyph is a bottle; this is the actual pill shape. */
+private val CapsuleMedicationIcon: ImageVector by lazy {
+    ImageVector.Builder(
+        name = "CapsuleMedication", defaultWidth = 24.dp, defaultHeight = 24.dp,
+        viewportWidth = 24f, viewportHeight = 24f,
+    ).apply {
+        addPath(
+            pathData = PathParser().parsePathString(
+                "M7 21C5.33 21 3.92 20.42 2.75 19.25C1.58 18.08 1 16.67 1 15C1 13.6 1.52 12.33 2.55 11.2L11.2 2.55C12.25 1.52 13.52 1 15 1C16.67 1 18.08 1.58 19.25 2.75C20.42 3.92 21 5.33 21 7C21 8.4 20.48 9.67 19.45 10.8L10.8 19.45C9.75 20.48 8.48 21 7 21ZM8.15 11.65L12.35 15.85L18.05 10.15L13.85 5.95L8.15 11.65Z"
+            ).toNodes(),
+            fill = SolidColor(Color.Black),
+        )
+    }.build()
 }
 
 @Composable

@@ -669,9 +669,9 @@
     <string name="scan_ai_verify">AI-forslag – tjek etiketten før du gemmer</string>
     <string name="scan_verify">Tjek etiketten, før du fortsætter</string>
     <string name="scan_source_ai">AI-etiketscanning</string>
-    <string name="scan_ai_remaining">%1$d af 30 AI-scanninger tilbage denne måned</string>
+    <string name="scan_ai_remaining">%1$d af 100 AI-scanninger tilbage med dette Pro-abonnement</string>
     <string name="scan_ai_no_match">AI kunne ikke læse en medicinetiket. Gå tættere på, undgå genskin, og prøv igen.</string>
-    <string name="scan_ai_limit">Du har brugt 30 AI-scanninger denne måned. Din kvote nulstilles næste måned.</string>
+    <string name="scan_ai_limit">Du har brugt alle 100 AI-scanninger i dette Pro-abonnement.</string>
     <string name="scan_ai_fallback">AI-scanning er midlertidigt utilgængelig. Her er de bedste lokale match.</string>
     <string name="scan_ai_not_configured">AI-scanning er ikke konfigureret endnu. Privat genkendelse på enheden bruges.</string>
     <string name="scan_instant_title">Lynscanning</string>
@@ -679,7 +679,7 @@
     <string name="scan_home_title">Prøv Lynscanning</string>
     <string name="scan_home_sub">Ret kameraet mod en etiket — tilføjet på sekunder</string>
     <string name="scan_addsheet_sub">AI læser etiketten og udfylder alt</string>
-    <string name="scan_card_caption_quota">AI læser etiketten · %1$d af 30 scanninger tilbage</string>
+    <string name="scan_card_caption_quota">AI læser etiketten · %1$d af 100 scanninger tilbage</string>
     <string name="scan_locked">Etiket låst — hold stille</string>
     <string name="scan_check_read">Læser hvad der står på etiketten</string>
     <string name="scan_check_form">Mikstur? Tablet? Finder ud af det</string>

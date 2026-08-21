@@ -669,9 +669,9 @@
     <string name="scan_ai_verify">KI-forslag – sjekk etiketten før du lagrer</string>
     <string name="scan_verify">Sjekk etiketten før du fortsetter</string>
     <string name="scan_source_ai">KI-etikettskanning</string>
-    <string name="scan_ai_remaining">%1$d av 30 KI-skanninger igjen denne måneden</string>
+    <string name="scan_ai_remaining">%1$d av 100 KI-skanninger igjen med dette Pro-abonnementet</string>
     <string name="scan_ai_no_match">KI kunne ikke lese en legemiddeletikett. Gå nærmere, unngå gjenskinn og prøv igjen.</string>
-    <string name="scan_ai_limit">Du har brukt 30 KI-skanninger denne måneden. Kvoten tilbakestilles neste måned.</string>
+    <string name="scan_ai_limit">Du har brukt alle 100 KI-skanningene i dette Pro-abonnementet.</string>
     <string name="scan_ai_fallback">KI-skanning er midlertidig utilgjengelig. Her er de beste treffene på enheten.</string>
     <string name="scan_ai_not_configured">KI-skanning er ikke konfigurert ennå. Privat gjenkjenning på enheten brukes.</string>
     <string name="scan_instant_title">Lynskanning</string>
@@ -679,7 +679,7 @@
     <string name="scan_home_title">Prøv Lynskanning</string>
     <string name="scan_home_sub">Rett kameraet mot en etikett — lagt til på sekunder</string>
     <string name="scan_addsheet_sub">KI-en leser etiketten og fyller ut alt</string>
-    <string name="scan_card_caption_quota">KI-en leser etiketten · %1$d av 30 skanninger igjen</string>
+    <string name="scan_card_caption_quota">KI-en leser etiketten · %1$d av 100 skanninger igjen</string>
     <string name="scan_locked">Etikett låst — hold stille</string>
     <string name="scan_check_read">Leser hva som står på etiketten</string>
     <string name="scan_check_form">Mikstur? Tablett? Finner ut av det</string>

@@ -65,11 +65,11 @@ fun CareScreen(
         (typeFilter == TreatmentType.MEDICATIONS || parent == null) && medication.effectiveStatus(parent) == statusFilter
     }
     ScreenBackground {
+        val dockClearance = mainDockContentPadding()
         LazyColumn(
-            Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp),
+            Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = dockClearance),
         ) {
             item {
-                Spacer(Modifier.statusBarsPadding().height(1.dp))
                 Row(Modifier.appearFluidly(0), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.care_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.weight(1f))
                     RoundIconButton(Icons.Default.Add, stringResource(R.string.care_add), { showAddMode = true }, tint = DS.colors.mint)
@@ -217,9 +217,8 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
     val nextDose = remember(repository.data, med.id) { repository.nextDoseFor(med.id) }
     val medicationStatus = med.effectiveStatus(repository.prescription(med.prescriptionID))
     ScreenBackground {
-        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)) {
+        LazyColumn(Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)) {
             item {
-                Spacer(Modifier.statusBarsPadding().height(1.dp))
                 DetailTopBar(med.name, onBack, onEdit)
                 Spacer(Modifier.height(15.dp))
                 GradientCard(Modifier.fillMaxWidth().appearFluidly(0)) {
@@ -344,8 +343,8 @@ fun PrescriptionDetailScreen(
         DoseEngine.onTimeRate(it, progressSettings.onTimeWindowMinutes, progressStart)
     }
     ScreenBackground {
-        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)) {
-            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); DetailTopBar(rx.name, onBack) { edit = true }; Spacer(Modifier.height(15.dp)) }
+        LazyColumn(Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)) {
+            item { DetailTopBar(rx.name, onBack) { edit = true }; Spacer(Modifier.height(15.dp)) }
             item {
                 GradientCard(Modifier.fillMaxWidth().appearFluidly(0)) {
                     Column(Modifier.padding(21.dp)) {

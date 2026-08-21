@@ -695,9 +695,9 @@
     <string name="scan_ai_verify">Suggestion de l’IA — vérifiez l’étiquette avant d’enregistrer</string>
     <string name="scan_verify">Vérifiez l’étiquette avant de continuer</string>
     <string name="scan_source_ai">Scan d’étiquette par IA</string>
-    <string name="scan_ai_remaining">%1$d scans IA sur 30 restants ce mois-ci</string>
+    <string name="scan_ai_remaining">%1$d scans IA sur 100 restants avec cet abonnement Pro</string>
     <string name="scan_ai_no_match">L’IA n’a pas pu lire l’étiquette d’un médicament. Rapprochez-vous, évitez les reflets et réessayez.</string>
-    <string name="scan_ai_limit">Vous avez utilisé 30 scans IA ce mois-ci. Votre quota sera réinitialisé le mois prochain.</string>
+    <string name="scan_ai_limit">Vous avez utilisé les 100 scans IA inclus avec cet abonnement Pro.</string>
     <string name="scan_ai_fallback">Le scan IA est temporairement indisponible. Voici les meilleures correspondances trouvées sur l’appareil.</string>
     <string name="scan_ai_not_configured">Le scan IA n’est pas encore configuré. La reconnaissance privée sur l’appareil est utilisée.</string>
     <string name="scan_instant_title">Scan instantané</string>
@@ -705,7 +705,7 @@
     <string name="scan_home_title">Essayez le scan instantané</string>
     <string name="scan_home_sub">Visez n’importe quelle étiquette — ajouté en quelques secondes</string>
     <string name="scan_addsheet_sub">L’IA lit l’étiquette et remplit tout</string>
-    <string name="scan_card_caption_quota">L’IA lit l’étiquette · %1$d scans sur 30 restants</string>
+    <string name="scan_card_caption_quota">L’IA lit l’étiquette · %1$d scans sur 100 restants</string>
     <string name="scan_locked">Étiquette verrouillée — ne bougez plus</string>
     <string name="scan_check_read">Lecture de ce qui est écrit sur l’étiquette</string>
     <string name="scan_check_form">Sirop ? Comprimé ? On y travaille</string>

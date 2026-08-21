@@ -773,9 +773,9 @@
     <string name="scan_ai_verify">اقتراح بالذكاء الاصطناعي — تحقق من الملصق قبل الحفظ</string>
     <string name="scan_verify">تحقق من الملصق قبل المتابعة</string>
     <string name="scan_source_ai">مسح الملصق بالذكاء الاصطناعي</string>
-    <string name="scan_ai_remaining">متبقٍ %1$d من 30 عملية مسح بالذكاء الاصطناعي هذا الشهر</string>
+    <string name="scan_ai_remaining">متبقٍ %1$d من 100 عملية مسح بالذكاء الاصطناعي ضمن اشتراك Pro هذا</string>
     <string name="scan_ai_no_match">تعذر على الذكاء الاصطناعي قراءة ملصق الدواء. اقترب أكثر وتجنب الوهج وحاول مجددًا.</string>
-    <string name="scan_ai_limit">استخدمت 30 عملية مسح بالذكاء الاصطناعي هذا الشهر. ستتم إعادة تعيين الحد الشهر المقبل.</string>
+    <string name="scan_ai_limit">لقد استخدمت كل عمليات المسح بالذكاء الاصطناعي الـ100 ضمن اشتراك Pro هذا.</string>
     <string name="scan_ai_fallback">المسح بالذكاء الاصطناعي غير متاح مؤقتًا. إليك أفضل النتائج على الجهاز.</string>
     <string name="scan_ai_not_configured">لم يتم إعداد المسح بالذكاء الاصطناعي بعد. سيُستخدم التعرّف الخاص على الجهاز.</string>
     <string name="scan_instant_title">المسح الفوري</string>
@@ -783,7 +783,7 @@
     <string name="scan_home_title">جرّب المسح الفوري</string>
     <string name="scan_home_sub">وجّه الكاميرا نحو أي ملصق — تُضاف خلال ثوانٍ</string>
     <string name="scan_addsheet_sub">الذكاء الاصطناعي يقرأ الملصق ويملأ كل شيء</string>
-    <string name="scan_card_caption_quota">الذكاء الاصطناعي يقرأ الملصق · بقي %1$d من 30 عملية مسح</string>
+    <string name="scan_card_caption_quota">الذكاء الاصطناعي يقرأ الملصق · بقي %1$d من 100 عملية مسح</string>
     <string name="scan_locked">تم تثبيت الملصق — أبقِ الهاتف ثابتًا</string>
     <string name="scan_check_read">قراءة ما هو مكتوب على الملصق</string>
     <string name="scan_check_form">شراب؟ قرص؟ جارٍ التحديد</string>

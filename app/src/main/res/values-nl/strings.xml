@@ -669,9 +669,9 @@
     <string name="scan_ai_verify">AI-suggestie — controleer het etiket vóór opslaan</string>
     <string name="scan_verify">Controleer het etiket voordat je doorgaat</string>
     <string name="scan_source_ai">AI-etiketscan</string>
-    <string name="scan_ai_remaining">Nog %1$d van 30 AI-scans deze maand</string>
+    <string name="scan_ai_remaining">Nog %1$d van 100 AI-scans bij dit Pro-abonnement</string>
     <string name="scan_ai_no_match">AI kon geen medicijnetiket lezen. Ga dichterbij, vermijd schittering en probeer opnieuw.</string>
-    <string name="scan_ai_limit">Je hebt deze maand 30 AI-scans gebruikt. Je tegoed wordt volgende maand vernieuwd.</string>
+    <string name="scan_ai_limit">Je hebt alle 100 AI-scans van dit Pro-abonnement gebruikt.</string>
     <string name="scan_ai_fallback">AI-scan is tijdelijk niet beschikbaar. Dit zijn de beste overeenkomsten op het apparaat.</string>
     <string name="scan_ai_not_configured">AI-scan is nog niet ingesteld. Privéherkenning op het apparaat wordt gebruikt.</string>
     <string name="scan_instant_title">Direct scannen</string>
@@ -679,7 +679,7 @@
     <string name="scan_home_title">Probeer Direct scannen</string>
     <string name="scan_home_sub">Richt op een etiket — in seconden toegevoegd</string>
     <string name="scan_addsheet_sub">AI leest het etiket en vult alles in</string>
-    <string name="scan_card_caption_quota">AI leest het etiket · nog %1$d van 30 scans</string>
+    <string name="scan_card_caption_quota">AI leest het etiket · nog %1$d van 100 scans</string>
     <string name="scan_locked">Etiket vergrendeld — houd stil</string>
     <string name="scan_check_read">Lezen wat er op het etiket staat</string>
     <string name="scan_check_form">Siroop? Tablet? Even uitzoeken</string>

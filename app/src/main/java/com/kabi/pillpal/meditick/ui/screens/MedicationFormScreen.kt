@@ -18,7 +18,9 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.*
@@ -42,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import android.content.Context
 import androidx.annotation.StringRes
 import com.kabi.pillpal.meditick.R
+import com.kabi.pillpal.meditick.billing.AIScanPurchaseIdentity
 import com.kabi.pillpal.meditick.formatMediumDate
 import com.kabi.pillpal.meditick.weekdayInitial
 import androidx.compose.ui.text.font.FontWeight
@@ -124,7 +127,7 @@ private fun sundayFirstInitials(): List<String> {
 fun MedicationFormScreen(
     repository: AppRepository, editingId: String?, prescriptionId: String?,
     onClose: () -> Unit, onSaved: () -> Unit,
-    isPro: Boolean = true, aiScanAccountID: String = "android-preview-account",
+    isPro: Boolean = true, aiScanIdentity: AIScanPurchaseIdentity? = null,
     onShowPaywall: () -> Unit = {}, startWithScan: Boolean = false,
 ) {
     val existing = repository.medication(editingId)
@@ -157,13 +160,21 @@ fun MedicationFormScreen(
     var duplicateName by remember { mutableStateOf<String?>(null) }
     var saved by remember { mutableStateOf<Medication?>(null) }
     var showScan by remember { mutableStateOf(false) }
+    // Scanner-only test entitlement; false in all Release builds.
+    val hasProScanAccess = isPro || ScanDebugOptions.forceProAccess
+    val effectiveScanIdentity = aiScanIdentity ?: if (ScanDebugOptions.forceProAccess) {
+        // Accepted only by a non-production backend with
+        // AI_SCAN_ALLOW_DEBUG_IDENTITY=true. Production always rejects it.
+        AIScanPurchaseIdentity.debug("meditick-android-local-debug")
+    } else null
+
     /** True once Instant Scan filled the basics — drives the AI-filled tags. */
     var prefilledFromScan by remember { mutableStateOf(false) }
 
     // Entering straight from a Home / Add New "Instant Scan" tap.
     LaunchedEffect(startWithScan) {
         if (!startWithScan) return@LaunchedEffect
-        if (ScanQuota.canStart(context, isPro)) showScan = true else onShowPaywall()
+        if (ScanQuota.canStart(context, hasProScanAccess)) showScan = true else onShowPaywall()
     }
 
     /** Clears the whole draft for "Add another" from the success screen. */
@@ -182,16 +193,18 @@ fun MedicationFormScreen(
         // Full-screen scanner; a picked match prefills the basics and jumps
         // past the describe step, exactly like iOS.
         ScanToAddScreen(
-            isPro = isPro,
-            accountID = aiScanAccountID,
+            isPro = hasProScanAccess,
+            purchaseIdentity = effectiveScanIdentity,
             onClose = { showScan = false; if (startWithScan && name.isBlank()) onClose() },
             onMatch = { candidate ->
                 name = candidate.name
                 candidate.strengthText?.let(::parseStrength)?.let { strength = it.first; strengthUnit = it.second }
                 candidate.form?.let { form = it }
                 candidate.note?.takeIf { instructions.isBlank() }?.let { instructions = it }
-                ScanQuota.consume(context, isPro)
-                prefilledFromScan = true
+                ScanQuota.consume(context, hasProScanAccess)
+                // Keep AI-specific field badges hidden while OCR-only
+                // scanning is active; fields are still prefilled normally.
+                prefilledFromScan = candidate.source == ScanCandidate.Source.AI
                 showScan = false
                 step = 1
             },
@@ -234,14 +247,14 @@ fun MedicationFormScreen(
                 when (active) {
                     0 -> DescribeStep(describe, { describe = it }, catalog, presets,
                         scanCaption = when {
-                            isPro -> stringResource(R.string.scan_card_caption_quota, ScanQuota.aiRemaining(context))
+                            hasProScanAccess -> stringResource(R.string.scan_local_identifying)
                             ScanQuota.remainingFree(context) > 0 -> stringResource(R.string.scan_card_caption_free, ScanQuota.remainingFree(context))
                             else -> stringResource(R.string.scan_card_caption_locked)
                         },
                         onScan = {
                             // Free users get a few real scans before the gate —
                             // the feature is experienced, not just advertised.
-                            if (ScanQuota.canStart(context, isPro)) showScan = true
+                            if (ScanQuota.canStart(context, hasProScanAccess)) showScan = true
                             else { haptics.warning(); onShowPaywall() }
                         },
                         onSuggestion = { suggestion ->
@@ -602,10 +615,10 @@ private fun BasicsStep(
                 }
             }
         }
-        item { SectionLabel(stringResource(R.string.basics_section_form)); FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+        item { SectionLabel(stringResource(R.string.basics_section_form)); Spacer(Modifier.height(8.dp)); FlowRow(horizontalArrangement = Arrangement.spacedBy(7.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
             MedicationForm.pickerOrder.forEach { candidate ->
                 Box {
-                    SelectChip(candidate.title(context), form == candidate, { onForm(candidate) })
+                    MedicationFormChip(candidate, form == candidate) { onForm(candidate) }
                     // The form the scan chose wears the sparkle, like the design.
                     if (prefilled && form == candidate) Box(
                         Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-7).dp)
@@ -631,6 +644,34 @@ private fun BasicsStep(
                 MediTickTextField(alert, { onAlert(it.filter(Char::isDigit)) }, placeholder = stringResource(R.string.basics_field_alert), modifier = Modifier.weight(1f), singleLine = true)
             } }
         } }
+    }
+}
+
+/** A form choice that can be recognized by shape as well as translated text. */
+@Composable
+private fun MedicationFormChip(form: MedicationForm, selected: Boolean, onClick: () -> Unit) {
+    val c = DS.colors
+    val interaction = remember { MutableInteractionSource() }
+    val haptics = rememberHaptics()
+    val fill by animateColorAsState(if (selected) c.mint.copy(.15f) else c.glass2, label = "formChipFill")
+    val edge by animateColorAsState(if (selected) c.mint.copy(.5f) else c.line, label = "formChipEdge")
+    val content by animateColorAsState(if (selected) c.mint else c.ink2, label = "formChipContent")
+    Surface(
+        onClick = { haptics.tick(); onClick() }, interactionSource = interaction,
+        modifier = Modifier.widthIn(min = 92.dp).pressScale(interaction, .94f),
+        shape = RoundedCornerShape(16.dp), color = fill, border = BorderStroke(1.dp, edge),
+    ) {
+        Row(
+            Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            Icon(formIcon(form), null, tint = content, modifier = Modifier.size(17.dp))
+            Text(
+                form.title(LocalContext.current), color = content, fontWeight = FontWeight.Bold,
+                fontSize = 12.sp, maxLines = 2, lineHeight = 15.sp,
+            )
+        }
     }
 }
 

@@ -695,9 +695,9 @@
     <string name="scan_ai_verify">Sugerencia de IA: comprueba la etiqueta antes de guardar</string>
     <string name="scan_verify">Comprueba la etiqueta antes de continuar</string>
     <string name="scan_source_ai">Escaneo de etiqueta con IA</string>
-    <string name="scan_ai_remaining">Quedan %1$d de 30 escaneos con IA este mes</string>
+    <string name="scan_ai_remaining">Quedan %1$d de 100 escaneos con IA de esta suscripción Pro</string>
     <string name="scan_ai_no_match">La IA no pudo leer una etiqueta de medicamento. Acércate, evita los reflejos e inténtalo de nuevo.</string>
-    <string name="scan_ai_limit">Has usado 30 escaneos con IA este mes. El límite se restablece el próximo mes.</string>
+    <string name="scan_ai_limit">Has usado los 100 escaneos con IA incluidos en esta suscripción Pro.</string>
     <string name="scan_ai_fallback">El escaneo con IA no está disponible temporalmente. Se muestran las mejores coincidencias del dispositivo.</string>
     <string name="scan_ai_not_configured">El escaneo con IA aún no está configurado. Se usará el reconocimiento privado del dispositivo.</string>
     <string name="scan_instant_title">Escaneo instantáneo</string>
@@ -705,7 +705,7 @@
     <string name="scan_home_title">Prueba el escaneo instantáneo</string>
     <string name="scan_home_sub">Apunta a cualquier etiqueta: se añade en segundos</string>
     <string name="scan_addsheet_sub">La IA lee la etiqueta y lo rellena todo</string>
-    <string name="scan_card_caption_quota">La IA lee la etiqueta · quedan %1$d de 30 escaneos</string>
+    <string name="scan_card_caption_quota">La IA lee la etiqueta · quedan %1$d de 100 escaneos</string>
     <string name="scan_locked">Etiqueta enfocada: mantén firme</string>
     <string name="scan_check_read">Leyendo lo que dice la etiqueta</string>
     <string name="scan_check_form">¿Jarabe? ¿Comprimido? Averiguándolo</string>

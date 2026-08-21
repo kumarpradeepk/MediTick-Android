@@ -669,9 +669,9 @@
     <string name="scan_ai_verify">KI-Vorschlag – Etikett vor dem Speichern prüfen</string>
     <string name="scan_verify">Etikett prüfen, bevor du fortfährst</string>
     <string name="scan_source_ai">KI-Etikettenscan</string>
-    <string name="scan_ai_remaining">Noch %1$d von 30 KI-Scans in diesem Monat</string>
+    <string name="scan_ai_remaining">Noch %1$d von 100 KI-Scans in diesem Pro-Abo</string>
     <string name="scan_ai_no_match">Die KI konnte kein Medikamentenetikett lesen. Näher herangehen, Spiegelungen vermeiden und erneut versuchen.</string>
-    <string name="scan_ai_limit">Du hast diesen Monat 30 KI-Scans verwendet. Dein Kontingent wird nächsten Monat zurückgesetzt.</string>
+    <string name="scan_ai_limit">Du hast alle 100 KI-Scans dieses Pro-Abos verwendet.</string>
     <string name="scan_ai_fallback">Der KI-Scan ist vorübergehend nicht verfügbar. Stattdessen werden die besten Treffer auf dem Gerät angezeigt.</string>
     <string name="scan_ai_not_configured">Der KI-Scan ist noch nicht konfiguriert. Private Erkennung auf dem Gerät wird verwendet.</string>
     <string name="scan_instant_title">Sofort-Scan</string>
@@ -679,7 +679,7 @@
     <string name="scan_home_title">Sofort-Scan ausprobieren</string>
     <string name="scan_home_sub">Auf ein Etikett richten — in Sekunden hinzugefügt</string>
     <string name="scan_addsheet_sub">Die KI liest das Etikett und füllt alles aus</string>
-    <string name="scan_card_caption_quota">Die KI liest das Etikett · noch %1$d von 30 Scans</string>
+    <string name="scan_card_caption_quota">Die KI liest das Etikett · noch %1$d von 100 Scans</string>
     <string name="scan_locked">Etikett erfasst — ruhig halten</string>
     <string name="scan_check_read">Lesen, was auf dem Etikett steht</string>
     <string name="scan_check_form">Saft? Tablette? Wird ermittelt</string>

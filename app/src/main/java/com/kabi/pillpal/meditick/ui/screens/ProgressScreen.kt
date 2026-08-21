@@ -77,8 +77,9 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
     }
 
     ScreenBackground {
-        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.progress_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.appearFluidly(0)) }
+        val dockClearance = mainDockContentPadding()
+        LazyColumn(Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = dockClearance), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            item { Text(stringResource(R.string.progress_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.appearFluidly(0)) }
             if (data.medications.isEmpty()) item {
                 Spacer(Modifier.height(55.dp)); FriendlyEmptyState(Icons.Default.BarChart, stringResource(R.string.progress_empty_title),
                     stringResource(R.string.progress_empty_body))
@@ -96,9 +97,9 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                     }
                 }
                 item {
-                    Row(Modifier.appearFluidly(3), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(Modifier.appearFluidly(3).height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         // Momentum first: the streak leads, timing follows.
-                        StreakTile(streak, best, Modifier.weight(1f)) { detail = "streak" }
+                        StreakTile(streak, best, Modifier.weight(1f).fillMaxHeight()) { detail = "streak" }
                         // On-time: until a few doses are taken there is no
                         // rate to show — the tile says so instead.
                         if (hasTakenLogs) MetricTile(
@@ -106,9 +107,9 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                             formatPercent((onTime * 100).toInt()),
                             stringResource(R.string.progress_metric_on_time),
                             stringResource(R.string.progress_metric_window, settings.onTimeWindowMinutes),
-                            Modifier.weight(1f),
+                            Modifier.weight(1f).fillMaxHeight(),
                         ) { detail = "timing" }
-                        else InsightsSoonTile(Modifier.weight(1f)) { detail = "timing" }
+                        else InsightsSoonTile(Modifier.weight(1f).fillMaxHeight()) { detail = "timing" }
                     }
                 }
                 item { InsightCard(data, stats) }
@@ -175,9 +176,7 @@ private fun InsightsSoonTile(modifier: Modifier, onClick: () -> Unit) {
         IconTile(Icons.Default.Timer, DS.colors.cyan, 38.dp)
         Spacer(Modifier.height(10.dp))
         Text(stringResource(R.string.progress_metric_on_time), color = DS.colors.ink2, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-        Spacer(Modifier.height(8.dp))
-        Icon(Icons.Default.AutoAwesome, null, tint = DS.colors.ink3, modifier = Modifier.size(20.dp))
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(10.dp))
         Text(stringResource(R.string.progress_insights_soon), color = DS.colors.ink3, fontSize = 12.sp, lineHeight = 17.sp)
     }
 }

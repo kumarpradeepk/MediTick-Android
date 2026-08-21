@@ -98,7 +98,7 @@ fun MediTickApp(
                 is Route.MedicationForm -> MedicationFormScreen(
                     repository = repository, editingId = current.editingId, prescriptionId = current.prescriptionId,
                     isPro = billing.isPro,
-                    aiScanAccountID = billing.scanAccountID,
+                    aiScanIdentity = billing.scanIdentity,
                     onClose = back, onSaved = back,
                     onShowPaywall = { back(); navigate(Route.Paywall) },
                     startWithScan = current.startWithScan,
@@ -188,7 +188,7 @@ private fun MainShell(
             Spacer(Modifier.height(14.dp))
             InstantScanCard(
                 title = stringResource(R.string.scan_instant_title),
-                subtitle = stringResource(R.string.scan_addsheet_sub),
+                subtitle = stringResource(R.string.scan_local_identifying),
                 modifier = Modifier.appearFluidly(1),
                 radius = 22.dp, borderWidth = 2.dp,
             ) { openAddMedication(true) }

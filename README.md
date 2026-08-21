@@ -56,16 +56,16 @@ Billing product details are unavailable in a sideload-only emulator. Test purcha
 
 ## AI medication scan
 
-Free users receive 3 private on-device ML Kit OCR/catalog scans. Pro uses a downsampled label photo with the MediTick Claude proxy and is capped server-side at 30 AI attempts per UTC month. Results still require confirmation and only prefill label facts; the app never invents dosing instructions.
+Free users receive 3 private on-device ML Kit OCR scans and Pro users receive unlimited OCR scans. OCR text is matched against the bundled medication catalog, with a text-only RxNorm lookup when the local catalog has no match. The server-backed Claude image recognizer remains implemented but is currently hidden and disabled, so scan photos never leave the device. Results still require confirmation and only prefill label facts; the app never invents dosing instructions.
 
 Set these in the gitignored `local.properties` for local builds, or provide the matching environment variables in CI:
 
 ```properties
-ai.scan.endpoint=https://YOUR-WORKER/v1/medication/scan
+ai.scan.endpoint=https://project-3nck3.vercel.app/api/medication/scan
 ai.scan.clientToken=YOUR_CLIENT_TOKEN
 ```
 
-The Anthropic API key must exist only in the worker secret store. Without these settings, Pro falls back to on-device recognition. Android currently has no login system, so Pro quota is tied to a one-way hash of the restored Google Play purchase identity (with an install-scoped fallback before billing refresh); see `../services/ai-scan-worker/README.md` for deployment and production auth/Play Integrity hardening.
+Claude access uses Vercel OIDC and Anthropic Workload Identity Federation, so no Anthropic API key is stored in Vercel or the app. Without these settings, Pro falls back to on-device recognition. Android sends its restored Play purchase token only to MediTick's Vercel endpoint; the server verifies it with Google Play and stores only an HMAC quota identity in Redis. See `../services/ai-scan-vercel/README.md` for deployment variables and Play Integrity hardening.
 
 ## Reminder behavior
 

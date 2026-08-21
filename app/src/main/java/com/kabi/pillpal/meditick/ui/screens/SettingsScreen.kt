@@ -80,8 +80,9 @@ fun SettingsScreen(
         }
     }
     ScreenBackground {
-        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp)) {
-            item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.padding(bottom = 18.dp).appearFluidly(0)) }
+        val dockClearance = mainDockContentPadding()
+        LazyColumn(Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = dockClearance)) {
+            item { Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineLarge, color = DS.colors.ink, modifier = Modifier.padding(bottom = 18.dp).appearFluidly(0)) }
             item {
                 if (billing.isPro) {
                     GlassCard(Modifier.fillMaxWidth().appearFluidly(1), contentPadding = PaddingValues(18.dp)) {

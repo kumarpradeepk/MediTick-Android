@@ -669,9 +669,9 @@
     <string name="scan_ai_verify">AI-förslag – kontrollera etiketten innan du sparar</string>
     <string name="scan_verify">Kontrollera etiketten innan du fortsätter</string>
     <string name="scan_source_ai">AI-etikettskanning</string>
-    <string name="scan_ai_remaining">%1$d av 30 AI-skanningar kvar den här månaden</string>
+    <string name="scan_ai_remaining">%1$d av 100 AI-skanningar kvar med den här Pro-prenumerationen</string>
     <string name="scan_ai_no_match">AI kunde inte läsa en läkemedelsetikett. Gå närmare, undvik blänk och försök igen.</string>
-    <string name="scan_ai_limit">Du har använt 30 AI-skanningar den här månaden. Kvoten återställs nästa månad.</string>
+    <string name="scan_ai_limit">Du har använt alla 100 AI-skanningar i den här Pro-prenumerationen.</string>
     <string name="scan_ai_fallback">AI-skanning är tillfälligt otillgänglig. Här är de bästa träffarna på enheten.</string>
     <string name="scan_ai_not_configured">AI-skanning är inte konfigurerad än. Privat igenkänning på enheten används.</string>
     <string name="scan_instant_title">Blixtskanning</string>
@@ -679,7 +679,7 @@
     <string name="scan_home_title">Prova Blixtskanning</string>
     <string name="scan_home_sub">Rikta mot vilken etikett som helst — tillagd på sekunder</string>
     <string name="scan_addsheet_sub">AI läser etiketten och fyller i allt</string>
-    <string name="scan_card_caption_quota">AI läser etiketten · %1$d av 30 skanningar kvar</string>
+    <string name="scan_card_caption_quota">AI läser etiketten · %1$d av 100 skanningar kvar</string>
     <string name="scan_locked">Etikett låst — håll stilla</string>
     <string name="scan_check_read">Läser vad etiketten säger</string>
     <string name="scan_check_form">Mixtur? Tablett? Listar ut det</string>

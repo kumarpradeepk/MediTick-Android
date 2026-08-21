@@ -643,9 +643,9 @@
     <string name="scan_ai_verify">AI 建议 — 保存前请核对标签</string>
     <string name="scan_verify">继续前请核对标签</string>
     <string name="scan_source_ai">AI 标签扫描</string>
-    <string name="scan_ai_remaining">本月 30 次 AI 扫描还剩 %1$d 次</string>
+    <string name="scan_ai_remaining">此 Pro 订阅包含的 100 次 AI 扫描还剩 %1$d 次</string>
     <string name="scan_ai_no_match">AI 无法读取药品标签。请靠近一些、避开反光后重试。</string>
-    <string name="scan_ai_limit">你本月已使用 30 次 AI 扫描。额度将在下月重置。</string>
+    <string name="scan_ai_limit">你已用完此 Pro 订阅包含的 100 次 AI 扫描。</string>
     <string name="scan_ai_fallback">AI 扫描暂时不可用。以下是在设备上找到的最佳匹配。</string>
     <string name="scan_ai_not_configured">AI 扫描尚未配置，将使用设备上的私密识别。</string>
     <string name="scan_instant_title">即时扫描</string>
@@ -653,7 +653,7 @@
     <string name="scan_home_title">试试即时扫描</string>
     <string name="scan_home_sub">对准任意药品标签 — 几秒即可添加</string>
     <string name="scan_addsheet_sub">AI 读取标签并自动填写全部信息</string>
-    <string name="scan_card_caption_quota">AI 读取标签 · 本月还剩 %1$d/30 次扫描</string>
+    <string name="scan_card_caption_quota">AI 读取标签 · 还剩 %1$d/100 次扫描</string>
     <string name="scan_locked">已锁定标签 — 请保持稳定</string>
     <string name="scan_check_read">读取标签上的文字</string>
     <string name="scan_check_form">糖浆？药片？正在判断</string>

@@ -8,13 +8,43 @@ import androidx.compose.runtime.setValue
 import com.android.billingclient.api.*
 import com.kabi.pillpal.meditick.R
 import com.kabi.pillpal.meditick.notifications.NotificationScheduler
-import java.security.MessageDigest
-import java.util.UUID
 
 data class BillingPlan(
     val id: String, val title: String, val subtitle: String, val price: String,
     val productDetails: ProductDetails, val offerToken: String? = null,
 )
+
+/**
+ * Untrusted purchase evidence sent only over TLS to MediTick's backend. The
+ * backend verifies it with Google Play before deriving a quota identity.
+ */
+class AIScanPurchaseIdentity(
+    val purchaseToken: String,
+    val productId: String,
+    val productType: String,
+    private val debugId: String? = null,
+) {
+    fun putInto(target: org.json.JSONObject): org.json.JSONObject {
+        if (debugId != null) {
+            return target.put("provider", "debug").put("debug_id", debugId)
+        }
+        return target
+            .put("provider", "google_play")
+            .put("purchase_token", purchaseToken)
+            .put("product_id", productId)
+            .put("product_type", productType)
+    }
+
+    override fun toString(): String = if (debugId != null) {
+        "AIScanPurchaseIdentity(debug=<redacted>)"
+    } else {
+        "AIScanPurchaseIdentity(productId=$productId, token=<redacted>)"
+    }
+
+    companion object {
+        fun debug(id: String) = AIScanPurchaseIdentity("", "", "", debugId = id)
+    }
+}
 
 class BillingManager private constructor(private val context: Context) : PurchasesUpdatedListener {
     private val prefs = context.getSharedPreferences("meditick-billing", Context.MODE_PRIVATE)
@@ -26,11 +56,7 @@ class BillingManager private constructor(private val context: Context) : Purchas
         .build()
 
     var isPro by mutableStateOf(prefs.getBoolean("is_pro", false)); private set
-    var scanAccountID by mutableStateOf(
-        prefs.getString("scan_account_id", null) ?: "android-install-${UUID.randomUUID()}".also {
-            prefs.edit().putString("scan_account_id", it).apply()
-        },
-    ); private set
+    var scanIdentity by mutableStateOf<AIScanPurchaseIdentity?>(null); private set
     var plans by mutableStateOf<List<BillingPlan>>(emptyList()); private set
     var isLoading by mutableStateOf(false); private set
     var lastMessage by mutableStateOf<String?>(null); private set
@@ -128,15 +154,20 @@ class BillingManager private constructor(private val context: Context) : Purchas
             client.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()) { }
         }
         isPro = active.isNotEmpty()
-        if (active.isNotEmpty()) {
-            // A one-way hash ties server-side AI quota to the restored Play
-            // purchase without transmitting or persisting the purchase token.
-            val material = active.map { it.purchaseToken }.sorted().joinToString(":")
-            val digest = MessageDigest.getInstance("SHA-256").digest(material.toByteArray())
-                .joinToString("") { "%02x".format(it) }
-            scanAccountID = "play-${digest.take(48)}"
-        }
-        prefs.edit().putBoolean("is_pro", isPro).putString("scan_account_id", scanAccountID).apply()
+        scanIdentity = active
+            .sortedWith(compareBy<Purchase> { if ("lifetime" in it.products) 0 else 1 }
+                .thenBy { it.products.joinToString(",") })
+            .firstOrNull()
+            ?.let { purchase ->
+                purchase.products.firstOrNull(PRODUCT_IDS::contains)?.let { productId ->
+                    AIScanPurchaseIdentity(
+                        purchaseToken = purchase.purchaseToken,
+                        productId = productId,
+                        productType = if (productId == "lifetime") "inapp" else "subs",
+                    )
+                }
+            }
+        prefs.edit().putBoolean("is_pro", isPro).remove("scan_account_id").apply()
         NotificationScheduler.scheduleAll(context)
         if (isPro) lastMessage = context.getString(R.string.billing_pro_unlocked)
     }

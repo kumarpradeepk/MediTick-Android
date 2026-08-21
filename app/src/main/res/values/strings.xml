@@ -491,9 +491,9 @@
     <string name="scan_source_catalog">Catalog match</string>
     <string name="scan_source_rxnorm">RxNorm match</string>
     <string name="scan_source_ai">AI label scan</string>
-    <string name="scan_ai_remaining">%1$d of 30 AI scans left this month</string>
+    <string name="scan_ai_remaining">%1$d of 100 AI scans remaining for this Pro subscription</string>
     <string name="scan_ai_no_match">AI couldn’t read a medication label. Move closer, avoid glare, and try again.</string>
-    <string name="scan_ai_limit">You’ve used 30 AI scans this month. Your allowance resets next month.</string>
+    <string name="scan_ai_limit">You’ve used all 100 AI scans included with this Pro subscription.</string>
     <string name="scan_ai_fallback">AI scan is temporarily unavailable. Here are the best on-device matches instead.</string>
     <string name="scan_ai_not_configured">AI scan isn’t configured yet. Using private on-device recognition.</string>
     <string name="scan_none_title">No match yet</string>
@@ -841,7 +841,7 @@
     <string name="scan_home_title">Try Instant Scan</string>
     <string name="scan_home_sub">Point at any label — added in seconds</string>
     <string name="scan_addsheet_sub">AI reads the label &amp; pre-fills everything</string>
-    <string name="scan_card_caption_quota">AI reads the label · %1$d of 30 scans left</string>
+    <string name="scan_card_caption_quota">AI reads the label · %1$d of 100 scans left</string>
     <string name="scan_locked">Label locked — hold steady</string>
     <string name="scan_check_read">Reading what the label says</string>
     <string name="scan_check_form">Syrup? Tablet? Working it out</string>

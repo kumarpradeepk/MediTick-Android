@@ -695,9 +695,9 @@
     <string name="scan_ai_verify">Sugestão da IA — confira o rótulo antes de salvar</string>
     <string name="scan_verify">Confira o rótulo antes de continuar</string>
     <string name="scan_source_ai">Leitura de rótulo por IA</string>
-    <string name="scan_ai_remaining">Restam %1$d de 30 leituras por IA neste mês</string>
+    <string name="scan_ai_remaining">Restam %1$d de 100 leituras por IA nesta assinatura Pro</string>
     <string name="scan_ai_no_match">A IA não conseguiu ler um rótulo de medicamento. Aproxime-se, evite reflexos e tente novamente.</string>
-    <string name="scan_ai_limit">Você usou 30 leituras por IA neste mês. Seu limite será renovado no próximo mês.</string>
+    <string name="scan_ai_limit">Você usou todas as 100 leituras por IA incluídas nesta assinatura Pro.</string>
     <string name="scan_ai_fallback">A leitura por IA está temporariamente indisponível. Veja as melhores correspondências no dispositivo.</string>
     <string name="scan_ai_not_configured">A leitura por IA ainda não está configurada. O reconhecimento privado no dispositivo será usado.</string>
     <string name="scan_instant_title">Escaneamento Instantâneo</string>
@@ -705,7 +705,7 @@
     <string name="scan_home_title">Experimente o Escaneamento Instantâneo</string>
     <string name="scan_home_sub">Aponte para qualquer rótulo — adicionado em segundos</string>
     <string name="scan_addsheet_sub">A IA lê o rótulo e preenche tudo</string>
-    <string name="scan_card_caption_quota">A IA lê o rótulo · %1$d de 30 escaneamentos restantes</string>
+    <string name="scan_card_caption_quota">A IA lê o rótulo · %1$d de 100 escaneamentos restantes</string>
     <string name="scan_locked">Rótulo focado — mantenha firme</string>
     <string name="scan_check_read">Lendo o que diz o rótulo</string>
     <string name="scan_check_form">Xarope? Comprimido? Descobrindo</string>

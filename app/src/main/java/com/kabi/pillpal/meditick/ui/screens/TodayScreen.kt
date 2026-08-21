@@ -86,11 +86,12 @@ fun TodayScreen(
                 )
             }
         } else {
+            val dockClearance = mainDockContentPadding()
             LazyColumn(
-                Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 126.dp),
+                Modifier.fillMaxSize().statusBarsPadding(), contentPadding = PaddingValues(start = 22.dp, end = 22.dp, top = 12.dp, bottom = dockClearance),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                item { Spacer(Modifier.statusBarsPadding().height(1.dp)); Header(now, onAdd, Modifier.appearFluidly(0)) }
+                item { Header(now, onAdd, Modifier.appearFluidly(0)) }
                 item { DayStrip(repository, selectedDay, Modifier.appearFluidly(1)) { selectedDay = it } }
                 item { HeroCard(stats, doses.firstOrNull { it.state == DoseState.DUE || it.state == DoseState.UPCOMING }, isToday, isFuture, Modifier.appearFluidly(2)) { selectedDose = it } }
                 if (isToday) item { MealBanner(repository.mealTimes, Modifier.appearFluidly(3)) }

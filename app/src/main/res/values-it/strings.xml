@@ -695,9 +695,9 @@
     <string name="scan_ai_verify">Suggerimento IA — controlla l’etichetta prima di salvare</string>
     <string name="scan_verify">Controlla l’etichetta prima di continuare</string>
     <string name="scan_source_ai">Scansione etichetta con IA</string>
-    <string name="scan_ai_remaining">%1$d scansioni IA su 30 rimaste questo mese</string>
+    <string name="scan_ai_remaining">%1$d scansioni IA su 100 rimaste con questo abbonamento Pro</string>
     <string name="scan_ai_no_match">L’IA non è riuscita a leggere l’etichetta di un farmaco. Avvicinati, evita i riflessi e riprova.</string>
-    <string name="scan_ai_limit">Hai usato 30 scansioni IA questo mese. La disponibilità si azzera il mese prossimo.</string>
+    <string name="scan_ai_limit">Hai usato tutte le 100 scansioni IA incluse con questo abbonamento Pro.</string>
     <string name="scan_ai_fallback">La scansione IA non è temporaneamente disponibile. Ecco le migliori corrispondenze sul dispositivo.</string>
     <string name="scan_ai_not_configured">La scansione IA non è ancora configurata. Verrà usato il riconoscimento privato sul dispositivo.</string>
     <string name="scan_instant_title">Scansione istantanea</string>
@@ -705,7 +705,7 @@
     <string name="scan_home_title">Prova la scansione istantanea</string>
     <string name="scan_home_sub">Inquadra qualsiasi etichetta: aggiunto in pochi secondi</string>
     <string name="scan_addsheet_sub">L’IA legge l’etichetta e compila tutto</string>
-    <string name="scan_card_caption_quota">L’IA legge l’etichetta · %1$d scansioni su 30 rimaste</string>
+    <string name="scan_card_caption_quota">L’IA legge l’etichetta · %1$d scansioni su 100 rimaste</string>
     <string name="scan_locked">Etichetta agganciata: tieni fermo</string>
     <string name="scan_check_read">Sto leggendo cosa dice l’etichetta</string>
     <string name="scan_check_form">Sciroppo? Compressa? Ci sto lavorando</string>

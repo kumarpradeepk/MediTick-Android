@@ -78,6 +78,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.kabi.pillpal.meditick.R
 import com.kabi.pillpal.meditick.BuildConfig
+import com.kabi.pillpal.meditick.billing.AIScanPurchaseIdentity
 import com.kabi.pillpal.meditick.data.CatalogEntry
 import com.kabi.pillpal.meditick.data.MedicationCatalog
 import com.kabi.pillpal.meditick.model.MedicationForm
@@ -98,13 +99,26 @@ import java.util.UUID
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+// Temporary, scanner-only Pro bypass for local testing. BuildConfig.DEBUG
+// makes this false in every release build even if the block is left in place.
+internal object ScanDebugOptions {
+    val forceProAccess: Boolean = BuildConfig.DEBUG // TEMP: replace with false before committing.
+}
+
+/** Keeps image-based AI dormant while on-device OCR remains available. */
+internal object ScanFeatures {
+    @Volatile
+    var aiScanEnabled: Boolean = false
+        private set
+}
+
 //
 // "Scan to Add" — point the camera at a medicine label and MediTick
 // identifies the medication, mirroring the iOS ScanToAdd feature:
 //  1. On-device OCR (ML Kit) fuzzy-matched against the bundled catalog —
 //     free, offline, nothing leaves the device.
 //  2. Pro sends one downsampled label frame through the MediTick backend to
-//     Claude vision. The backend owns the model key and monthly quota.
+//     Claude vision. The backend owns the model key and subscription quota.
 //
 
 // MARK: - Candidate model
@@ -346,12 +360,16 @@ object AIScanService {
     val isAvailable: Boolean
         get() = BuildConfig.AI_SCAN_ENDPOINT.isNotBlank() && BuildConfig.AI_SCAN_CLIENT_TOKEN.isNotBlank()
 
-    data class Usage(val used: Int, val limit: Int, val remaining: Int, val resetsAt: String)
+    data class Usage(val used: Int, val limit: Int, val remaining: Int, val resetsAt: String?)
     data class Result(val candidates: List<ScanCandidate>, val usage: Usage?)
     class QuotaException(val usage: Usage?) : Exception()
     class ScanException : Exception()
 
-    suspend fun analyze(image: ByteArray, hintText: String, accountId: String): Result = withContext(Dispatchers.IO) {
+    suspend fun analyze(
+        image: ByteArray,
+        hintText: String,
+        purchaseIdentity: AIScanPurchaseIdentity,
+    ): Result = withContext(Dispatchers.IO) {
         if (!isAvailable) throw ScanException()
         val connection = URL(BuildConfig.AI_SCAN_ENDPOINT).openConnection() as HttpURLConnection
         try {
@@ -365,7 +383,7 @@ object AIScanService {
                 .put("image_base64", Base64.encodeToString(image, Base64.NO_WRAP))
                 .put("media_type", "image/jpeg")
                 .put("hint_text", hintText.take(1500))
-                .put("account_id", accountId)
+                .put("identity", purchaseIdentity.putInto(JSONObject()))
                 .toString()
             connection.outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
 
@@ -407,7 +425,7 @@ object AIScanService {
         used = raw.optInt("used"),
         limit = raw.optInt("limit", 30),
         remaining = raw.optInt("remaining"),
-        resetsAt = raw.optString("resets_at"),
+        resetsAt = raw.optString("resets_at").takeIf { it.isNotEmpty() && it != "null" },
     )
 }
 
@@ -428,10 +446,11 @@ private fun compressedScanImage(file: File): ByteArray? {
 
 object ScanQuota {
     const val FREE_SCANS = 3
-    /** The monthly Pro allowance the backend enforces. */
-    const val AI_SCANS = 30
+    /** The lifetime allowance attached to a server-verified Pro purchase. */
+    const val AI_SCANS = 100
     private const val USED_KEY = "freeScansUsed"
     private const val AI_REMAINING_KEY = "aiScansRemaining"
+    private const val AI_QUOTA_VERSION_KEY = "aiQuotaVersion"
 
     private fun prefs(context: Context) = context.getSharedPreferences("meditick.scan", Context.MODE_PRIVATE)
 
@@ -454,10 +473,18 @@ object ScanQuota {
      * reported is cached here — the entry cards can name a number before the
      * first scan of a session instead of showing a blank.
      */
-    fun aiRemaining(context: Context): Int = prefs(context).getInt(AI_REMAINING_KEY, AI_SCANS)
+    fun aiRemaining(context: Context): Int {
+        val store = prefs(context)
+        return if (store.getInt(AI_QUOTA_VERSION_KEY, 0) >= 2) {
+            store.getInt(AI_REMAINING_KEY, AI_SCANS)
+        } else AI_SCANS
+    }
 
     fun rememberAIRemaining(context: Context, remaining: Int) {
-        prefs(context).edit().putInt(AI_REMAINING_KEY, remaining.coerceIn(0, AI_SCANS)).apply()
+        prefs(context).edit()
+            .putInt(AI_REMAINING_KEY, remaining.coerceIn(0, AI_SCANS))
+            .putInt(AI_QUOTA_VERSION_KEY, 2)
+            .apply()
     }
 }
 
@@ -470,7 +497,12 @@ private enum class ScanPhase { SEARCHING, LOCKED, ANALYZING, FOUND }
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
-fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMatch: (ScanCandidate) -> Unit) {
+fun ScanToAddScreen(
+    isPro: Boolean,
+    purchaseIdentity: AIScanPurchaseIdentity?,
+    onClose: () -> Unit,
+    onMatch: (ScanCandidate) -> Unit,
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val haptics = rememberHaptics()
@@ -513,6 +545,8 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
     var stableHits by remember { mutableIntStateOf(0) }
     var torchOn by remember { mutableStateOf(false) }
     var camera by remember { mutableStateOf<androidx.camera.core.Camera?>(null) }
+    val isAI = ScanFeatures.aiScanEnabled && isPro &&
+        AIScanService.isAvailable && purchaseIdentity != null
 
     val phase = when {
         showMatches -> ScanPhase.FOUND
@@ -555,11 +589,17 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
 
     fun identifyLocally(errorMessage: String? = null) {
         scope.launch {
-            val results = ScanEngine.candidates(recognizedLines, catalog.all())
-            searchedOnline = false
-            matches = results.take(4)
+            val local = ScanEngine.candidates(recognizedLines, catalog.all())
+            if (local.isEmpty()) {
+                val query = ScanEngine.onlineQuery(recognizedLines)
+                matches = RxNormService.approximateMatches(query)
+                searchedOnline = query.isNotEmpty()
+            } else {
+                matches = local.take(4)
+                searchedOnline = false
+            }
             aiError = errorMessage
-            land(errorMessage == null && results.isNotEmpty())
+            land(errorMessage == null && matches.isNotEmpty())
         }
     }
 
@@ -570,10 +610,8 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
         checkStage = 0
         aiError = null
 
-        if (!isPro || !AIScanService.isAvailable) {
-            identifyLocally(
-                if (isPro) context.getString(R.string.scan_ai_not_configured) else null,
-            )
+        if (!isAI || purchaseIdentity == null) {
+            identifyLocally()
             return
         }
 
@@ -584,7 +622,7 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
                 scope.launch {
                     try {
                         val bytes = withContext(Dispatchers.IO) { compressedScanImage(photo) } ?: throw AIScanService.ScanException()
-                        val result = AIScanService.analyze(bytes, recognizedLines.joinToString("\n"), accountID)
+                        val result = AIScanService.analyze(bytes, recognizedLines.joinToString("\n"), purchaseIdentity)
                         matches = result.candidates
                         result.usage?.remaining?.let { aiRemaining = it; ScanQuota.rememberAIRemaining(context, it) }
                         searchedOnline = false
@@ -623,7 +661,7 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
     // Auto-present as soon as the reading is stable and confident — the
     // "it just recognized it" moment from the reference flow.
     LaunchedEffect(recognizedLines) {
-        if (isPro || showMatches || identifying || finished) return@LaunchedEffect
+        if (isAI || showMatches || identifying || finished) return@LaunchedEffect
         val local = ScanEngine.candidates(recognizedLines, catalog.all())
         val best = local.firstOrNull()
         if (best == null || best.confidence < 0.8) { stableHits = 0; return@LaunchedEffect }
@@ -683,7 +721,7 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
                 )
                 ScanOverlay(
                     phase = phase,
-                    isAI = isPro && AIScanService.isAvailable,
+                    isAI = isAI,
                     cameraReady = camera != null,
                     onIdentify = { haptics.tap(); identifyNow() },
                 )
@@ -703,7 +741,7 @@ fun ScanToAddScreen(isPro: Boolean, accountID: String, onClose: () -> Unit, onMa
         if (identifying || finished) AnalyzingOverlay(
             stage = checkStage,
             finished = finished,
-            isAI = isPro && AIScanService.isAvailable,
+            isAI = isAI,
             best = matches.firstOrNull(),
         )
 

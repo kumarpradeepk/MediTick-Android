@@ -643,9 +643,9 @@
     <string name="scan_ai_verify">AI 建議 — 儲存前請核對標籤</string>
     <string name="scan_verify">繼續前請核對標籤</string>
     <string name="scan_source_ai">AI 標籤掃描</string>
-    <string name="scan_ai_remaining">本月 30 次 AI 掃描還剩 %1$d 次</string>
+    <string name="scan_ai_remaining">此 Pro 訂閱包含的 100 次 AI 掃描還剩 %1$d 次</string>
     <string name="scan_ai_no_match">AI 無法讀取藥品標籤。請靠近一些、避開反光後再試一次。</string>
-    <string name="scan_ai_limit">你本月已使用 30 次 AI 掃描。額度將於下月重設。</string>
+    <string name="scan_ai_limit">你已用完此 Pro 訂閱包含的 100 次 AI 掃描。</string>
     <string name="scan_ai_fallback">AI 掃描暫時無法使用。以下是在裝置上找到的最佳相符項目。</string>
     <string name="scan_ai_not_configured">AI 掃描尚未設定，將使用裝置上的私密辨識。</string>
     <string name="scan_instant_title">即時掃描</string>
@@ -653,7 +653,7 @@
     <string name="scan_home_title">試試即時掃描</string>
     <string name="scan_home_sub">對準任何藥品標籤 — 幾秒即可新增</string>
     <string name="scan_addsheet_sub">AI 讀取標籤並自動填入所有資料</string>
-    <string name="scan_card_caption_quota">AI 讀取標籤 · 本月還剩 %1$d/30 次掃描</string>
+    <string name="scan_card_caption_quota">AI 讀取標籤 · 還剩 %1$d/100 次掃描</string>
     <string name="scan_locked">已鎖定標籤 — 請保持穩定</string>
     <string name="scan_check_read">讀取標籤上的文字</string>
     <string name="scan_check_form">糖漿？藥錠？正在判斷</string>

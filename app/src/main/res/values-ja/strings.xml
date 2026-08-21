@@ -643,9 +643,9 @@
     <string name="scan_ai_verify">AIの候補 — 保存前にラベルを確認してください</string>
     <string name="scan_verify">続行する前にラベルを確認してください</string>
     <string name="scan_source_ai">AIラベルスキャン</string>
-    <string name="scan_ai_remaining">今月のAIスキャンは30回中あと%1$d回</string>
+    <string name="scan_ai_remaining">このProサブスクリプションのAIスキャン100回中あと%1$d回</string>
     <string name="scan_ai_no_match">AIが薬のラベルを読み取れませんでした。近づき、反射を避けてもう一度お試しください。</string>
-    <string name="scan_ai_limit">今月はAIスキャンを30回使用しました。来月リセットされます。</string>
+    <string name="scan_ai_limit">このProサブスクリプションに含まれるAIスキャン100回をすべて使用しました。</string>
     <string name="scan_ai_fallback">AIスキャンは一時的に利用できません。端末上の最適な候補を表示します。</string>
     <string name="scan_ai_not_configured">AIスキャンはまだ設定されていません。端末上のプライベート認識を使用します。</string>
     <string name="scan_instant_title">インスタントスキャン</string>
@@ -653,7 +653,7 @@
     <string name="scan_home_title">インスタントスキャンを試す</string>
     <string name="scan_home_sub">ラベルにかざすだけ — 数秒で追加</string>
     <string name="scan_addsheet_sub">AI がラベルを読み取り、すべて自動入力</string>
-    <string name="scan_card_caption_quota">AI がラベルを読み取り · 残り %1$d/30 回</string>
+    <string name="scan_card_caption_quota">AI がラベルを読み取り · 残り %1$d/100 回</string>
     <string name="scan_locked">ラベルを認識 — そのまま静止</string>
     <string name="scan_check_read">ラベルの文字を読み取り中</string>
     <string name="scan_check_form">シロップ？錠剤？判別中</string>
