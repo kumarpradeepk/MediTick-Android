@@ -422,13 +422,10 @@
     <string name="form_success_view_rx">Ver minha receita</string>
     <string name="form_success_add_another">Adicionar outro medicamento</string>
     <string name="form_success_add_more_pro">Adicione mais com o Pro</string>
-    <string name="scan_card_title">Escanear o rótulo</string>
-    <string name="scan_card_caption_pro">Aponte a câmera para a caixa ou o frasco</string>
     <string name="scan_card_caption_free">Escaneamentos grátis restantes: %1$d — depois Pro</string>
     <string name="scan_card_caption_locked">Um recurso do MediTick Pro</string>
     <string name="scan_position">Posicione o rótulo dentro do quadro</string>
     <string name="scan_looking">Procurando um rótulo…</string>
-    <string name="scan_reading">Lendo o rótulo…</string>
     <string name="scan_identify">Identificar agora</string>
     <string name="scan_identifying">Identificando…</string>
     <string name="scan_matches_title">Possíveis correspondências</string>
@@ -691,9 +688,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">cada,duas vezes,uma vez,diário,diariamente,tome,tomar,com,antes,depois,manhã,noite,tarde,meio-dia,cama,dormir,almoço,jantar,café da manhã,refeição,refeições,o,a,os,as,e</string>
     <string name="scan_identify_ai">Identificar com IA</string>
     <string name="scan_ai_checks">A IA verifica nome, concentração e forma</string>
-    <string name="scan_stage_capture">Capturando a imagem mais nítida</string>
-    <string name="scan_stage_read">Lendo nome e concentração</string>
-    <string name="scan_stage_check">Verificando a forma do medicamento</string>
     <string name="scan_ai_identifying">O MediTick AI está identificando</string>
     <string name="scan_local_identifying">Lendo o rótulo</string>
     <string name="scan_confirm_title">Confirmar medicamento</string>
@@ -706,4 +700,29 @@
     <string name="scan_ai_limit">Você usou 30 leituras por IA neste mês. Seu limite será renovado no próximo mês.</string>
     <string name="scan_ai_fallback">A leitura por IA está temporariamente indisponível. Veja as melhores correspondências no dispositivo.</string>
     <string name="scan_ai_not_configured">A leitura por IA ainda não está configurada. O reconhecimento privado no dispositivo será usado.</string>
+    <string name="scan_instant_title">Escaneamento Instantâneo</string>
+    <string name="scan_badge_new">NOVO</string>
+    <string name="scan_home_title">Experimente o Escaneamento Instantâneo</string>
+    <string name="scan_home_sub">Aponte para qualquer rótulo — adicionado em segundos</string>
+    <string name="scan_addsheet_sub">A IA lê o rótulo e preenche tudo</string>
+    <string name="scan_card_caption_quota">A IA lê o rótulo · %1$d de 30 escaneamentos restantes</string>
+    <string name="scan_locked">Rótulo focado — mantenha firme</string>
+    <string name="scan_check_read">Lendo o que diz o rótulo</string>
+    <string name="scan_check_form">Xarope? Comprimido? Descobrindo</string>
+    <string name="scan_check_details">Juntando os seus detalhes</string>
+    <string name="scan_phase_1">Dando uma boa olhada…</string>
+    <string name="scan_phase_2">Hmm — que tipo de medicamento é este?</string>
+    <string name="scan_phase_3">Agora tudo faz sentido</string>
+    <string name="scan_phase_4">Quase lá…</string>
+    <string name="scan_found">Encontrado — %1$s</string>
+    <string name="scan_found_sub">%1$d%% de correspondência · preparando os detalhes</string>
+    <string name="scan_best_match">MELHOR RESULTADO</string>
+    <string name="scan_match_label">CORRESP.</string>
+    <string name="scan_use_match">Usar este resultado</string>
+    <string name="scan_prefilled_banner">Preenchido pelo escaneamento — confira e continue</string>
+    <string name="scan_ai_filled">PREENCH. POR IA</string>
+    <string name="scan_ai_filled_short">IA</string>
+    <string name="scan_added_toast">Adicionado pelo Escaneamento Instantâneo</string>
+    <string name="scan_badge_scanned">ESCANEADO</string>
+    <string name="scan_or_skip_typing">OU PULE A DIGITAÇÃO</string>
 </resources>

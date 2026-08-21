@@ -422,13 +422,10 @@
     <string name="form_success_view_rx">Voir mon ordonnance</string>
     <string name="form_success_add_another">Ajouter un autre médicament</string>
     <string name="form_success_add_more_pro">Ajoutez-en plus avec Pro</string>
-    <string name="scan_card_title">Scanner l\'étiquette</string>
-    <string name="scan_card_caption_pro">Pointez la caméra vers la boîte ou le flacon</string>
     <string name="scan_card_caption_free">Scans gratuits restants : %1$d — ensuite Pro</string>
     <string name="scan_card_caption_locked">Une fonctionnalité MediTick Pro</string>
     <string name="scan_position">Placez l\'étiquette dans le cadre</string>
     <string name="scan_looking">Recherche d\'une étiquette…</string>
-    <string name="scan_reading">Lecture de l\'étiquette…</string>
     <string name="scan_identify">Identifier maintenant</string>
     <string name="scan_identifying">Identification…</string>
     <string name="scan_matches_title">Correspondances possibles</string>
@@ -691,9 +688,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">chaque,deux fois,une fois,quotidien,quotidiennement,prendre,prends,avec,avant,après,matin,nuit,soir,midi,coucher,déjeuner,dîner,petit-déjeuner,repas,le,la,les,et</string>
     <string name="scan_identify_ai">Identifier avec l’IA</string>
     <string name="scan_ai_checks">L’IA vérifie le nom, le dosage et la forme</string>
-    <string name="scan_stage_capture">Capture de l’image la plus nette</string>
-    <string name="scan_stage_read">Lecture du nom et du dosage</string>
-    <string name="scan_stage_check">Vérification de la forme du médicament</string>
     <string name="scan_ai_identifying">MediTick AI l’identifie</string>
     <string name="scan_local_identifying">Lecture de votre étiquette</string>
     <string name="scan_confirm_title">Confirmer le médicament</string>
@@ -706,4 +700,29 @@
     <string name="scan_ai_limit">Vous avez utilisé 30 scans IA ce mois-ci. Votre quota sera réinitialisé le mois prochain.</string>
     <string name="scan_ai_fallback">Le scan IA est temporairement indisponible. Voici les meilleures correspondances trouvées sur l’appareil.</string>
     <string name="scan_ai_not_configured">Le scan IA n’est pas encore configuré. La reconnaissance privée sur l’appareil est utilisée.</string>
+    <string name="scan_instant_title">Scan instantané</string>
+    <string name="scan_badge_new">NOUVEAU</string>
+    <string name="scan_home_title">Essayez le scan instantané</string>
+    <string name="scan_home_sub">Visez n’importe quelle étiquette — ajouté en quelques secondes</string>
+    <string name="scan_addsheet_sub">L’IA lit l’étiquette et remplit tout</string>
+    <string name="scan_card_caption_quota">L’IA lit l’étiquette · %1$d scans sur 30 restants</string>
+    <string name="scan_locked">Étiquette verrouillée — ne bougez plus</string>
+    <string name="scan_check_read">Lecture de ce qui est écrit sur l’étiquette</string>
+    <string name="scan_check_form">Sirop ? Comprimé ? On y travaille</string>
+    <string name="scan_check_details">Assemblage de vos informations</string>
+    <string name="scan_phase_1">On regarde de plus près…</string>
+    <string name="scan_phase_2">Hmm — quel type de médicament est-ce ?</string>
+    <string name="scan_phase_3">Tout se recoupe</string>
+    <string name="scan_phase_4">Presque terminé…</string>
+    <string name="scan_found">Trouvé — %1$s</string>
+    <string name="scan_found_sub">%1$d%% de correspondance · préparation des détails</string>
+    <string name="scan_best_match">MEILLEUR RÉSULTAT</string>
+    <string name="scan_match_label">CORRESP.</string>
+    <string name="scan_use_match">Utiliser ce résultat</string>
+    <string name="scan_prefilled_banner">Prérempli depuis votre scan — vérifiez et continuez</string>
+    <string name="scan_ai_filled">REMPLI PAR L’IA</string>
+    <string name="scan_ai_filled_short">IA</string>
+    <string name="scan_added_toast">Ajouté via le scan instantané</string>
+    <string name="scan_badge_scanned">SCANNÉ</string>
+    <string name="scan_or_skip_typing">OU ÉVITEZ DE TAPER</string>
 </resources>

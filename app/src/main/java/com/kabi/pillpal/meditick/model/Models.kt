@@ -366,6 +366,8 @@ data class Medication(
     val completedByPrescriptionID: String? = null,
     val completedAt: Long? = null,
     val createdAt: Long = System.currentTimeMillis(),
+    /** True when Instant Scan filled the basics — drives the SCANNED badge. */
+    val addedByScan: Boolean = false,
 ) {
     val strengthLabel: String? get() = strengthValue?.takeIf { it > 0 }?.let { "${prettyNumber(it)} $strengthUnit" }
     fun doseLabel(context: Context): String = context.getString(
@@ -400,7 +402,7 @@ data class Medication(
         .putNullable("archivedAt", archivedAt?.let(::isoDate))
         .putNullable("completedByPrescriptionID", completedByPrescriptionID)
         .putNullable("completedAt", completedAt?.let(::isoDate))
-        .put("createdAt", isoDate(createdAt))
+        .put("createdAt", isoDate(createdAt)).put("addedByScan", addedByScan)
 
     companion object {
         fun fromJson(json: JSONObject) = Medication(
@@ -418,6 +420,7 @@ data class Medication(
             completedByPrescriptionID = json.optNullableString("completedByPrescriptionID"),
             completedAt = parseDate(json.opt("completedAt")),
             createdAt = parseDate(json.opt("createdAt")) ?: System.currentTimeMillis(),
+            addedByScan = json.optBoolean("addedByScan"),
         )
     }
 }

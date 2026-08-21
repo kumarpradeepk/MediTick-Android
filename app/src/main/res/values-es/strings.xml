@@ -422,13 +422,10 @@
     <string name="form_success_view_rx">Ver mi receta</string>
     <string name="form_success_add_another">Añadir otro medicamento</string>
     <string name="form_success_add_more_pro">Añade más con Pro</string>
-    <string name="scan_card_title">Escanear la etiqueta</string>
-    <string name="scan_card_caption_pro">Apunta la cámara a la caja o el frasco</string>
     <string name="scan_card_caption_free">Escaneos gratis restantes: %1$d — luego Pro</string>
     <string name="scan_card_caption_locked">Una función de MediTick Pro</string>
     <string name="scan_position">Coloca la etiqueta dentro del marco</string>
     <string name="scan_looking">Buscando una etiqueta…</string>
-    <string name="scan_reading">Leyendo la etiqueta…</string>
     <string name="scan_identify">Identificar ahora</string>
     <string name="scan_identifying">Identificando…</string>
     <string name="scan_matches_title">Posibles coincidencias</string>
@@ -691,9 +688,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">cada,dos veces,una vez,diario,diariamente,toma,tomar,con,antes,después,mañana,noche,tarde,mediodía,cama,dormir,almuerzo,cena,desayuno,comida,comidas,el,la,los,las,y</string>
     <string name="scan_identify_ai">Identificar con IA</string>
     <string name="scan_ai_checks">La IA comprueba el nombre, la concentración y la forma</string>
-    <string name="scan_stage_capture">Capturando la imagen más nítida</string>
-    <string name="scan_stage_read">Leyendo el nombre y la concentración</string>
-    <string name="scan_stage_check">Comprobando la forma del medicamento</string>
     <string name="scan_ai_identifying">MediTick AI lo está identificando</string>
     <string name="scan_local_identifying">Leyendo la etiqueta</string>
     <string name="scan_confirm_title">Confirmar medicamento</string>
@@ -706,4 +700,29 @@
     <string name="scan_ai_limit">Has usado 30 escaneos con IA este mes. El límite se restablece el próximo mes.</string>
     <string name="scan_ai_fallback">El escaneo con IA no está disponible temporalmente. Se muestran las mejores coincidencias del dispositivo.</string>
     <string name="scan_ai_not_configured">El escaneo con IA aún no está configurado. Se usará el reconocimiento privado del dispositivo.</string>
+    <string name="scan_instant_title">Escaneo instantáneo</string>
+    <string name="scan_badge_new">NUEVO</string>
+    <string name="scan_home_title">Prueba el escaneo instantáneo</string>
+    <string name="scan_home_sub">Apunta a cualquier etiqueta: se añade en segundos</string>
+    <string name="scan_addsheet_sub">La IA lee la etiqueta y lo rellena todo</string>
+    <string name="scan_card_caption_quota">La IA lee la etiqueta · quedan %1$d de 30 escaneos</string>
+    <string name="scan_locked">Etiqueta enfocada: mantén firme</string>
+    <string name="scan_check_read">Leyendo lo que dice la etiqueta</string>
+    <string name="scan_check_form">¿Jarabe? ¿Comprimido? Averiguándolo</string>
+    <string name="scan_check_details">Reuniendo tus datos</string>
+    <string name="scan_phase_1">Echando un buen vistazo…</string>
+    <string name="scan_phase_2">Mmm… ¿qué tipo de medicamento es?</string>
+    <string name="scan_phase_3">Ahora todo encaja</string>
+    <string name="scan_phase_4">Casi listo…</string>
+    <string name="scan_found">Encontrado: %1$s</string>
+    <string name="scan_found_sub">%1$d%% de coincidencia · preparando los detalles</string>
+    <string name="scan_best_match">MEJOR COINCIDENCIA</string>
+    <string name="scan_match_label">COINCID.</string>
+    <string name="scan_use_match">Usar esta coincidencia</string>
+    <string name="scan_prefilled_banner">Rellenado con tu escaneo: revísalo y continúa</string>
+    <string name="scan_ai_filled">RELLENADO POR IA</string>
+    <string name="scan_ai_filled_short">IA</string>
+    <string name="scan_added_toast">Añadido con Escaneo instantáneo</string>
+    <string name="scan_badge_scanned">ESCANEADO</string>
+    <string name="scan_or_skip_typing">O SÁLTATE LA ESCRITURA</string>
 </resources>

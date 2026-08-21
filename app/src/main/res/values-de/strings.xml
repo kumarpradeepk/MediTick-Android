@@ -401,13 +401,10 @@
     <string name="form_success_view_rx">Mein Rezept ansehen</string>
     <string name="form_success_add_another">Weiteres Medikament hinzufügen</string>
     <string name="form_success_add_more_pro">Mit Pro mehr hinzufügen</string>
-    <string name="scan_card_title">Etikett scannen</string>
-    <string name="scan_card_caption_pro">Richte die Kamera auf die Packung oder Flasche</string>
     <string name="scan_card_caption_free">Verbleibende Gratis-Scans: %1$d — danach Pro</string>
     <string name="scan_card_caption_locked">Eine MediTick-Pro-Funktion</string>
     <string name="scan_position">Halte das Etikett in den Rahmen</string>
     <string name="scan_looking">Suche nach einem Etikett…</string>
-    <string name="scan_reading">Etikett wird gelesen…</string>
     <string name="scan_identify">Jetzt erkennen</string>
     <string name="scan_identifying">Wird erkannt…</string>
     <string name="scan_matches_title">Mögliche Treffer</string>
@@ -665,9 +662,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">jede,jeden,zweimal,einmal,täglich,nimm,mit,vor,nach,morgen,nacht,abend,mittag,bett,schlafenszeit,mittagessen,abendessen,frühstück,mahlzeit,mahlzeiten,und,der,die,das</string>
     <string name="scan_identify_ai">Mit KI erkennen</string>
     <string name="scan_ai_checks">KI prüft Name, Stärke und Form</string>
-    <string name="scan_stage_capture">Bestes Bild wird aufgenommen</string>
-    <string name="scan_stage_read">Name und Stärke werden gelesen</string>
-    <string name="scan_stage_check">Darreichungsform wird geprüft</string>
     <string name="scan_ai_identifying">MediTick AI erkennt das Medikament</string>
     <string name="scan_local_identifying">Etikett wird gelesen</string>
     <string name="scan_confirm_title">Medikament bestätigen</string>
@@ -680,4 +674,29 @@
     <string name="scan_ai_limit">Du hast diesen Monat 30 KI-Scans verwendet. Dein Kontingent wird nächsten Monat zurückgesetzt.</string>
     <string name="scan_ai_fallback">Der KI-Scan ist vorübergehend nicht verfügbar. Stattdessen werden die besten Treffer auf dem Gerät angezeigt.</string>
     <string name="scan_ai_not_configured">Der KI-Scan ist noch nicht konfiguriert. Private Erkennung auf dem Gerät wird verwendet.</string>
+    <string name="scan_instant_title">Sofort-Scan</string>
+    <string name="scan_badge_new">NEU</string>
+    <string name="scan_home_title">Sofort-Scan ausprobieren</string>
+    <string name="scan_home_sub">Auf ein Etikett richten — in Sekunden hinzugefügt</string>
+    <string name="scan_addsheet_sub">Die KI liest das Etikett und füllt alles aus</string>
+    <string name="scan_card_caption_quota">Die KI liest das Etikett · noch %1$d von 30 Scans</string>
+    <string name="scan_locked">Etikett erfasst — ruhig halten</string>
+    <string name="scan_check_read">Lesen, was auf dem Etikett steht</string>
+    <string name="scan_check_form">Saft? Tablette? Wird ermittelt</string>
+    <string name="scan_check_details">Deine Angaben werden zusammengestellt</string>
+    <string name="scan_phase_1">Genauer hinschauen…</string>
+    <string name="scan_phase_2">Hmm — was für ein Medikament ist das?</string>
+    <string name="scan_phase_3">Jetzt ergibt alles einen Sinn</string>
+    <string name="scan_phase_4">Fast geschafft…</string>
+    <string name="scan_found">Gefunden — %1$s</string>
+    <string name="scan_found_sub">%1$d%% Etiketten-Übereinstimmung · Details werden vorbereitet</string>
+    <string name="scan_best_match">BESTE ÜBEREINSTIMMUNG</string>
+    <string name="scan_match_label">TREFFER</string>
+    <string name="scan_use_match">Diesen Treffer verwenden</string>
+    <string name="scan_prefilled_banner">Aus deinem Scan vorausgefüllt — prüfen und weiter</string>
+    <string name="scan_ai_filled">KI-AUSGEFÜLLT</string>
+    <string name="scan_ai_filled_short">KI</string>
+    <string name="scan_added_toast">Über Sofort-Scan hinzugefügt</string>
+    <string name="scan_badge_scanned">GESCANNT</string>
+    <string name="scan_or_skip_typing">ODER TIPPEN ÜBERSPRINGEN</string>
 </resources>

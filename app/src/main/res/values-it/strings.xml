@@ -422,13 +422,10 @@
     <string name="form_success_view_rx">Vedi la mia ricetta</string>
     <string name="form_success_add_another">Aggiungi un altro farmaco</string>
     <string name="form_success_add_more_pro">Aggiungine altri con Pro</string>
-    <string name="scan_card_title">Scansiona l\'etichetta</string>
-    <string name="scan_card_caption_pro">Punta la fotocamera sulla scatola o sul flacone</string>
     <string name="scan_card_caption_free">Scansioni gratuite rimaste: %1$d — poi Pro</string>
     <string name="scan_card_caption_locked">Una funzione di MediTick Pro</string>
     <string name="scan_position">Inquadra l\'etichetta nella cornice</string>
     <string name="scan_looking">Ricerca di un\'etichetta…</string>
-    <string name="scan_reading">Lettura dell\'etichetta…</string>
     <string name="scan_identify">Identifica ora</string>
     <string name="scan_identifying">Identificazione…</string>
     <string name="scan_matches_title">Possibili corrispondenze</string>
@@ -691,9 +688,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">ogni,due volte,una volta,quotidiano,giornaliero,prendi,prendere,con,prima,dopo,mattina,notte,sera,mezzogiorno,letto,pranzo,cena,colazione,pasto,pasti,il,la,i,le,e</string>
     <string name="scan_identify_ai">Identifica con l’IA</string>
     <string name="scan_ai_checks">L’IA controlla nome, dosaggio e forma</string>
-    <string name="scan_stage_capture">Acquisizione dell’immagine più nitida</string>
-    <string name="scan_stage_read">Lettura di nome e dosaggio</string>
-    <string name="scan_stage_check">Controllo della forma del farmaco</string>
     <string name="scan_ai_identifying">MediTick AI sta identificando il farmaco</string>
     <string name="scan_local_identifying">Lettura dell’etichetta</string>
     <string name="scan_confirm_title">Conferma farmaco</string>
@@ -706,4 +700,29 @@
     <string name="scan_ai_limit">Hai usato 30 scansioni IA questo mese. La disponibilità si azzera il mese prossimo.</string>
     <string name="scan_ai_fallback">La scansione IA non è temporaneamente disponibile. Ecco le migliori corrispondenze sul dispositivo.</string>
     <string name="scan_ai_not_configured">La scansione IA non è ancora configurata. Verrà usato il riconoscimento privato sul dispositivo.</string>
+    <string name="scan_instant_title">Scansione istantanea</string>
+    <string name="scan_badge_new">NUOVO</string>
+    <string name="scan_home_title">Prova la scansione istantanea</string>
+    <string name="scan_home_sub">Inquadra qualsiasi etichetta: aggiunto in pochi secondi</string>
+    <string name="scan_addsheet_sub">L’IA legge l’etichetta e compila tutto</string>
+    <string name="scan_card_caption_quota">L’IA legge l’etichetta · %1$d scansioni su 30 rimaste</string>
+    <string name="scan_locked">Etichetta agganciata: tieni fermo</string>
+    <string name="scan_check_read">Sto leggendo cosa dice l’etichetta</string>
+    <string name="scan_check_form">Sciroppo? Compressa? Ci sto lavorando</string>
+    <string name="scan_check_details">Sto mettendo insieme i tuoi dati</string>
+    <string name="scan_phase_1">Sto guardando bene…</string>
+    <string name="scan_phase_2">Mmm — che tipo di medicinale è?</string>
+    <string name="scan_phase_3">Ora torna tutto</string>
+    <string name="scan_phase_4">Ci siamo quasi…</string>
+    <string name="scan_found">Trovato — %1$s</string>
+    <string name="scan_found_sub">%1$d%% di corrispondenza · preparo i dettagli</string>
+    <string name="scan_best_match">MIGLIOR RISULTATO</string>
+    <string name="scan_match_label">CORRISP.</string>
+    <string name="scan_use_match">Usa questo risultato</string>
+    <string name="scan_prefilled_banner">Precompilato dalla scansione: controlla e continua</string>
+    <string name="scan_ai_filled">COMPILATO DALL’IA</string>
+    <string name="scan_ai_filled_short">IA</string>
+    <string name="scan_added_toast">Aggiunto con la scansione istantanea</string>
+    <string name="scan_badge_scanned">SCANSIONATO</string>
+    <string name="scan_or_skip_typing">OPPURE SALTA LA DIGITAZIONE</string>
 </resources>

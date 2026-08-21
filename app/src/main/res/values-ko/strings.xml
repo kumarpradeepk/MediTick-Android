@@ -380,13 +380,10 @@
     <string name="form_success_view_rx">내 처방전 보기</string>
     <string name="form_success_add_another">다른 약 추가</string>
     <string name="form_success_add_more_pro">Pro로 더 추가하기</string>
-    <string name="scan_card_title">라벨 스캔</string>
-    <string name="scan_card_caption_pro">카메라를 상자나 병에 향하게 하세요</string>
     <string name="scan_card_caption_free">남은 무료 스캔: %1$d회 — 이후 Pro</string>
     <string name="scan_card_caption_locked">MediTick Pro 기능</string>
     <string name="scan_position">라벨을 프레임 안에 맞춰 주세요</string>
     <string name="scan_looking">라벨을 찾는 중…</string>
-    <string name="scan_reading">라벨을 읽는 중…</string>
     <string name="scan_identify">지금 식별</string>
     <string name="scan_identifying">식별 중…</string>
     <string name="scan_matches_title">가능한 일치 항목</string>
@@ -639,9 +636,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">매일,매,2회,1회,복용,함께,전,후,아침,밤,저녁,점심,취침,식사,끼니</string>
     <string name="scan_identify_ai">AI로 식별</string>
     <string name="scan_ai_checks">AI가 이름, 함량, 제형을 확인합니다</string>
-    <string name="scan_stage_capture">가장 선명한 화면을 촬영하는 중</string>
-    <string name="scan_stage_read">이름과 함량을 읽는 중</string>
-    <string name="scan_stage_check">약의 제형을 확인하는 중</string>
     <string name="scan_ai_identifying">MediTick AI가 식별하고 있습니다</string>
     <string name="scan_local_identifying">라벨을 읽고 있습니다</string>
     <string name="scan_confirm_title">약 확인</string>
@@ -654,4 +648,29 @@
     <string name="scan_ai_limit">이번 달 AI 스캔 30회를 모두 사용했습니다. 다음 달에 초기화됩니다.</string>
     <string name="scan_ai_fallback">AI 스캔을 일시적으로 사용할 수 없습니다. 기기에서 찾은 최적의 일치 항목을 표시합니다.</string>
     <string name="scan_ai_not_configured">AI 스캔이 아직 설정되지 않았습니다. 기기 내 비공개 인식을 사용합니다.</string>
+    <string name="scan_instant_title">인스턴트 스캔</string>
+    <string name="scan_badge_new">신규</string>
+    <string name="scan_home_title">인스턴트 스캔 사용해 보기</string>
+    <string name="scan_home_sub">아무 라벨이나 비추세요 — 몇 초면 추가됩니다</string>
+    <string name="scan_addsheet_sub">AI가 라벨을 읽고 모두 자동으로 채웁니다</string>
+    <string name="scan_card_caption_quota">AI가 라벨을 읽습니다 · 30회 중 %1$d회 남음</string>
+    <string name="scan_locked">라벨 인식됨 — 그대로 유지하세요</string>
+    <string name="scan_check_read">라벨 내용을 읽는 중</string>
+    <string name="scan_check_form">시럽? 정제? 확인하는 중</string>
+    <string name="scan_check_details">세부 정보를 정리하는 중</string>
+    <string name="scan_phase_1">자세히 살펴보는 중…</string>
+    <string name="scan_phase_2">음 — 어떤 종류의 약일까요?</string>
+    <string name="scan_phase_3">이제 딱 맞아떨어지네요</string>
+    <string name="scan_phase_4">거의 다 됐어요…</string>
+    <string name="scan_found">찾았어요 — %1$s</string>
+    <string name="scan_found_sub">라벨 일치율 %1$d%% · 세부 정보 준비 중</string>
+    <string name="scan_best_match">최적 일치</string>
+    <string name="scan_match_label">일치율</string>
+    <string name="scan_use_match">이 결과 사용</string>
+    <string name="scan_prefilled_banner">스캔 결과로 미리 입력됨 — 확인 후 계속</string>
+    <string name="scan_ai_filled">AI 입력</string>
+    <string name="scan_ai_filled_short">AI</string>
+    <string name="scan_added_toast">인스턴트 스캔으로 추가됨</string>
+    <string name="scan_badge_scanned">스캔됨</string>
+    <string name="scan_or_skip_typing">입력 없이 추가하기</string>
 </resources>

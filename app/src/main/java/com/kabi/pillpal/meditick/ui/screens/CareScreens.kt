@@ -187,7 +187,10 @@ private fun MedicationRow(med: Medication, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 13.dp), verticalAlignment = Alignment.CenterVertically) {
         MedicationIcon(med, 40.dp); Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(med.name, color = DS.colors.ink, fontWeight = FontWeight.Bold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(med.name, color = DS.colors.ink, fontWeight = FontWeight.Bold)
+                if (med.addedByScan) { Spacer(Modifier.width(8.dp)); ScannedBadge() }
+            }
             Text(listOfNotNull(med.strengthLabel, med.schedule.summary(context)).joinToString(" · "), color = DS.colors.ink3, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         if (med.inventoryEnabled) {
@@ -225,7 +228,11 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
                         Column(Modifier.weight(1f)) {
                             Text(med.name, style = MaterialTheme.typography.headlineMedium, color = DS.colors.ink)
                             Text(listOfNotNull(med.strengthLabel, med.form.title(context)).joinToString(" · "), color = DS.colors.ink2)
-                            Spacer(Modifier.height(7.dp)); StatusPill(stringResource(medicationStatus.titleRes()), when (medicationStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 })
+                            Spacer(Modifier.height(7.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                StatusPill(stringResource(medicationStatus.titleRes()), when (medicationStatus) { TreatmentStatus.active -> DS.colors.mint; TreatmentStatus.completed -> DS.colors.cyan; TreatmentStatus.archived -> DS.colors.ink3 })
+                                if (med.addedByScan) { Spacer(Modifier.width(8.dp)); ScannedBadge() }
+                            }
                         }
                     }
                 }

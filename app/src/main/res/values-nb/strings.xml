@@ -401,13 +401,10 @@
     <string name="form_success_view_rx">Vis resepten min</string>
     <string name="form_success_add_another">Legg til enda en medisin</string>
     <string name="form_success_add_more_pro">Legg til flere med Pro</string>
-    <string name="scan_card_title">Skann etiketten</string>
-    <string name="scan_card_caption_pro">Rett kameraet mot esken eller flasken</string>
     <string name="scan_card_caption_free">Gratis skanninger igjen: %1$d — deretter Pro</string>
     <string name="scan_card_caption_locked">En MediTick Pro-funksjon</string>
     <string name="scan_position">Plasser etiketten i rammen</string>
     <string name="scan_looking">Ser etter en etikett…</string>
-    <string name="scan_reading">Leser etiketten…</string>
     <string name="scan_identify">Identifiser nå</string>
     <string name="scan_identifying">Identifiserer…</string>
     <string name="scan_matches_title">Mulige treff</string>
@@ -665,9 +662,6 @@
     <string name="parse_stopwords" tools:ignore="Typos">hver,to ganger,en gang,daglig,ta,med,før,etter,morgen,natt,kveld,middag,lunsj,leggetid,frokost,måltid,måltider,og</string>
     <string name="scan_identify_ai">Identifiser med KI</string>
     <string name="scan_ai_checks">KI sjekker navn, styrke og form</string>
-    <string name="scan_stage_capture">Tar det skarpeste bildet</string>
-    <string name="scan_stage_read">Leser navn og styrke</string>
-    <string name="scan_stage_check">Kontrollerer legemiddelform</string>
     <string name="scan_ai_identifying">MediTick AI identifiserer legemiddelet</string>
     <string name="scan_local_identifying">Leser etiketten</string>
     <string name="scan_confirm_title">Bekreft legemiddel</string>
@@ -680,4 +674,29 @@
     <string name="scan_ai_limit">Du har brukt 30 KI-skanninger denne måneden. Kvoten tilbakestilles neste måned.</string>
     <string name="scan_ai_fallback">KI-skanning er midlertidig utilgjengelig. Her er de beste treffene på enheten.</string>
     <string name="scan_ai_not_configured">KI-skanning er ikke konfigurert ennå. Privat gjenkjenning på enheten brukes.</string>
+    <string name="scan_instant_title">Lynskanning</string>
+    <string name="scan_badge_new">NY</string>
+    <string name="scan_home_title">Prøv Lynskanning</string>
+    <string name="scan_home_sub">Rett kameraet mot en etikett — lagt til på sekunder</string>
+    <string name="scan_addsheet_sub">KI-en leser etiketten og fyller ut alt</string>
+    <string name="scan_card_caption_quota">KI-en leser etiketten · %1$d av 30 skanninger igjen</string>
+    <string name="scan_locked">Etikett låst — hold stille</string>
+    <string name="scan_check_read">Leser hva som står på etiketten</string>
+    <string name="scan_check_form">Mikstur? Tablett? Finner ut av det</string>
+    <string name="scan_check_details">Setter sammen opplysningene dine</string>
+    <string name="scan_phase_1">Ser nøye etter…</string>
+    <string name="scan_phase_2">Hmm — hva slags medisin er dette?</string>
+    <string name="scan_phase_3">Nå henger alt sammen</string>
+    <string name="scan_phase_4">Nesten ferdig…</string>
+    <string name="scan_found">Funnet — %1$s</string>
+    <string name="scan_found_sub">%1$d%% treff på etiketten · klargjør detaljene</string>
+    <string name="scan_best_match">BESTE TREFF</string>
+    <string name="scan_match_label">TREFF</string>
+    <string name="scan_use_match">Bruk dette treffet</string>
+    <string name="scan_prefilled_banner">Forhåndsutfylt fra skanningen — sjekk og fortsett</string>
+    <string name="scan_ai_filled">KI-UTFYLT</string>
+    <string name="scan_ai_filled_short">KI</string>
+    <string name="scan_added_toast">Lagt til via Lynskanning</string>
+    <string name="scan_badge_scanned">SKANNET</string>
+    <string name="scan_or_skip_typing">ELLER HOPP OVER SKRIVINGEN</string>
 </resources>
