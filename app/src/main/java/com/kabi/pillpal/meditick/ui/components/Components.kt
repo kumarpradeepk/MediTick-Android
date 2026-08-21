@@ -268,6 +268,44 @@ fun ProgressRing(
     }
 }
 
+/**
+ * MediTick's signature day marker: a miniature daily ring around the day
+ * number. The arc fills with the day's taken ratio in the legend color —
+ * where the reference app draws a static dot, this shows how much of the
+ * day is done at a glance.
+ */
+@Composable
+fun MiniDayRing(
+    number: String, progress: Float, tint: Color?, selected: Boolean,
+    modifier: Modifier = Modifier, size: Dp = 34.dp,
+) {
+    val c = DS.colors
+    val animated by androidx.compose.animation.core.animateFloatAsState(
+        progress.coerceIn(0f, 1f),
+        androidx.compose.animation.core.spring(dampingRatio = 0.85f, stiffness = 140f),
+        label = "dayRing",
+    )
+    Box(modifier.size(size), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.fillMaxSize()) {
+            val stroke = 2.5.dp.toPx()
+            val inset = stroke / 2
+            val arcSize = Size(this.size.width - stroke, this.size.height - stroke)
+            drawArc(c.ringTrack, -90f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            if (tint != null && animated > 0f) {
+                drawArc(tint, -90f, 360f * animated, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+            }
+        }
+        if (selected) {
+            Box(
+                Modifier.size(size - 9.dp).clip(CircleShape).background(c.mint),
+                contentAlignment = Alignment.Center,
+            ) { Text(number, color = c.onMint, fontWeight = FontWeight.Bold, fontSize = 13.sp) }
+        } else {
+            Text(number, color = c.ink, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+        }
+    }
+}
+
 @Composable
 fun FriendlyEmptyState(icon: ImageVector, title: String, message: String, action: String? = null, onAction: (() -> Unit)? = null) {
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {

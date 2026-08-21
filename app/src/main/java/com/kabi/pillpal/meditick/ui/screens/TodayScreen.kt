@@ -165,33 +165,33 @@ private fun DayStrip(repository: AppRepository, selectedDay: Long, modifier: Mod
             val day = DoseEngine.addDays(today, offset)
             val selected = day == selectedDay
             val dayStats = DoseEngine.stats(repository.doses(day))
-            // The selection pill and text colors settle in, no snapping.
-            val pill by animateColorAsState(if (selected) DS.colors.mint.copy(.14f) else Color.Transparent, tween(200), label = "dayPill")
             val initialTint by animateColorAsState(if (selected) DS.colors.mint else DS.colors.ink3, tween(200), label = "dayInitial")
-            val numberTint by animateColorAsState(if (selected) DS.colors.ink else DS.colors.ink2, tween(200), label = "dayNumber")
             val interaction = remember { MutableInteractionSource() }
+            // The MediTick signature: each day is a miniature daily ring.
+            val isFutureDay = day > today
+            val tint = when {
+                isFutureDay || dayStats.scheduled == 0 -> null
+                dayStats.taken == dayStats.scheduled -> DS.colors.mint
+                dayStats.missed > 0 -> DS.colors.coral
+                else -> DS.colors.amber
+            }
+            val ratio = if (dayStats.scheduled == 0) 0f else dayStats.taken.toFloat() / dayStats.scheduled
             Column(
                 Modifier.width(43.dp)
                     .pressScale(interaction, 0.9f)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(pill)
                     .clickable(interaction, ripple()) { haptics.tick(); onSelect(day) }
-                    .padding(vertical = 9.dp),
+                    .padding(vertical = 7.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(weekdayInitial(day), color = initialTint,
                     fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                Text(SimpleDateFormat("d", Locale.getDefault()).format(Date(day)), color = numberTint,
-                    fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(5.dp))
-                val dot = when {
-                    dayStats.scheduled == 0 -> DS.colors.line2
-                    dayStats.taken == dayStats.scheduled -> DS.colors.mint
-                    dayStats.missed > 0 -> DS.colors.coral
-                    dayStats.skipped > 0 -> DS.colors.amber
-                    else -> DS.colors.ink3
-                }
-                Box(Modifier.size(5.dp).clip(CircleShape).background(dot))
+                Spacer(Modifier.height(6.dp))
+                MiniDayRing(
+                    number = SimpleDateFormat("d", Locale.getDefault()).format(Date(day)),
+                    progress = if (tint == DS.colors.mint) 1f else ratio,
+                    tint = tint, selected = selected,
+                )
             }
         }
     }
