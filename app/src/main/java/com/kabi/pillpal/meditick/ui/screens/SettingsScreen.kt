@@ -221,9 +221,16 @@ fun SettingsScreen(
     if (showAppearance) AppearanceDialog(settings) { showAppearance = false }
     if (showMeals) MealTimesDialog(repository, onDismiss = { showMeals = false })
     if (showPresets) DoseTimePresetsDialog(settings, onDismiss = { showPresets = false })
-    if (confirmErase) AlertDialog(onDismissRequest = { confirmErase = false }, title = { Text(stringResource(R.string.settings_erase_title)) }, text = { Text(stringResource(R.string.settings_erase_body)) },
-        confirmButton = { TextButton({ repository.eraseAll(); confirmErase = false }) { Text(stringResource(R.string.settings_erase), color = DS.colors.coral) } }, dismissButton = { TextButton({ confirmErase = false }) { Text(stringResource(R.string.action_cancel)) } })
-    message?.let { AlertDialog(onDismissRequest = { message = null }, confirmButton = { TextButton({ message = null }) { Text(stringResource(R.string.action_ok)) } }, title = { Text(stringResource(R.string.app_name)) }, text = { Text(it) }) }
+    if (confirmErase) ConfirmSheet(
+        title = stringResource(R.string.settings_erase_title), body = stringResource(R.string.settings_erase_body),
+        confirmText = stringResource(R.string.settings_erase), destructive = true,
+        cancelText = stringResource(R.string.action_cancel),
+        onConfirm = { repository.eraseAll(); confirmErase = false }, onDismiss = { confirmErase = false },
+    )
+    message?.let {
+        InfoSheet(stringResource(R.string.app_name), it, stringResource(R.string.action_ok), onDismiss = { message = null },
+            icon = Icons.Default.Info, tint = DS.colors.cyan)
+    }
     if (showLanguage) LanguageDialog(settings) { showLanguage = false }
     if (showSound) ReminderSoundDialog(settings, billing.isPro, onShowPaywall) { showSound = false }
     if (showWhatsNew) WhatsNewDialog { showWhatsNew = false }
@@ -235,7 +242,13 @@ fun SettingsScreen(
             else -> stringResource(R.string.settings_about) to
                 stringResource(R.string.info_about_body, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
         }
-        AlertDialog(onDismissRequest = { infoDialog = null }, title = { Text(title) }, text = { Text(copy) }, confirmButton = { TextButton({ infoDialog = null }) { Text(stringResource(R.string.action_done)) } })
+        InfoSheet(title, copy, stringResource(R.string.action_done), onDismiss = { infoDialog = null },
+            icon = when (kind) {
+                "widgets" -> Icons.Default.Widgets
+                "privacy" -> Icons.Default.PrivacyTip
+                "terms" -> Icons.Default.Gavel
+                else -> Icons.Default.Info
+            }, tint = DS.colors.cyan)
     }
 }
 
@@ -328,12 +341,11 @@ private fun CommunityCard(onOpen: (String) -> Unit) {
 @Composable
 private fun LanguageDialog(settings: SettingsStore, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.settings_language)) },
-        text = {
+    AppSheet(onDismiss, title = stringResource(R.string.settings_language)) {
+        GlassCard(Modifier.fillMaxWidth().weight(1f, fill = false), contentPadding = PaddingValues(vertical = 3.dp)) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                supportedLanguageTags.forEach { tag ->
+                supportedLanguageTags.forEachIndexed { index, tag ->
+                    if (index > 0) RowDivider()
                     Row(
                         Modifier.fillMaxWidth()
                             .clickable {
@@ -341,18 +353,19 @@ private fun LanguageDialog(settings: SettingsStore, onDismiss: () -> Unit) {
                                 applyAppLocale(context, tag)
                                 onDismiss()
                             }
-                            .padding(vertical = 12.dp),
+                            .padding(horizontal = 16.dp, vertical = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(stringResource(languageTitleRes(tag)), color = if (settings.languageTag == tag) DS.colors.mint else DS.colors.ink)
+                        Text(stringResource(languageTitleRes(tag)),
+                            color = if (settings.languageTag == tag) DS.colors.mint else DS.colors.ink,
+                            fontWeight = FontWeight.Bold)
                         Spacer(Modifier.weight(1f))
-                        if (settings.languageTag == tag) Icon(Icons.Default.Check, null, tint = DS.colors.mint)
+                        if (settings.languageTag == tag) Icon(Icons.Default.CheckCircle, null, tint = DS.colors.mint)
                     }
                 }
             }
-        },
-        confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } },
-    )
+        }
+    }
 }
 
 /**
@@ -378,63 +391,58 @@ private fun ReminderSoundDialog(
     val context = LocalContext.current
     var pending by remember { mutableStateOf(settings.alertSound) }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.settings_sound_title)) },
-        text = {
-            Column {
-                AlertSound.entries.forEach { sound ->
-                    val locked = alertSoundRequiresPro(sound) && !isPro
-                    Row(
-                        Modifier.fillMaxWidth()
-                            .clickable {
-                                if (locked) onShowPaywall() else {
-                                    pending = sound
-                                    NotificationScheduler.previewSound(context, sound)
-                                }
+    AppSheet(onDismiss, title = stringResource(R.string.settings_sound_title)) {
+        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
+            AlertSound.entries.forEachIndexed { index, sound ->
+                if (index > 0) RowDivider()
+                val locked = alertSoundRequiresPro(sound) && !isPro
+                Row(
+                    Modifier.fillMaxWidth()
+                        .clickable {
+                            if (locked) onShowPaywall() else {
+                                pending = sound
+                                NotificationScheduler.previewSound(context, sound)
                             }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(stringResource(alertSoundTitleRes(sound)), color = if (pending == sound) DS.colors.mint else DS.colors.ink)
-                        Spacer(Modifier.weight(1f))
-                        when {
-                            locked -> StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
-                            pending == sound -> Icon(Icons.Default.Check, null, tint = DS.colors.mint)
                         }
+                        .padding(horizontal = 16.dp, vertical = 13.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(stringResource(alertSoundTitleRes(sound)),
+                        color = if (pending == sound) DS.colors.mint else DS.colors.ink, fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.weight(1f))
+                    when {
+                        locked -> StatusPill(stringResource(R.string.badge_pro), DS.colors.violet)
+                        pending == sound -> Icon(Icons.Default.CheckCircle, null, tint = DS.colors.mint)
                     }
                 }
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    stringResource(R.string.settings_sound_hint),
-                    color = DS.colors.ink3, fontSize = 12.sp, lineHeight = 17.sp,
-                )
             }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    settings.updateAlertSound(pending)
-                    // Channels are immutable once created, so the scheduler
-                    // rebuilds them under a new id before re-queuing.
-                    NotificationScheduler.scheduleAll(context)
-                    onDismiss()
-                },
-                enabled = pending != settings.alertSound,
-            ) { Text(stringResource(R.string.action_save)) }
-        },
-        dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } },
-    )
+        }
+        Spacer(Modifier.height(10.dp))
+        Text(
+            stringResource(R.string.settings_sound_hint),
+            color = DS.colors.ink3, fontSize = 12.sp, lineHeight = 17.sp,
+        )
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(
+            stringResource(R.string.action_save),
+            onClick = {
+                settings.updateAlertSound(pending)
+                // Channels are immutable once created, so the scheduler
+                // rebuilds them under a new id before re-queuing.
+                NotificationScheduler.scheduleAll(context)
+                onDismiss()
+            },
+            Modifier.fillMaxWidth(),
+            enabled = pending != settings.alertSound,
+        )
+    }
 }
 
 /** The in-app changelog. */
 @Composable
 private fun WhatsNewDialog(onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.settings_whats_new)) },
-        text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+    AppSheet(onDismiss, title = stringResource(R.string.settings_whats_new)) {
+        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
                 ReleaseNotes.entries.forEach { entry ->
                     Text(
                         listOfNotNull(stringResource(entry.version), entry.date.ifBlank { null }).joinToString(" · "),
@@ -449,10 +457,8 @@ private fun WhatsNewDialog(onDismiss: () -> Unit) {
                     }
                     Spacer(Modifier.height(10.dp))
                 }
-            }
-        },
-        confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } },
-    )
+        }
+    }
 }
 
 @Composable
@@ -462,22 +468,22 @@ private fun SettingsGroup(label: String, content: @Composable ColumnScope.() -> 
 
 @Composable
 private fun AppearanceDialog(settings: SettingsStore, onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.settings_appearance)) }, text = {
-        Column {
-            SectionLabel(stringResource(R.string.settings_appearance_mode)); Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) { AppearanceMode.entries.forEach { SelectChip(stringResource(appearanceTitleRes(it)), settings.appearance == it, { settings.updateAppearance(it) }) } }
-            Spacer(Modifier.height(20.dp)); SectionLabel(stringResource(R.string.settings_appearance_accent)); Spacer(Modifier.height(8.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { AccentId.entries.forEach { accent ->
-                GlassCard(Modifier.fillMaxWidth(), radius = 18.dp, onClick = { settings.updateAccent(accent) }, contentPadding = PaddingValues(13.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(34.dp).clip(RoundedCornerShape(12.dp)).background(accentBrush(accent))); Spacer(Modifier.width(11.dp))
-                        Text(stringResource(accentTitleRes(accent)), color = DS.colors.ink, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                        Icon(if (settings.accent == accent) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked, null, tint = if (settings.accent == accent) DS.colors.mint else DS.colors.ink3)
-                    }
+    AppSheet(onDismiss, title = stringResource(R.string.settings_appearance)) {
+        SectionLabel(stringResource(R.string.settings_appearance_mode)); Spacer(Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) { AppearanceMode.entries.forEach { SelectChip(stringResource(appearanceTitleRes(it)), settings.appearance == it, { settings.updateAppearance(it) }) } }
+        Spacer(Modifier.height(20.dp)); SectionLabel(stringResource(R.string.settings_appearance_accent)); Spacer(Modifier.height(8.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { AccentId.entries.forEach { accent ->
+            GlassCard(Modifier.fillMaxWidth(), radius = 18.dp, onClick = { settings.updateAccent(accent) }, contentPadding = PaddingValues(13.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.size(34.dp).clip(RoundedCornerShape(12.dp)).background(accentBrush(accent))); Spacer(Modifier.width(11.dp))
+                    Text(stringResource(accentTitleRes(accent)), color = DS.colors.ink, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    Icon(if (settings.accent == accent) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked, null, tint = if (settings.accent == accent) DS.colors.mint else DS.colors.ink3)
                 }
-            } }
-        }
-    }, confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } })
+            }
+        } }
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(stringResource(R.string.action_done), onDismiss, Modifier.fillMaxWidth())
+    }
 }
 
 private fun accentBrush(accent: AccentId) = androidx.compose.ui.graphics.Brush.linearGradient(when (accent) {
@@ -491,30 +497,39 @@ private fun accentBrush(accent: AccentId) = androidx.compose.ui.graphics.Brush.l
 internal fun MealTimesDialog(repository: AppRepository, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var times by remember { mutableStateOf(repository.mealTimes) }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.settings_meal_times)) }, text = {
-        Column { MealSlot.entries.forEach { slot ->
-            val time = times.time(slot)
-            SettingsRow(when (slot) { MealSlot.breakfast -> Icons.Default.WbSunny; MealSlot.lunch -> Icons.Default.LightMode; MealSlot.dinner -> Icons.Default.NightsStay; MealSlot.bedtime -> Icons.Default.Bedtime },
-                when (slot) { MealSlot.breakfast -> DS.colors.amber; MealSlot.lunch -> DS.colors.cyan; MealSlot.dinner -> DS.colors.violet; MealSlot.bedtime -> DS.colors.mint },
-                slot.title(context), time.label(context), onClick = {
-                    android.app.TimePickerDialog(context, { _, h, m -> times = times.withTime(slot, TimeOfDay(h, m)) }, time.hour, time.minute, false).show()
-                })
-        } }
-    }, confirmButton = { TextButton({ repository.setMealTimes(times); onDismiss() }) { Text(stringResource(R.string.action_save)) } }, dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } })
+    AppSheet(onDismiss, title = stringResource(R.string.settings_meal_times)) {
+        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
+            MealSlot.entries.forEachIndexed { index, slot ->
+                if (index > 0) RowDivider()
+                val time = times.time(slot)
+                SettingsRow(when (slot) { MealSlot.breakfast -> Icons.Default.WbSunny; MealSlot.lunch -> Icons.Default.LightMode; MealSlot.dinner -> Icons.Default.NightsStay; MealSlot.bedtime -> Icons.Default.Bedtime },
+                    when (slot) { MealSlot.breakfast -> DS.colors.amber; MealSlot.lunch -> DS.colors.cyan; MealSlot.dinner -> DS.colors.violet; MealSlot.bedtime -> DS.colors.mint },
+                    slot.title(context), time.label(context), onClick = {
+                        android.app.TimePickerDialog(context, { _, h, m -> times = times.withTime(slot, TimeOfDay(h, m)) }, time.hour, time.minute, false).show()
+                    })
+            }
+        }
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(stringResource(R.string.action_save), { repository.setMealTimes(times); onDismiss() }, Modifier.fillMaxWidth())
+    }
 }
 
 @Composable
 private fun DoseTimePresetsDialog(settings: SettingsStore, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val labels = dayPartLabels()
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.settings_dose_presets)) }, text = {
-        Column {
+    AppSheet(onDismiss, title = stringResource(R.string.settings_dose_presets)) {
+        GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(vertical = 3.dp)) {
             settings.doseTimePresets.all().forEachIndexed { index, time ->
+                if (index > 0) RowDivider()
                 SettingsRow(Icons.Default.Schedule, if (index % 2 == 0) DS.colors.mint else DS.colors.cyan, labels[index], time.label(context), onClick = {
                     android.app.TimePickerDialog(context, { _, hour, minute -> settings.setDoseTimePreset(index, TimeOfDay(hour, minute)) }, time.hour, time.minute, false).show()
                 })
             }
-            TextButton({ settings.restoreDoseTimePresets() }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.settings_dose_presets_restore)) }
         }
-    }, confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } })
+        Spacer(Modifier.height(12.dp))
+        GhostButton(stringResource(R.string.settings_dose_presets_restore), { settings.restoreDoseTimePresets() }, Modifier.fillMaxWidth(), leading = Icons.Default.Restore)
+        Spacer(Modifier.height(10.dp))
+        PrimaryButton(stringResource(R.string.action_done), onDismiss, Modifier.fillMaxWidth())
+    }
 }
