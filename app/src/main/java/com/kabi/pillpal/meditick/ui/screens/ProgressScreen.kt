@@ -97,8 +97,10 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                 }
                 item {
                     Row(Modifier.appearFluidly(3), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        // On-time: until a few doses are taken there is no rate
-                        // to show — the tile says so, the Doz way.
+                        // Momentum first: the streak leads, timing follows.
+                        StreakTile(streak, best, Modifier.weight(1f)) { detail = "streak" }
+                        // On-time: until a few doses are taken there is no
+                        // rate to show — the tile says so instead.
                         if (hasTakenLogs) MetricTile(
                             Icons.Default.Timer, DS.colors.cyan,
                             formatPercent((onTime * 100).toInt()),
@@ -107,7 +109,6 @@ fun ProgressScreen(repository: AppRepository, settings: SettingsStore, isPro: Bo
                             Modifier.weight(1f),
                         ) { detail = "timing" }
                         else InsightsSoonTile(Modifier.weight(1f)) { detail = "timing" }
-                        StreakTile(streak, best, Modifier.weight(1f)) { detail = "streak" }
                     }
                 }
                 item { InsightCard(data, stats) }
@@ -294,26 +295,21 @@ private fun WeekCard(repository: AppRepository, selected: Long, onSelect: (Long)
                     val day = DoseEngine.addDays(today, offset)
                     val stats = DoseEngine.stats(repository.doses(day))
                     val active = day == selected
-                    val fill by androidx.compose.animation.animateColorAsState(
-                        if (active) DS.colors.mint else Color.Transparent, tween(200), label = "dayFill",
-                    )
-                    val numberTint by androidx.compose.animation.animateColorAsState(
-                        if (active) DS.colors.onMint else DS.colors.ink, tween(200), label = "dayTint",
-                    )
+                    // MediTick's signature: the day itself is a mini daily
+                    // ring — the legend color plus how far the day got.
+                    val tint = dayLegendColor(stats)
+                    val ratio = if (stats.scheduled == 0) 0f else stats.taken.toFloat() / stats.scheduled
                     Column(
                         Modifier.width(44.dp).clip(RoundedCornerShape(14.dp)).clickable { haptics.tick(); onSelect(day) }.padding(vertical = 4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(weekdayInitial(day).uppercase(), color = if (active) DS.colors.mint else DS.colors.ink3, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = .5.sp)
                         Spacer(Modifier.height(7.dp))
-                        Box(Modifier.size(34.dp).clip(CircleShape).background(fill), contentAlignment = Alignment.Center) {
-                            Text(SimpleDateFormat("d", Locale.getDefault()).format(Date(day)), color = numberTint, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        }
-                        Spacer(Modifier.height(5.dp))
-                        // The status dot beneath the day, per the legend.
-                        val dot = dayLegendColor(stats)
-                        if (dot != null) Box(Modifier.size(6.dp).clip(CircleShape).background(dot))
-                        else Box(Modifier.size(6.dp).clip(CircleShape).border(1.dp, DS.colors.line2, CircleShape))
+                        MiniDayRing(
+                            number = SimpleDateFormat("d", Locale.getDefault()).format(Date(day)),
+                            progress = if (tint == DS.colors.mint) 1f else ratio,
+                            tint = tint, selected = active,
+                        )
                     }
                 }
             }
