@@ -23,10 +23,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -280,4 +285,120 @@ fun ScreenTopBar(
 @Composable
 fun SheetDragHandle() {
     androidx.compose.material3.BottomSheetDefaults.DragHandle(color = DS.colors.line2)
+}
+
+// MARK: - The sheet family
+//
+// Every conversation the app starts lives in a bottom sheet — Material
+// dialogs read as a different, older app against the glass design. These
+// three cover the shapes the app needs: free-form, confirm, and inform.
+
+/** The app's standard sheet: rounded top, themed handle, padded column. */
+@Composable
+fun AppSheet(
+    onDismiss: () -> Unit,
+    title: String? = null,
+    content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
+) {
+    androidx.compose.material3.ModalBottomSheet(
+        onDismissRequest = onDismiss, containerColor = DS.colors.bg3,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
+    ) {
+        androidx.compose.foundation.layout.Column(
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 22.dp)
+                .padding(bottom = 30.dp),
+        ) {
+            title?.let {
+                Text(
+                    it, color = DS.colors.ink, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                    modifier = Modifier.appearFluidly(0),
+                )
+                Spacer(Modifier.height(16.dp))
+            }
+            content()
+        }
+    }
+}
+
+/**
+ * A decision: icon, question, consequence, then the action — destructive
+ * actions get the coral treatment, everything else the brand gradient.
+ */
+@Composable
+fun ConfirmSheet(
+    title: String,
+    body: String,
+    confirmText: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    destructive: Boolean = false,
+    icon: ImageVector? = null,
+    cancelText: String? = null,
+) {
+    val c = DS.colors
+    AppSheet(onDismiss) {
+        androidx.compose.foundation.layout.Column(
+            Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconTile(
+                icon ?: if (destructive) androidx.compose.material.icons.Icons.Default.DeleteOutline
+                else androidx.compose.material.icons.Icons.Default.HelpOutline,
+                if (destructive) c.coral else c.mint, 56.dp,
+            )
+            Spacer(Modifier.height(14.dp))
+            Text(
+                title, color = c.ink, fontWeight = FontWeight.Bold, fontSize = 19.sp,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.appearFluidly(1),
+            )
+            Spacer(Modifier.height(6.dp))
+            Text(
+                body, color = c.ink2, fontSize = 14.sp, lineHeight = 20.sp,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.appearFluidly(2),
+            )
+            Spacer(Modifier.height(22.dp))
+            if (destructive) DangerButton(confirmText, onConfirm, Modifier.fillMaxWidth().appearFluidly(3))
+            else PrimaryButton(confirmText, onConfirm, Modifier.fillMaxWidth().appearFluidly(3))
+            cancelText?.let {
+                Spacer(Modifier.height(10.dp))
+                GhostButton(it, onDismiss, Modifier.fillMaxWidth().appearFluidly(4))
+            }
+        }
+    }
+}
+
+/** A message with one acknowledging action. */
+@Composable
+fun InfoSheet(
+    title: String,
+    body: String,
+    doneText: String,
+    onDismiss: () -> Unit,
+    icon: ImageVector? = null,
+    tint: Color = DS.colors.mint,
+) {
+    AppSheet(onDismiss) {
+        androidx.compose.foundation.layout.Column(
+            Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            icon?.let { IconTile(it, tint, 56.dp); Spacer(Modifier.height(14.dp)) }
+            Text(
+                title, color = DS.colors.ink, fontWeight = FontWeight.Bold, fontSize = 19.sp,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.appearFluidly(1),
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                body, color = DS.colors.ink2, fontSize = 14.sp, lineHeight = 20.sp,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.appearFluidly(2),
+            )
+            Spacer(Modifier.height(22.dp))
+            PrimaryButton(doneText, onDismiss, Modifier.fillMaxWidth().appearFluidly(3))
+        }
+    }
 }

@@ -4,6 +4,7 @@ package com.kabi.pillpal.meditick.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -342,11 +343,8 @@ private fun ProgressDetailDialog(
             else -> R.string.progress_detail_adherence_title
         },
     )
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(title) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    AppSheet(onDismiss, title = title) {
+        Column(Modifier.weight(1f, fill = false).verticalScroll(androidx.compose.foundation.rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 when (kind) {
                     "timing" -> {
                         Text(
@@ -399,11 +397,11 @@ private fun ProgressDetailDialog(
                             )
                         }
                     }
-                }
             }
-        },
-        confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } },
-    )
+        }
+        Spacer(Modifier.height(16.dp))
+        PrimaryButton(stringResource(R.string.action_done), onDismiss, Modifier.fillMaxWidth())
+    }
 }
 
 /**

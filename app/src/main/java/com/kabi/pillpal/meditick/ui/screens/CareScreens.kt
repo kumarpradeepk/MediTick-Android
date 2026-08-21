@@ -275,18 +275,25 @@ fun MedicationDetailScreen(repository: AppRepository, medicationId: String, onBa
             }
         }
     }
-    if (confirmDelete) AlertDialog(onDismissRequest = { confirmDelete = false }, title = { Text(stringResource(R.string.confirm_delete_medication_title, med.name)) },
-        text = { Text(stringResource(R.string.confirm_delete_medication_body)) },
-        confirmButton = { TextButton({ repository.deleteMedication(med.id); onBack() }) { Text(stringResource(R.string.action_delete), color = DS.colors.coral) } },
-        dismissButton = { TextButton({ confirmDelete = false }) { Text(stringResource(R.string.action_cancel)) } })
-    if (confirmArchive) AlertDialog(onDismissRequest = { confirmArchive = false }, title = { Text(stringResource(R.string.confirm_archive_medication_title, med.name)) },
-        text = { Text(stringResource(R.string.confirm_archive_medication_body)) },
-        confirmButton = { TextButton({ repository.archiveMedication(med.id, true); confirmArchive = false }) { Text(stringResource(R.string.rx_action_archive)) } },
-        dismissButton = { TextButton({ confirmArchive = false }) { Text(stringResource(R.string.action_cancel)) } })
-    if (showRefill) AlertDialog(onDismissRequest = { showRefill = false }, title = { Text(stringResource(R.string.refill_title)) },
-        text = { MediTickTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, placeholder = stringResource(R.string.refill_units_label), singleLine = true) },
-        confirmButton = { TextButton({ repository.refillStock(med.id, refillAmount.toDoubleOrNull() ?: 0.0); showRefill = false }) { Text(stringResource(R.string.action_add)) } },
-        dismissButton = { TextButton({ showRefill = false }) { Text(stringResource(R.string.action_cancel)) } })
+    if (confirmDelete) ConfirmSheet(
+        title = stringResource(R.string.confirm_delete_medication_title, med.name),
+        body = stringResource(R.string.confirm_delete_medication_body),
+        confirmText = stringResource(R.string.action_delete), destructive = true,
+        cancelText = stringResource(R.string.action_cancel),
+        onConfirm = { repository.deleteMedication(med.id); onBack() }, onDismiss = { confirmDelete = false },
+    )
+    if (confirmArchive) ConfirmSheet(
+        title = stringResource(R.string.confirm_archive_medication_title, med.name),
+        body = stringResource(R.string.confirm_archive_medication_body),
+        confirmText = stringResource(R.string.rx_action_archive), icon = Icons.Default.Archive,
+        cancelText = stringResource(R.string.action_cancel),
+        onConfirm = { repository.archiveMedication(med.id, true); confirmArchive = false }, onDismiss = { confirmArchive = false },
+    )
+    if (showRefill) AppSheet({ showRefill = false }, title = stringResource(R.string.refill_title)) {
+        MediTickTextField(refillAmount, { refillAmount = it.filter(Char::isDigit) }, placeholder = stringResource(R.string.refill_units_label), singleLine = true, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(stringResource(R.string.action_add), { repository.refillStock(med.id, refillAmount.toDoubleOrNull() ?: 0.0); showRefill = false }, Modifier.fillMaxWidth(), leading = Icons.Default.Add)
+    }
     logDose?.let { dose -> LogDoseDialog(repository, dose, { logDose = null }) }
     if (showAsNeeded) AsNeededSheet(repository, med) { showAsNeeded = false }
     if (showLogs) LogsDialog(stringResource(R.string.logs_title, med.name), repository.logs.filter { it.medicationID == med.id }.sortedByDescending { it.actedAt }, repository, { showLogs = false })
@@ -389,28 +396,39 @@ fun PrescriptionDetailScreen(
     }
     pendingStatus?.let { status ->
         val reactivating = status == TreatmentStatus.active && effectiveStatus == TreatmentStatus.completed
-        AlertDialog(onDismissRequest = { pendingStatus = null },
-        title = { Text(stringResource(when (status) {
-            TreatmentStatus.completed -> R.string.rx_confirm_complete_title
-            TreatmentStatus.archived -> R.string.rx_confirm_archive_title
-            TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_title else R.string.rx_confirm_restore_title
-        })) },
-        text = { Text(stringResource(when (status) {
-            TreatmentStatus.completed -> R.string.rx_confirm_complete_body
-            TreatmentStatus.archived -> R.string.rx_confirm_archive_body
-            TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_body else R.string.rx_confirm_restore_body
-        })) },
-        confirmButton = { TextButton({ repository.setPrescriptionStatus(rx.id, status); pendingStatus = null }) { Text(stringResource(when {
-            status == TreatmentStatus.active && reactivating -> R.string.rx_action_reactivate
-            status == TreatmentStatus.active -> R.string.rx_action_restore
-            status == TreatmentStatus.completed -> R.string.rx_action_complete
-            else -> R.string.rx_action_archive
-        })) } },
-        dismissButton = { TextButton({ pendingStatus = null }) { Text(stringResource(R.string.action_cancel)) } }) }
-    if (delete) AlertDialog(onDismissRequest = { delete = false }, title = { Text(stringResource(R.string.rx_confirm_delete_title)) },
-        text = { Text(stringResource(R.string.rx_confirm_delete_body)) },
-        confirmButton = { TextButton({ repository.deletePrescription(rx.id); onBack() }) { Text(stringResource(R.string.action_delete), color = DS.colors.coral) } },
-        dismissButton = { TextButton({ delete = false }) { Text(stringResource(R.string.action_cancel)) } })
+        ConfirmSheet(
+            title = stringResource(when (status) {
+                TreatmentStatus.completed -> R.string.rx_confirm_complete_title
+                TreatmentStatus.archived -> R.string.rx_confirm_archive_title
+                TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_title else R.string.rx_confirm_restore_title
+            }),
+            body = stringResource(when (status) {
+                TreatmentStatus.completed -> R.string.rx_confirm_complete_body
+                TreatmentStatus.archived -> R.string.rx_confirm_archive_body
+                TreatmentStatus.active -> if (reactivating) R.string.rx_confirm_reactivate_body else R.string.rx_confirm_restore_body
+            }),
+            confirmText = stringResource(when {
+                status == TreatmentStatus.active && reactivating -> R.string.rx_action_reactivate
+                status == TreatmentStatus.active -> R.string.rx_action_restore
+                status == TreatmentStatus.completed -> R.string.rx_action_complete
+                else -> R.string.rx_action_archive
+            }),
+            icon = when (status) {
+                TreatmentStatus.completed -> Icons.Default.CheckCircle
+                TreatmentStatus.archived -> Icons.Default.Archive
+                TreatmentStatus.active -> Icons.Default.Restore
+            },
+            cancelText = stringResource(R.string.action_cancel),
+            onConfirm = { repository.setPrescriptionStatus(rx.id, status); pendingStatus = null },
+            onDismiss = { pendingStatus = null },
+        ) }
+    if (delete) ConfirmSheet(
+        title = stringResource(R.string.rx_confirm_delete_title),
+        body = stringResource(R.string.rx_confirm_delete_body),
+        confirmText = stringResource(R.string.action_delete), destructive = true,
+        cancelText = stringResource(R.string.action_cancel),
+        onConfirm = { repository.deletePrescription(rx.id); onBack() }, onDismiss = { delete = false },
+    )
     if (addMenu) ModalBottomSheet(
         onDismissRequest = { addMenu = false }, containerColor = DS.colors.bg3,
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp), dragHandle = { SheetDragHandle() },
@@ -479,29 +497,34 @@ fun PrescriptionEditor(
     var ongoing by remember { mutableStateOf(existing?.endDate == null) }
     var endDate by remember { mutableLongStateOf(existing?.endDate ?: DoseEngine.addDays(startDate, 14)) }
     var updateLinkedDates by remember(existing?.id) { mutableStateOf(true) }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(if (existing == null) R.string.rx_editor_new else R.string.rx_editor_edit)) },
-        text = { LazyColumn(Modifier.heightIn(max = 520.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            item { MediTickTextField(name, { name = it }, placeholder = stringResource(R.string.rx_field_plan_name), singleLine = true) }
-            item { MediTickTextField(condition, { condition = it }, placeholder = stringResource(R.string.rx_field_condition), singleLine = true) }
-            item { MediTickTextField(prescriber, { prescriber = it }, placeholder = stringResource(R.string.rx_field_prescriber), singleLine = true) }
-            item { MediTickTextField(facility, { facility = it }, placeholder = stringResource(R.string.rx_field_facility), singleLine = true) }
-            item { MediTickTextField(contact, { contact = it }, placeholder = stringResource(R.string.rx_field_contact), singleLine = true) }
-            item { OutlinedButton({ showDatePicker(context, startDate) { startDate = it; if (endDate < it) endDate = it } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_start, formatMediumDate(startDate))) } }
-            item { Row(verticalAlignment = Alignment.CenterVertically) { Text(stringResource(R.string.rx_ongoing), Modifier.weight(1f)); Switch(ongoing, { ongoing = it }) } }
-            if (!ongoing) item { OutlinedButton({ showDatePicker(context, endDate) { endDate = it.coerceAtLeast(startDate) } }, Modifier.fillMaxWidth()) { Text(stringResource(R.string.rx_end, formatMediumDate(endDate))) } }
+    AppSheet(onDismiss, title = stringResource(if (existing == null) R.string.rx_editor_new else R.string.rx_editor_edit)) {
+        LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+            item { MediTickTextField(name, { name = it }, placeholder = stringResource(R.string.rx_field_plan_name), singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { MediTickTextField(condition, { condition = it }, placeholder = stringResource(R.string.rx_field_condition), singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { MediTickTextField(prescriber, { prescriber = it }, placeholder = stringResource(R.string.rx_field_prescriber), singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { MediTickTextField(facility, { facility = it }, placeholder = stringResource(R.string.rx_field_facility), singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { MediTickTextField(contact, { contact = it }, placeholder = stringResource(R.string.rx_field_contact), singleLine = true, modifier = Modifier.fillMaxWidth()) }
+            item { GhostButton(stringResource(R.string.rx_start, formatMediumDate(startDate)), { showDatePicker(context, startDate) { startDate = it; if (endDate < it) endDate = it } }, Modifier.fillMaxWidth(), leading = Icons.Default.CalendarMonth) }
+            item { Row(verticalAlignment = Alignment.CenterVertically) { Text(stringResource(R.string.rx_ongoing), Modifier.weight(1f), color = DS.colors.ink, fontWeight = FontWeight.Bold); Switch(ongoing, { ongoing = it }) } }
+            if (!ongoing) item { GhostButton(stringResource(R.string.rx_end, formatMediumDate(endDate)), { showDatePicker(context, endDate) { endDate = it.coerceAtLeast(startDate) } }, Modifier.fillMaxWidth(), leading = Icons.Default.EventBusy) }
             if (existing != null && linkedMedicationCount > 0) item {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text(pluralStringResource(R.plurals.rx_update_linked, linkedMedicationCount, linkedMedicationCount))
+                        Text(pluralStringResource(R.plurals.rx_update_linked, linkedMedicationCount, linkedMedicationCount), color = DS.colors.ink)
                         Text(stringResource(R.string.rx_apply_dates), color = DS.colors.ink3, fontSize = 11.sp)
                     }
                     Switch(updateLinkedDates, { updateLinkedDates = it })
                 }
             }
-            item { MediTickTextField(notes, { notes = it }, placeholder = stringResource(R.string.rx_field_notes), minLines = 2) }
-        } },
-        confirmButton = { TextButton({ if (name.isNotBlank()) onSave((existing ?: Prescription()).copy(name = name.trim(), condition = condition.trim(), prescriber = prescriber.trim(), facility = facility.trim(), contact = contact.trim(), startDate = startDate, endDate = if (ongoing) null else endDate, notes = notes.trim()), updateLinkedDates) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.action_save)) } },
-        dismissButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } })
+            item { MediTickTextField(notes, { notes = it }, placeholder = stringResource(R.string.rx_field_notes), minLines = 2, modifier = Modifier.fillMaxWidth()) }
+        }
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(
+            stringResource(R.string.action_save),
+            { if (name.isNotBlank()) onSave((existing ?: Prescription()).copy(name = name.trim(), condition = condition.trim(), prescriber = prescriber.trim(), facility = facility.trim(), contact = contact.trim(), startDate = startDate, endDate = if (ongoing) null else endDate, notes = notes.trim()), updateLinkedDates) },
+            Modifier.fillMaxWidth(), enabled = name.isNotBlank(), leading = Icons.Default.Check,
+        )
+    }
 }
 
 private fun showDatePicker(context: android.content.Context, initial: Long, onDate: (Long) -> Unit) {
@@ -514,45 +537,54 @@ fun LogDoseDialog(repository: AppRepository, dose: ScheduledDose, onDismiss: () 
     val context = LocalContext.current
     var actedAt by remember(dose.id) { mutableLongStateOf(System.currentTimeMillis()) }
     var note by remember(dose.id) { mutableStateOf("") }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.dose_log_title)) }, text = {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.today_dose_line, dose.medication.name, dose.medication.doseLabel(context)))
-            OutlinedButton({
-                val calendar = Calendar.getInstance().apply { timeInMillis = actedAt }
-                android.app.TimePickerDialog(context, { _, hour, minute ->
-                    actedAt = Calendar.getInstance().apply { timeInMillis = actedAt; set(Calendar.HOUR_OF_DAY, hour); set(Calendar.MINUTE, minute) }.timeInMillis
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
-            }, Modifier.fillMaxWidth()) { Icon(Icons.Default.Schedule, null); Spacer(Modifier.width(7.dp)); Text(stringResource(R.string.dose_logged_time, formatTime(context, actedAt))) }
-            OutlinedTextField(note, { note = it }, label = { Text(stringResource(R.string.dose_note_optional)) }, modifier = Modifier.fillMaxWidth())
-        }
-    }, confirmButton = { TextButton({ repository.logDose(dose, DoseStatus.taken, actedAt, note); onDismiss() }) { Text(stringResource(R.string.action_take)) } },
-        dismissButton = { Row { TextButton({ repository.logDose(dose, DoseStatus.skipped, actedAt, note); onDismiss() }) { Text(stringResource(R.string.action_skip)) }; TextButton(onDismiss) { Text(stringResource(R.string.action_cancel)) } } })
+    val haptics = rememberHaptics()
+    AppSheet(onDismiss, title = stringResource(R.string.dose_log_title)) {
+        Text(stringResource(R.string.today_dose_line, dose.medication.name, dose.medication.doseLabel(context)), color = DS.colors.ink2)
+        Spacer(Modifier.height(14.dp))
+        GhostButton(stringResource(R.string.dose_logged_time, formatTime(context, actedAt)), {
+            val calendar = Calendar.getInstance().apply { timeInMillis = actedAt }
+            android.app.TimePickerDialog(context, { _, hour, minute ->
+                actedAt = Calendar.getInstance().apply { timeInMillis = actedAt; set(Calendar.HOUR_OF_DAY, hour); set(Calendar.MINUTE, minute) }.timeInMillis
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
+        }, Modifier.fillMaxWidth(), leading = Icons.Default.Schedule)
+        Spacer(Modifier.height(10.dp))
+        MediTickTextField(note, { note = it }, placeholder = stringResource(R.string.dose_note_optional), modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+        PrimaryButton(stringResource(R.string.action_take), { haptics.success(); repository.logDose(dose, DoseStatus.taken, actedAt, note); onDismiss() }, Modifier.fillMaxWidth(), leading = Icons.Default.Check)
+        Spacer(Modifier.height(10.dp))
+        GhostButton(stringResource(R.string.action_skip), { repository.logDose(dose, DoseStatus.skipped, actedAt, note); onDismiss() }, Modifier.fillMaxWidth(), leading = Icons.Default.RemoveCircleOutline, tint = DS.colors.amber, borderTint = DS.colors.amber.copy(.3f), fillTint = DS.colors.amber.copy(.1f))
+    }
 }
 
 @Composable
 fun LogsDialog(title: String, logs: List<DoseLog>, repository: AppRepository, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(title) }, text = {
-        if (logs.isEmpty()) Text(stringResource(R.string.logs_empty)) else LazyColumn(Modifier.heightIn(max = 420.dp)) {
-            items(logs, key = { it.id }) { log ->
-                Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(if (log.status == DoseStatus.taken) Icons.Default.CheckCircle else Icons.Default.RemoveCircle, null, tint = if (log.status == DoseStatus.taken) DS.colors.mint else DS.colors.amber)
-                    Spacer(Modifier.width(9.dp)); Column(Modifier.weight(1f)) {
-                        Text(repository.medication(log.medicationID)?.name ?: stringResource(R.string.progress_generic_medication), color = DS.colors.ink, fontWeight = FontWeight.Bold)
-                        Text(
-                            stringResource(
-                                R.string.log_row,
-                                stringResource(doseStatusRes(log.status)),
-                                formatShortDate(log.actedAt) + " " + formatTime(context, log.actedAt),
-                            ),
-                            color = DS.colors.ink3, fontSize = 12.sp,
-                        )
+    AppSheet(onDismiss, title = title) {
+        if (logs.isEmpty()) Text(stringResource(R.string.logs_empty), color = DS.colors.ink3)
+        else GlassCard(Modifier.fillMaxWidth().weight(1f, fill = false), contentPadding = PaddingValues(vertical = 3.dp)) {
+            LazyColumn {
+                items(logs, key = { it.id }) { log ->
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 9.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(if (log.status == DoseStatus.taken) Icons.Default.CheckCircle else Icons.Default.RemoveCircle, null, tint = if (log.status == DoseStatus.taken) DS.colors.mint else DS.colors.amber)
+                        Spacer(Modifier.width(11.dp)); Column(Modifier.weight(1f)) {
+                            Text(repository.medication(log.medicationID)?.name ?: stringResource(R.string.progress_generic_medication), color = DS.colors.ink, fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(
+                                    R.string.log_row,
+                                    stringResource(doseStatusRes(log.status)),
+                                    formatShortDate(log.actedAt) + " " + formatTime(context, log.actedAt),
+                                ),
+                                color = DS.colors.ink3, fontSize = 12.sp,
+                            )
+                        }
+                        IconButton({ repository.deleteLog(log.id) }) { Icon(Icons.Default.DeleteOutline, stringResource(R.string.progress_delete_log), tint = DS.colors.ink3) }
                     }
-                    IconButton({ repository.deleteLog(log.id) }) { Icon(Icons.Default.DeleteOutline, stringResource(R.string.progress_delete_log), tint = DS.colors.ink3) }
                 }
             }
         }
-    }, confirmButton = { TextButton(onDismiss) { Text(stringResource(R.string.action_done)) } })
+        Spacer(Modifier.height(16.dp))
+        PrimaryButton(stringResource(R.string.action_done), onDismiss, Modifier.fillMaxWidth())
+    }
 }
 
 /** The word for a logged outcome — "Taken" / "Skipped". */

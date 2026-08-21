@@ -277,9 +277,14 @@ fun MedicationFormScreen(
             }
         }
     }
-    duplicateName?.let { duplicate -> AlertDialog(onDismissRequest = { duplicateName = null }, title = { Text(stringResource(R.string.form_duplicate_title)) },
-        text = { Text(stringResource(R.string.form_duplicate_body, duplicate)) },
-        confirmButton = { TextButton({ duplicateName = null }) { Text(stringResource(R.string.action_ok)) } }) }
+    duplicateName?.let { duplicate ->
+        InfoSheet(
+            stringResource(R.string.form_duplicate_title),
+            stringResource(R.string.form_duplicate_body, duplicate),
+            stringResource(R.string.action_ok), onDismiss = { duplicateName = null },
+            icon = Icons.Default.ErrorOutline, tint = DS.colors.amber,
+        )
+    }
 }
 
 /**
